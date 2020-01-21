@@ -1,4 +1,3 @@
-from workers import task
 from app.models import *
 from datetime import timedelta
 from django.utils import timezone
@@ -8,7 +7,7 @@ processo em segundo plano que atualiza a situação do trabalhador
 verificando se ele está de férias no dia, ou abonando ou de licenças
 '''
 
-@task(schedule=60*60)
+
 def atualiza_situacoes_trabalhadores():
     hoje = timezone.now().date()
 
