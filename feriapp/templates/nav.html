@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{% url 'index' %}">FÉRIapp</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Alterna navegação">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'ferias' %}">Férias</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'licenca_premio' %}">Licenças-prêmio</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'abono' %}">Abonos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'setor' %}">Setores</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'trabalhadores' %}">Colaboradores</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" method="POST" action='{% url "pesquisa" %}'>
+      {% csrf_token %}
+      <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar" name='query' />
+      <button class="btn btn-info my-2 my-sm-0" type="submit" style="color:#C95900; border-color:#7D3D0A;">Pesquisar</button>
+    </form>
+  </div>
+</nav>

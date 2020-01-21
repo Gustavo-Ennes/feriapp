@@ -1,0 +1,130 @@
+{% load static %}
+{% load staticfiles %}
+{% load sass_tags %}
+{% load filtros %}
+<!doctype html>
+<html lang="pt-BR">
+  	<head>
+
+
+	    <!-- Required meta tags -->
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+
+	    <!-- Bootstrap CSS -->
+	    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+
+
+	    <!-- fontes -->
+	    <link href="https://fonts.googleapis.com/css?family=Arbutus+Slab|Baumans|Old+Standard+TT|Satisfy&display=swap" rel="stylesheet">
+
+
+	    <!-- scss -->
+	    <link href="{% sass_src 'app.scss' %}" rel="stylesheet" type="text/css">
+
+
+	    <title> FériAPP </title>
+
+      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-60x60.png" %}>
+      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-57x57.png" %}>
+      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-72x72.png" %}>
+      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-76x76.png" %}>
+      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-114x114.png" %}>
+      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-120x120.png" %}>
+      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-144x144.png" %}>
+      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-152x152.png" %}>
+      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-180x180.png" %}>
+      <link rel="icon" type="image/png" sizes="192x192" href={% sass_src "android-icon-192x192.png" %}>
+      <link rel="icon" type="image/png" sizes="32x32" href={% sass_src "favicon-32x32.png" %}>
+      <link rel="apple-touch-icon" sizes="96x96" href={% sass_src "favicon-96x96.png" %}>
+      <link rel="apple-touch-icon" sizes="16x16" href={% sass_src "favicon-16x16.png" %}>
+      <link rel="manifest" href="{% sass_src 'manifest.json'%}">
+      <meta name="msapplication-TileColor" content="#ffffff">
+      <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+      <meta name="theme-color" content="#ffffff">
+
+	    {% block head %} {% endblock %}
+    </head>
+    <body>
+
+        <!-- NAVBAR  -->
+        {% include 'nav.html' %}
+
+        <div class="page-header">
+
+          <div class="container-fluid">
+
+
+            <section class='row justify-content-center'>
+
+
+  		        {% for message in messages %}
+
+        				<div class="col-12 alert alert-{{ message.tags }}{% if message.tags == 'error' %} alert-danger text-right {% endif %}" role="alert">
+        					<small class="{% if message.tags == 'error' %} mr-2 {% endif %}">{{ message }}</small>
+        				</div>
+
+
+              {% endfor %}
+
+  		       </section>
+
+
+
+
+          </div>
+
+          {% block header %}{% endblock %}
+        	{% if user.is_authenticated %}
+
+        		<small class="text-muted m-2 float-right">
+
+          		<small class="text-muted">{{ user.username }}</small>
+
+        			<a href="{% url 'sair' %}" class="btn btn-outline-dark btn-sm sombra ml-1">Sair</a>
+
+        		</small>
+
+        	{% endif %}
+        </div>
+
+        <div class='container-fluid'>
+
+          {% block conteudo %} {% endblock %}
+
+        </div>
+
+    </body>
+
+
+	    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/2a327097e3.js"></script>
+
+    {% if messages %}
+
+        <script>
+          $(document).ready(function(){
+            setTimeout(function(){
+              jQuery(".alert").fadeOut("slow");
+            }, 5000)
+          });
+        </script>
+
+
+    {% endif %}
+
+    {% block js %} {% endblock %}
+
+</html>
