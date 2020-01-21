@@ -1,0 +1,123 @@
+$subtitle: #6B2F00;
+$text: #B85E16;
+$shadow: #065E6B;
+$glow: #38E4FF;
+$title: #DDDDFF;
+$primary: #17A2B8;
+
+html, body, .page-header{
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    background: url(fundo.png) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.card{
+
+  box-shadow: 2px 2px 10px 2px $shadow;
+
+
+  .card-header, .card-footer{
+    background-color: $shadow !important;
+  }
+
+  .card-body{
+    background-color: rgba(150,150,250,0.5);
+  }
+
+  .card-title{
+    color: $title !important;
+  }
+  .card-subtitle{
+    color: $subtitle !important;
+  }
+  .card-text{
+    color: $text !important;
+  }
+
+  .btn-card{
+    background-color:$primary !important;
+    color: $title !important;
+  }
+}
+
+.modal{
+
+    background: rgb(0,0,0);
+    background: -moz-linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(96,96,96,0.6923144257703081) 84%, rgba(232,232,232,1) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(96,96,96,0.6923144257703081) 84%, rgba(232,232,232,1) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(96,96,96,0.6923144257703081) 84%, rgba(232,232,232,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#e8e8e8",GradientType=1);
+
+  .modal-content{
+    background-color:$shadow;
+    color:rgba(255,255,255,0.6);
+
+  }
+  .modal-header, .modal-footer{
+    background-color: $primary;
+    color: $text;
+  }
+
+}
+
+.table{
+
+  color:$title !important;
+
+  thead tr{
+    background-color: $shadow !important;
+  }
+  tbody tr{
+    background-color:$primary !important;
+  }
+}
+
+.toast{
+
+  color:#dde !important;
+
+  .toast-header{
+    background-color: $subtitle !important;
+  }
+
+  .toast-body{
+    background-color: $text !important;
+  }
+}
+
+.header-gradient{
+  height: 50px;
+  padding-top:10px;
+  padding-bottom: 10px;
+}
+.header-gradient, .navbar{
+  background: rgb(6,94,107);
+  background: -moz-linear-gradient(90deg, rgba(6,94,107,1) 2%, rgba(23,162,184,1) 16%, rgba(56,228,255,1) 56%, rgba(255,255,255,1) 100%);
+  background: -webkit-linear-gradient(90deg, rgba(6,94,107,1) 2%, rgba(23,162,184,1) 16%, rgba(56,228,255,1) 56%, rgba(255,255,255,1) 100%);
+  background: linear-gradient(90deg, rgba(6,94,107,1) 2%, rgba(23,162,184,1) 16%, rgba(56,228,255,1) 56%, rgba(255,255,255,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#065e6b",endColorstr="#ffffff",GradientType=1);
+
+  .nav-item, .navbar-brand, .btn{
+    color: $title !important;
+  }
+}
+
+.btn{
+  .btn-big{
+    box-shadow: 15px 12px 15px 22px #000 !important;
+  }
+  .btn-transparent{
+    background-color: transparent;
+  }
+  .btn-pesquisa{
+    border-color: $subtitle !important;
+    color: $text !important;
+  }
+}

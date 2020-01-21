@@ -1,0 +1,47 @@
+html, body, .page-header { max-width: 100%; overflow-x: hidden; }
+
+body { background: url(fundo.png) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; }
+
+.card { box-shadow: 2px 2px 10px 2px #065E6B; }
+
+.card .card-header, .card .card-footer { background-color: #065E6B !important; }
+
+.card .card-body { background-color: rgba(150, 150, 250, 0.5); }
+
+.card .card-title { color: #DDDDFF !important; }
+
+.card .card-subtitle { color: #6B2F00 !important; }
+
+.card .card-text { color: #B85E16 !important; }
+
+.card .btn-card { background-color: #17A2B8 !important; color: #DDDDFF !important; }
+
+.modal { background: black; background: -moz-linear-gradient(180deg, black 0%, rgba(96, 96, 96, 0.692314) 84%, #e8e8e8 100%); background: -webkit-linear-gradient(180deg, black 0%, rgba(96, 96, 96, 0.692314) 84%, #e8e8e8 100%); background: linear-gradient(180deg, black 0%, rgba(96, 96, 96, 0.692314) 84%, #e8e8e8 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#e8e8e8",GradientType=1); }
+
+.modal .modal-content { background-color: #065E6B; color: rgba(255, 255, 255, 0.6); }
+
+.modal .modal-header, .modal .modal-footer { background-color: #17A2B8; color: #B85E16; }
+
+.table { color: #DDDDFF !important; }
+
+.table thead tr { background-color: #065E6B !important; }
+
+.table tbody tr { background-color: #17A2B8 !important; }
+
+.toast { color: #dde !important; }
+
+.toast .toast-header { background-color: #6B2F00 !important; }
+
+.toast .toast-body { background-color: #B85E16 !important; }
+
+.header-gradient { height: 50px; padding-top: 10px; padding-bottom: 10px; }
+
+.header-gradient, .navbar { background: #065e6b; background: -moz-linear-gradient(90deg, #065e6b 2%, #17a2b8 16%, #38e4ff 56%, white 100%); background: -webkit-linear-gradient(90deg, #065e6b 2%, #17a2b8 16%, #38e4ff 56%, white 100%); background: linear-gradient(90deg, #065e6b 2%, #17a2b8 16%, #38e4ff 56%, white 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#065e6b",endColorstr="#ffffff",GradientType=1); }
+
+.header-gradient .nav-item, .header-gradient .navbar-brand, .header-gradient .btn, .navbar .nav-item, .navbar .navbar-brand, .navbar .btn { color: #DDDDFF !important; }
+
+.btn .btn-big { box-shadow: 15px 12px 15px 22px #000 !important; }
+
+.btn .btn-transparent { background-color: transparent; }
+
+.btn .btn-pesquisa { border-color: #6B2F00 !important; color: #B85E16 !important; }
