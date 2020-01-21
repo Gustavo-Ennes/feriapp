@@ -58,9 +58,13 @@ class Ferias(models.Model):
     class FeriasIndeferidas(models.Manager):
         def all(self):
             return Ferias.objects.filter(Q(deferida=False))
+    class FeriasEmAndamento(models.Manager):
+        def all(self):
+            return Ferias.objects.filter(Q(tipo='f') & Q(deferida=True) & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()))
 
     fruidas = FeriasFruidas()
     indeferidas = FeriasIndeferidas()
+    em_andamento = FeriasEmAndamento()
 
     trabalhador = models.ForeignKey(Trabalhador, on_delete=models.CASCADE)
     qtd_dias = models.IntegerField(choices=OPCOES)
@@ -97,9 +101,13 @@ class LicencaPremio(Ferias):
     class LicencasIndeferidas(models.Manager):
         def all(self):
             return LicencaPremio.objects.filter(Q(deferida=False))
+    class LicencaEmAndamento(models.Manager):
+        def all(self):
+            return LicencaPremio.objects.filter(Q(deferida=True) & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()))
 
     fruidas = LicencasFruidas()
     indeferidas = LicencasIndeferidas()
+    em_andamento = LicencaEmAndamento()
 
     def __str__(self):
         return '%d dias - %s -saindo %s' % (self.qtd_dias, self.trabalhador.nome, self.data_inicio.strftime("%d/%m/%Y"))
@@ -126,9 +134,13 @@ class Abono(models.Model):
     class AbonosIndeferidos(models.Manager):
         def all(self):
             return Abono.objects.filter(Q(deferido=False))
+    class AbonoEmAndamento(models.Manager):
+        def all(self):
+            return Abono.objects.filter(Q(deferido=True) & Q(data=timezone.now().date()))
 
     fruidos = AbonosFruidos()
     indeferidos = AbonosIndeferidos()
+    em_andamento = AbonoEmAndamento()
 
     trabalhador = models.ForeignKey(Trabalhador, on_delete=models.CASCADE)
     data = models.DateField()

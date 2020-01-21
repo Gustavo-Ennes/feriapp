@@ -32,6 +32,7 @@
     <nav class='col-12'>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <a class="nav-item nav-link active text-light bg-primary" id="futuros-tab" data-toggle="tab" href="#futuros" role="tab" aria-controls="futuros" aria-selected="true">Futuras</a>
+        <a class="nav-item nav-link text-light bg-primary" id="andamento-tab" data-toggle="tab" href="#andamento" role="tab" aria-controls="andamento" aria-selected="false">Em andamento</a>
         <a class="nav-item nav-link text-light bg-primary" id="fruidos-tab" data-toggle="tab" href="#fruidos" role="tab" aria-controls="fruidos" aria-selected="false">Fruídas</a>
         <a class="nav-item nav-link text-light bg-primary" id="indeferidos-tab" data-toggle="tab" href="#indeferidos" role="tab" aria-controls="indeferidos" aria-selected="false">Indeferidas</a>
       </div>
@@ -42,6 +43,15 @@
           {% with licencas=futuras %}
             {% include 'tables/licenca.html' %}
           {% endwith %}
+        </div>
+      </div>
+      <div class="tab-pane fade show" id="andamento" role="tabpanel" aria-labelledby="andamento-tab">
+        <div>
+          {% with arquivada=True%}
+            {% with licencas=em_andamento %}
+              {% include 'tables/licenca.html' %}
+            {% endwith %}
+          {% endwith%}
         </div>
       </div>
       <div class="tab-pane fade" id="fruidos" role="tabpanel" aria-labelledby="fruidos-tab">

@@ -40,9 +40,10 @@ def index(request):
 def ferias(request):
     hoje = timezone.now().date()
     context = {
-        'futuras' : Ferias.objects.filter(Q(deferida=True) & Q(tipo='f') & Q(data_termino__gte=hoje)),
+        'futuras' : Ferias.objects.filter(Q(deferida=True) & Q(tipo='f') & Q(data_inicio__gt=hoje)),
         'fruidas' : Ferias.fruidas.all(),
         'indeferidas' : Ferias.indeferidas.all(),
+        'em_andamento' : Ferias.em_andamento.all(),
         'tipo' : 'ferias',
         'FeriasForm' : FeriasForm(),
     }
@@ -52,9 +53,10 @@ def ferias(request):
 def licenca_premio(request):
     hoje = timezone.now().date()
     context = {
-        'futuras' : LicencaPremio.objects.filter(Q(deferida=True) & Q(data_termino__gte=hoje)),
+        'futuras' : LicencaPremio.objects.filter(Q(deferida=True) & Q(data_inicio__gt=hoje)),
         'fruidas' : LicencaPremio.fruidas.all(),
         'indeferidas' : LicencaPremio.indeferidas.all(),
+        'em_andamento' : LicencaPremio.em_andamento.all(),
         'tipo' : 'licenca',
         'LicencaPremioForm' : LicencaPremioForm(),
     }
@@ -64,9 +66,10 @@ def licenca_premio(request):
 def abono(request):
     hoje = timezone.now().date()
     context = {
-            'futuros' : Abono.objects.filter(Q(deferido=True) & Q(data__gte=hoje)),
+            'futuros' : Abono.objects.filter(Q(deferido=True) & Q(data__gt=hoje)),
             'fruidos' : Abono.fruidos.all(),
             'indeferidos' : Abono.indeferidos.all(),
+            'em_andamento' : Abono.em_andamento.all(),
             'tipo' : 'abono',
             'AbonoForm': AbonoForm(),
         }
