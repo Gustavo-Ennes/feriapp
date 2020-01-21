@@ -598,4 +598,4 @@ def proximos_retornos():
 
 
 
-atualiza_situacoes_trabalhadores()
+#atualiza_situacoes_trabalhadores()
