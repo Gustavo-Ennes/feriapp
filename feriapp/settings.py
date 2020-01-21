@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     #'sass_processor',
-    'crispy_forms',
+    #'crispy_forms',
     'app',
 ]
 
