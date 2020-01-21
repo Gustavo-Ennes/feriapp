@@ -1,0 +1,55 @@
+{% load filtros %}
+
+<table class="table table-striped text-center">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nome</th>
+      <th scope="col">Qtd. servidores</th>
+      <th scope="col">Desde</th>
+      {% if not pdf and not query %}
+        <th scope='col'>Ações<th>
+      {% endif %}
+
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for setor in setores %}
+      <tr>
+        <th scope="row">{{ setor.id }}</th>
+        <td>
+
+          <form id='setorForm{{ setor.id }}' method='POST' action="{% url 'setor_espec' %}">
+            {% csrf_token %}
+            <input type="hidden" name='setor' value='{{ setor.id }}' />
+          </form>
+          <button form='setorForm{{ setor.id }}' class="btn btn-transparent text-light" type="submit">{{ setor.nome }}</button>
+
+
+        </td>
+        <td>{{ setor|qtd_servidores }}</td>
+        <td>{{ setor.criado_em|date:"d/m/Y" }}</td>
+        {% if not pdf and not query %}
+          <td>
+            <div class='row justify-content-center align-items-center'>
+              <div class="col-6">
+                {% include 'modals/editar_setor.html' %}
+              </div>
+              <div class='col-6'>
+                {% include 'modals/excluir_setor.html' %}
+              </div>
+
+            </div>
+          </td>
+        {% endif %}
+
+      </tr>
+    {% empty %}
+      <div class="badge badge-pill bg-warning d-block">
+        <h4 class='text-primary text-center'>Ainda não há setores cadastrados no sistema</h4>
+      </div>
+    {% endfor %}
+
+  </tbody>
+</table>

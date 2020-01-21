@@ -1,0 +1,66 @@
+{% if abonos %}
+  <table class="table table-striped text-center">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Setor</th>
+        <th scope="col">Situação</th>
+        <th scope="col">Pedido</th>
+        <th scope="col">Data</th>
+        {% if not pdf and not query and not arquivado %}
+          <th scope='col'>Ações</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for abono in abonos %}
+
+        <tr>
+          <th scope="row">{{ abono.id }}</th>
+          <td>
+            <form id='trabalhadorForm{{ abono.id }}{{ abono.trabalhador.id }}' method='POST' action='{% url 'trabalhador' %}'>
+              {% csrf_token %}
+              <input type="hidden" name='trabalhador' value='{{ abono.trabalhador.id }}' />
+            </form>
+            <button form='trabalhadorForm{{ abono.id }}{{ abono.trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ abono.trabalhador.nome }}</button>
+          </td>
+          <td>
+            <form id='setorForm{{ abono.id}}{{ abono.trabalhador.setor.id }}' method='POST' action='{% url 'setor_espec' %}'>
+              {% csrf_token %}
+              <input type="hidden" name='setor' value='{{ abono.trabalhador.setor.id }}' />
+            </form>
+            <button form='setorForm{{ abono.id}}{{ abono.trabalhador.setor.id }}' class="btn btn-transparent text-light" type="submit">{{ abono.trabalhador.setor.nome }}</button>
+          </td>
+          <td>{{ abono.trabalhador.situacao|title }}</td>
+          <td>{{ abono.criado_em|date:"d/m/Y" }}</td>
+          <td>
+            {{ abono.data|date:"d/m/Y" }}
+            {% if not pdf and not query and not arquivado %}
+              <small>
+                {% include 'modals/data.html' %}
+              </small>
+            {% endif %}
+          </td>
+          {% if not pdf and not query and not arquivado %}
+
+            <td class="row justify-content-center">
+              <div class="col">
+                {% include 'modals/indeferir_abono.html' %}
+              </div>
+            </td>
+
+          {% endif %}
+
+        </tr>
+
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% else %}
+  <div class="badge badge-pill bg-warning d-block">
+    <h4 class='text-primary text-center'>Ainda não há abonos cadastrados no sistema</h4>
+  </div>
+{% endif %}

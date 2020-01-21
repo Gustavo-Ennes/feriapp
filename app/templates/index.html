@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load filtros %}
+
+{% block header %}
+
+<div class='header-gradient' style="height:32px;margin-top:-15px;">
+  {% if proximas_folgas or proximos_retornos %}
+    <div clas="row">
+      <div class="col-12 letreiro">
+        <marquee truespeed='100000' style='heigth:20px;'>
+
+          {% for folga in proximas_folgas %}
+            - - - -
+            {% if folga|verifica_tipo:"ferias" %}
+              {{ folga.trabalhador.nome }} entrará de férias em {{ folga.data_inicio|dias_ate }} dia(s)
+            {% elif folga|verifica_tipo:'licenca' %}
+               {{ folga.trabalhador.nome }} entrará de licença-prêmio em {{ folga.data_inicio|dias_ate }} dia(s)
+            {% elif folga|verifica_tipo:'abo  no' %}
+              {{ folga.trabalhador.nome }} abonará em {{ folga.data|dias_ate }} dia(s)
+            {% endif %}
+            - - - -
+          {% endfor %}
+
+
+          {% for retorno in proximos_retornos %}
+          - - - -
+            {% if retorno|verifica_tipo:"ferias" %}
+              {{ retorno.trabalhador.nome }} voltará de férias em {{ retorno.data_termino|dias_ate }} dia(s)
+            {% elif retorno|verifica_tipo:'licenca' %}
+              {{ retorno.trabalhador.nome }} voltará de licença-prêmio em {{ retorno.data_termino|dias_ate }} dia(s)
+            {% elif retorno|verifica_tipo:'abono' %}
+              {{ retorno.trabalhador.nome }} está abonando hoje.
+            {% endif %}
+            - - - -
+
+          {% endfor %}
+
+        </marquee>
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+
+{% block conteudo %}
+
+
+  <div class="mr-5">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-12 col-sm-6 col-lg-4">
+        {% include 'modals/marcar_ferias.html' %}
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        {% include 'modals/marcar_licenca.html' %}
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        {% include 'modals/marcar_abono.html' %}
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        {% include 'modals/novo_setor.html' %}
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        {% include 'modals/novo_trabalhador.html' %}
+      </div>
+
+    </div>
+  </div>
+  <div class='col-12 my-4'>
+    <div class="card m-2">
+      <div class="card-header">
+        <h4 class="card-title text-center">Próximas folgas</h4>
+      </div>
+      <div class="card-body">
+        {% include 'tables/proximas_folgas.html' %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

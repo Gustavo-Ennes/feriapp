@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load filtros %}
+
+{% block header %}
+
+  <div class="header-gradient">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-8">
+        <h4 class="text-light ml-4">ABONOS</h4>
+      </div>
+      <div class="col-2">
+        {% include "modals/marcar_abono.html" %}
+      </div>
+      <div class="col-2">
+        <form method="POST" action="{% url 'pdf' %}" class="mr-1">
+          {% csrf_token %}
+          <input type='hidden' name='tipo' value="abono" />
+          <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info fas fa-file-pdf" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not futuros or not fruidos or not indeferidos %}disabled{% endif %}></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block conteudo %}
+
+  <div class='row align-items-center justify-content-center'>
+
+    <nav class='col-12'>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active text-light bg-primary" id="futuros-tab" data-toggle="tab" href="#futuros" role="tab" aria-controls="futuros" aria-selected="true">Futuros</a>
+        <a class="nav-item nav-link text-light bg-primary" id="fruidos-tab" data-toggle="tab" href="#fruidos" role="tab" aria-controls="fruidos" aria-selected="false">Fruídos</a>
+        <a class="nav-item nav-link text-light bg-primary" id="indeferidos-tab" data-toggle="tab" href="#indeferidos" role="tab" aria-controls="indeferidos" aria-selected="false">Indeferidos</a>
+      </div>
+    </nav>
+    <div class="tab-content col-12 mt-4" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="futuros" role="tabpanel" aria-labelledby="futuros-tab">
+        <div>
+          {% with abonos=futuros %}
+            {% include 'tables/abono.html' %}
+          {% endwith %}
+        </div>
+      </div>
+      <div class="tab-pane fade" id="fruidos" role="tabpanel" aria-labelledby="fruidos-tab">
+        {% with arquivado=True %}
+          {% with abonos=fruidos %}
+            {% include 'tables/abono.html' %}
+          {% endwith %}
+        {% endwith %}
+      </div>
+      <div class="tab-pane fade" id="indeferidos" role="tabpanel" aria-labelledby="indeferidos-tab">
+        {% with arquivado=True %}
+          {% with abonos=indeferidos %}
+            {% include 'tables/abono.html' %}
+          {% endwith %}
+        {% endwith %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

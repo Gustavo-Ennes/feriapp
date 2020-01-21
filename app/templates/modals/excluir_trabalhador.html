@@ -1,0 +1,35 @@
+{% load crispy_forms_tags %}
+{% load filtros %}
+
+<button class="btn btn-lg btn-block btn-outline-danger fas fa-trash" data-toggle="modal" data-target="#modalExcluirTrabalhador{{ trabalhador.id }}" data-toggle="tooltip" data-placement="top" title="Excluir Trabalhador">
+</button>
+
+<div class="modal fade" id="modalExcluirTrabalhador{{ trabalhador.id }}" tabindex="-1" role="dialog" aria-labelledby="labelExcluirTrabalhador{{ trabalhador.id }}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="labelExcluirTrabalhador{{ trabalhador.id }}">Excluir Trabalhador</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    	</div>
+
+
+			<form action="{% url 'excluir_trabalhador' %}" method="POST" enctype="multipart/form-data" class="text-left">
+   		   {% csrf_token %}
+	     	<div class="modal-body">
+
+          <h5>Você deseja excluir permanentemente o servidor {{ trabalhador.nome }}?</h5>
+          <input type='hidden' name='trabalhador_id' value='{{trabalhador.id}}' />
+
+      	</div>
+      	<div class="modal-footer">
+	        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+	        <button class="btn btn-lg btn-danger btn-block" type='submit'>Excluir</button>
+	     	</div>
+  		</form>
+
+
+    </div>
+  </div>
+</div>

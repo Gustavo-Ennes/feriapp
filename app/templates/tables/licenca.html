@@ -1,0 +1,68 @@
+{% if licencas %}
+  <table class="table table-striped text-center">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Setor</th>
+        <th scope="col">Situação</th>
+        <th scope="col">Pedido</th>
+        <th scope="col">Duração</th>
+        <th scope="col">Início</th>
+        <th scope="col">Retorno</th>
+        {% if not pdf and not query and not arquivada %}
+          <th scope="col">Ações</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for f in licencas %}
+        <tr>
+          <th scope="row">{{ f.id }}</th>
+          <td>
+            <form id='trabalhadorForm{{ f.trabalhador.id }}{{ f.id }}' method='POST' action='{% url 'trabalhador' %}'>
+              {% csrf_token %}
+              <input type="hidden" name='trabalhador' value='{{ f.trabalhador.id }}' />
+            </form>
+            <button form='trabalhadorForm{{ f.trabalhador.id }}{{ f.id }}' class="btn btn-transparent text-light" type="submit">{{ f.trabalhador.nome }}</button>
+          </td>
+          <td>
+            <form id='setorForm{{ f.trabalhador.setor.id }}{{ f.id }}' method='POST' action='{% url 'setor_espec' %}'>
+              {% csrf_token %}
+              <input type="hidden" name='setor' value='{{ f.trabalhador.setor.id }}' />
+            </form>
+            <button form='setorForm{{ f.trabalhador.setor.id }}{{ f.id }}' class="btn btn-transparent text-light" type="submit">{{ f.trabalhador.setor.nome }}</button>
+          </td>
+          <td>{{ f.trabalhador.situacao|title }}</td>
+          <td>{{ f.criado_em|date:"d/m/Y" }}</td>
+          <td>{{ f.qtd_dias }}</td>
+          <td>
+            {{ f.data_inicio|date:"d/m/Y" }}
+            {% if not pdf and not query and not arquivada %}
+              <small>
+                {% include 'modals/data.html' %}
+              </small>
+            {% endif %}
+          </td>
+          <td>{{ f.data_termino|date:"d/m/Y" }}</td>
+          {% if not pdf and not query and not arquivada %}
+
+            <td class="row justify-content-center">
+              <div class="col">
+                {% include 'modals/indeferir_licenca.html' %}
+              </div>
+            </td>
+
+          {% endif %}
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+
+{% else %}
+  <div class="badge badge-pill bg-warning d-block">
+    <h4 class='text-primary text-center m-1'>Ainda não há licenças-prêmio cadastradas no sistema</h4>
+  </div>
+{% endif %}

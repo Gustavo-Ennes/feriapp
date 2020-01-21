@@ -1,0 +1,36 @@
+{% if tipo %}
+  <button class="btn btn-sm text-light fas fa-pencil-alt mb-1"  data-toggle="modal" data-target="#modalEditarData" data-toggle="tooltip" data-placement="top" title="Editar data">
+  </button>
+
+  <div class="modal fade" id="modalEditarData" tabindex="-1" role="dialog" aria-labelledby="labelEditarData" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="labelMarcarFerias">Editar data</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      	</div>
+
+
+  			<form action="{% url 'editar_data' %}" method="POST" enctype="multipart/form-data" class="text-left">
+     		{% csrf_token %}
+  	     	<div class="modal-body">
+
+            <label for='inputData'>Insira uma data</label>
+            <input type="text" name='data' class="form-control" id="inputData" />
+            <input type='hidden' name='tipo' value={{tipo}} />
+            <input type='hidden' name='id' value={{abono.id}} />
+
+        	</div>
+        	<div class="modal-footer">
+  	        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+  	        <button class="btn btn-success" type='submit'>Marcar</button>
+  	     	</div>
+    		</form>
+
+
+      </div>
+    </div>
+  </div>
+{% endif %}

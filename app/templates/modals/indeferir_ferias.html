@@ -1,0 +1,38 @@
+{% if tipo %}
+  <button class="btn btn-sm btn-block btn-outline-danger"  data-toggle="modal" data-target="#modalIndeferirFerias" data-toggle="tooltip" data-placement="top" title="Indeferir">
+    <i class='text-danger fas fa-times-circle'></i> Indeferir <i class='text-danger fas fa-times-circle'></i>  </button>
+
+  <div class="modal fade" id="modalIndeferirFerias" tabindex="-1" role="dialog" aria-labelledby="labelIndeferirFerias" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="labelIndeferirFeriass">Indeferir Férias</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      	</div>
+
+
+  			<form action="{% url 'indeferir' %}" method="POST" enctype="multipart/form-data" class="text-left">
+     		{% csrf_token %}
+  	     	<div class="modal-body">
+
+
+              <h5>Você deseja indeferir as férias de {{ f.trabalhador.nome }}, de {{ f.data_inicio|date:"d/m/Y"}} até {{ f.data_termino|date:"d/m/Y"}}?</h5>
+              <label for='obs'>Justifique seu indeferimento</label>
+              <textarea id='obs' type='text' class="form-control" rows="5" name='observacoes' required></textarea>
+              <input type='hidden' name='ferias_id' value='{{f.id}}' />
+              <input type='hidden' name='tipo' value='ferias' />
+
+        	</div>
+        	<div class="modal-footer">
+  	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+  	        <button class="btn btn-lg btn-block btn-danger" type='submit'>Indeferir</button>
+  	     	</div>
+    		</form>
+
+
+      </div>
+    </div>
+  </div>
+{% endif %}

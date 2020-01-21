@@ -1,0 +1,77 @@
+<div class="card my-3">
+  <div class="card-header">
+    <div class="row justify-content-">
+      <div class="col-12 text-right">
+        <i class="fas fa-puzzle-piece text-right text-primary"></i>
+      </div>
+      <div class='col-12 text-center'>
+        <h5 class="card-title"> Colaboradores </h5>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+
+      <table class="table table-striped text-center">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Função</th>
+            <th scope='col'>Setor</th>
+            <th scope="col">Admissão</th>
+            <th scope="col">Situação</th>
+            {% if not pdf %}
+              <th scope="col">Ações</th>
+            {% endif %}
+
+          </tr>
+        </thead>
+        <tbody>
+
+
+        {% for trabalhador in trabalhadores %}
+          <tr>
+            <th scope="row">{{ trabalhador.id }}</th>
+            <td>
+              <form id='trabalhadorForm{{ trabalhador.id }}' method='POST' action='{% url 'trabalhador' %}'>
+                {% csrf_token %}
+                <input type="hidden" name='trabalhador' value='{{ trabalhador.id }}' />
+              </form>
+              <button form='trabalhadorForm{{ trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ trabalhador.nome }}</button>
+            </td>
+            <td>{{ trabalhador.funcao }}</td>
+            <td>
+              <form id='setorForm{{ trabalhador.id }}' method='POST' action='{% url 'setor_espec' %}'>
+                {% csrf_token %}
+                <input type="hidden" name='setor' value='{{ trabalhador.setor.id }} '/>
+              </form>
+              <button form='setorForm{{ trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ trabalhador.setor.nome }}</button>
+            </td>
+            <td>{{ trabalhador.data_admissao|date:"d/m/Y" }}</td>
+            <td>{{ trabalhador.situacao|title }}</td>
+            {% if not pdf %}
+              <td>
+                <small class='row justify-content-center align-items-center'>
+                  <div class="col-6">
+                    {% include 'modals/editar_trabalhador.html' %}
+                  </div>
+                  <div class='col-6'>
+                    {% include 'modals/excluir_trabalhador.html' %}
+                  </div>
+
+                </small>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer">
+    <div class="row justify-content-center align-items-center">
+      <div class="col">
+        <small class="text-muted text-left"> {{ trabalhadores.count }} colaborador(es) </small>
+      </div>
+  </div>
+</div>

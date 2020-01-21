@@ -1,0 +1,41 @@
+{% load crispy_forms_tags %}
+
+
+{% if index %}
+
+	<button style="height:180px;" class="btn btn-block btn-info btn-big m-4" data-toggle="modal" data-target="#modalMarcarFerias" data-toggle="tooltip" data-placement="top" title="Marcar Férias">
+				Marcar Férias
+	</button>
+
+{% else %}
+	<button class="btn btn-sm btn-info btn-block fas fa-plus" data-toggle="modal" data-target="#modalMarcarFerias" data-toggle="tooltip" data-placement="top" title="Marcar Férias"></button>
+{% endif %}
+
+<div class="modal fade" id="modalMarcarFerias" tabindex="-1" role="dialog" aria-labelledby="labelMarcarFerias" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="labelMarcarFerias">Marcar Férias</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    	</div>
+
+
+			<form action="{% url 'marcar_ferias' %}" method="POST" enctype="multipart/form-data" class="text-left">
+   		{% csrf_token %}
+	     	<div class="modal-body">
+
+          {{ FeriasForm|crispy }}
+
+      	</div>
+      	<div class="modal-footer">
+	        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+	        <button class="btn btn-success" type='submit'>Marcar</button>
+	     	</div>
+  		</form>
+
+
+    </div>
+  </div>
+</div>

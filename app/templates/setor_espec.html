@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load filtros %}
+
+{% block header %}
+
+  <div class="header-gradient">
+    <h4 class="text-light ml-4">SETOR: {{ setor.nome|upper }}</h4>
+  </div>
+
+{% endblock %}
+
+{% block conteudo %}
+
+  <div class="m-3">
+
+    {% include 'cards/trabalhador.html' %}
+
+  </div>
+
+
+{% endblock %}
