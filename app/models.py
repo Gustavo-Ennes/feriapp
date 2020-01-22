@@ -82,7 +82,7 @@ class Ferias(models.Model):
     def save(self, *args, **kwargs):
 
         self.data_termino = self.data_inicio + timedelta(days=self.qtd_dias)
-        valida_ferias(self)
+        self.deferida = valida_ferias(self)
         super(Ferias, self).save(*args, **kwargs)
 
 
@@ -154,7 +154,7 @@ class Abono(models.Model):
 
     def save(self, *args, **kwargs):
 
-        valida_abono(self)
+        self.deferido = valida_abono(self)
         super(Abono, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -185,14 +185,11 @@ def valida_ferias(ferias):
             ferias.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
         elif inicio < hoje:
             ferias.observacoes = "data de agendamento anterior a hoje"
-            ferias.deferida = True
+            return True
 
-        return ferias.deferida
+        return False
 
-
-    ferias.deferida = True
-
-    return ferias.deferida
+    return True
 
 def valida_abono(abono):
 
@@ -216,10 +213,8 @@ def valida_abono(abono):
             abono.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
         elif data < hoje:
             abono.observacoes = "data de agendamento anterior a hoje"
-            abono.deferido = True
+            return True
 
-        return abono.deferido
+        return False
 
-    abono.deferido = True
-
-    return abono.deferido
+    return True
