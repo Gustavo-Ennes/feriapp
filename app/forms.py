@@ -5,17 +5,21 @@ class FeriasForm(forms.ModelForm):
     class Meta:
         model = Ferias
         fields = "__all__"
+        widgets={'data_inicio': forms.TextInput(attrs={'class': 'datepicker', 'autocomplete' : 'off'})}
+
 
 class LicencaPremioForm(forms.ModelForm):
     class Meta:
         model = LicencaPremio
         fields = "__all__"
+        widgets={'data_inicio': forms.TextInput(attrs={'class': 'datepicker', 'autocomplete' : 'off'})}
 
 
 class AbonoForm(forms.ModelForm):
     class Meta:
         model = Abono
         fields = "__all__"
+        widgets={'data': forms.TextInput(attrs={'class': 'datepicker', 'autocomplete' : 'off'})}
 
 
 class TrabalhadorForm(forms.ModelForm):
