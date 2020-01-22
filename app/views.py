@@ -537,11 +537,17 @@ def entrar(request):
     	print(str(request.POST))
     	username = request.POST['usuario']
     	password = request.POST['senha']
+        remember_me = True if 'remember_me' in request.POST else False
 
     	user = authenticate(request, username=username, password=password)
     	if user is not None:
     		if user.is_active:
+                
     			login(request, user)
+
+                if not remember_me:
+                    request.session.set_expiry(0)
+
     			messages.success(request, 'Bem-vindo(a), %s' % user.username)
 
     			return redirect("index")

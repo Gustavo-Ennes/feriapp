@@ -201,6 +201,10 @@ LOGGING = {
     }
 }
 
+#sessão durará 10 horas
+SESSION_COOKIE_AGE = 60 * 60 * 10
+
+
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
