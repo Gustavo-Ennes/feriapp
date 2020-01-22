@@ -26,6 +26,7 @@ class TrabalhadorForm(forms.ModelForm):
     class Meta:
         model = Trabalhador
         fields = "__all__"
+        widgets={'data_admissao': forms.TextInput(attrs={'class': 'datepicker', 'autocomplete' : 'off'})}
 
 
 class SetorForm(forms.ModelForm):
