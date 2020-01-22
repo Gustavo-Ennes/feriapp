@@ -129,15 +129,17 @@
     {% endif %}
 
 
-
     <script>
-    $( function() {
-      $( ".datepicker" ).datepicker({minDate: 0});
-      $( ".datepicker_admissao" ).datepicker({maxDate: 0, changeMonth:True, changeYear:True});
-      $( ".datepicker .datepicker_admissao" ).datepicker( "option", "dateFormat", "dd/mm/yy" );
-      $( ".datepicker .datepicker_admissao" ).datepicker( "option", "showAnim", 'slideDown' );
+      $( function(){
+        $( ".datepicker" ).datepicker({minDate: 0});
+        $( ".datepicker" ).datepicker( "option", "dateFormat", "dd/mm/yy" );
+        $( ".datepicker" ).datepicker( "option", "showAnim", 'slideDown' );
 
-    } );
+        $( ".datepicker2" ).datepicker({minDate:"-20Y", maxDate: 0, changeMonth:true, changeYear:true});
+        $( ".datepicker2" ).datepicker( "option", "dateFormat", "dd/mm/yy" );
+        $( ".datepicker2" ).datepicker( "option", "showAnim", 'slideDown' );
+      });
+
     </script>
 
     {% block js %} {% endblock %}
