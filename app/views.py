@@ -211,6 +211,7 @@ def novo_trabalhador(request):
 
         return redirect("trabalhadores")
 
+@login_required(login_url='/entrar/')
 def  trabalhadores(request):
     trabalhadores = Trabalhador.objects.all()
     context = {
