@@ -20,19 +20,29 @@ def atualiza_situacoes_trabalhadores():
         trabalhador.situacao = "processando"
 
         for f in ferias:
-            if f.data_inicio <= hoje and hoje < f.data_termino and f.deferida:
-                trabalhador.situacao = 'ferias'
-                break
+            if not f.fruida:
+                if f.data_inicio <= hoje and hoje < f.data_termino and f.deferida:
+                    trabalhador.situacao = 'ferias'
+                    break
+                elif f.data_termino <= hoje:
+                    f.fruida = True
 
         for f in licencas:
-            if f.data_inicio <= hoje and hoje < f.data_termino and f.deferida:
-                trabalhador.situacao = 'licenca'
-                break
+            if not f.fruida:
+                if f.data_inicio <= hoje and hoje < f.data_termino and f.deferida:
+                    trabalhador.situacao = 'licenca'
+                    break
+                elif f.data_termino <= hoje:
+                    f.fruida = True
 
         for f in abonos:
-            if f.data == hoje and f.deferido:
-                trabalhador.situacao = 'abono'
-                break
+            if not f.fruido:
+                if f.data == hoje and f.deferido:
+                    trabalhador.situacao = 'abono'
+                    break
+                elif f.data < hoje:
+                    f.fruido = True
+
 
         if atestado:
             trabalhador.situacao = 'atestado'

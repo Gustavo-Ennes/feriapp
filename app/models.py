@@ -30,6 +30,7 @@ class Trabalhador(models.Model):
     )
 
     nome = models.CharField(max_length=100)
+    matricula = models.CharField(max_length=15, default="000000-0")
     funcao = models.CharField(max_length=50)
     setor = models.ForeignKey(Setor, on_delete=models.SET_NULL, null=True)
     data_admissao = models.DateTimeField()
@@ -75,6 +76,7 @@ class Ferias(models.Model):
     deferida = models.BooleanField(editable=False, default=False)
     observacoes = models.TextField(blank=True, editable=False)
     tipo = models.CharField(max_length=2, default='f', editable=False)
+    fruida = models.BooleanField(editable=False, default=False)
 
 
     def save(self, *args, **kwargs):
@@ -148,6 +150,7 @@ class Abono(models.Model):
     modificado_em = models.DateTimeField(auto_now=True)
     deferido = models.BooleanField(editable=False, default=False)
     observacoes = models.TextField(blank=True, editable=False)
+    fruido = models.BooleanField(editable=False, default=False)
 
     def save(self, *args, **kwargs):
 
@@ -182,6 +185,7 @@ def valida_ferias(ferias):
             ferias.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
         elif inicio < hoje:
             ferias.observacoes = "data de agendamento anterior a hoje"
+            ferias.deferida = True
 
         return ferias.deferida
 
@@ -212,6 +216,7 @@ def valida_abono(abono):
             abono.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
         elif data < hoje:
             abono.observacoes = "data de agendamento anterior a hoje"
+            abono.deferido = True
 
         return abono.deferido
 
