@@ -533,32 +533,30 @@ def entrar(request):
         return render(request, 'login.html', context)
 
     elif request.method == "POST":
-    	logout(request)
-    	print(str(request.POST))
-    	username = request.POST['usuario']
-    	password = request.POST['senha']
+        logout(request)
+        print(str(request.POST))
+        username = request.POST['usuario']
+        password = request.POST['senha']
         remember_me = True if 'remember_me' in request.POST else False
 
-    	user = authenticate(request, username=username, password=password)
-    	if user is not None:
-    		if user.is_active:
-                
-    			login(request, user)
-
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
                 if not remember_me:
                     request.session.set_expiry(0)
+                messages.success(request, 'Bem-vindo(a), %s' % user.username)
 
-    			messages.success(request, 'Bem-vindo(a), %s' % user.username)
+                return redirect("index")
 
-    			return redirect("index")
+            else:
+                print("usuário não ativo.")
 
-    		else:
-    			print("usuário não ativo.")
+        else:
+            messages.error(request, "Usuário ou senha inválida.")
 
-    	else:
-    		messages.error(request, "Usuário ou senha inválida.")
+        return redirect("entrar")
 
-    return redirect("entrar")
 
 @login_required(login_url='/entrar/')
 def sair(request):
