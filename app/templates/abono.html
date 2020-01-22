@@ -15,7 +15,7 @@
         <form method="POST" action="{% url 'pdf' %}" class="mr-1">
           {% csrf_token %}
           <input type='hidden' name='tipo' value="abono" />
-          <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info fas fa-file-pdf" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not futuros or not fruidos or not indeferidos %}disabled{% endif %}></button>
+          <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info fas fa-file-pdf" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not futuros and not fruidos and not indeferidos and not em_andamento %}disabled{% endif %}></button>
         </form>
       </div>
     </div>
