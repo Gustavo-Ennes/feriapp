@@ -49,7 +49,7 @@
 {% block conteudo %}
 
 
-  <div class="mr-5">
+  <div class="mr-5 my-5">
     <div class="row justify-content-center align-items-center">
       <div class="col-12 col-sm-6 col-lg-4">
         {% include 'modals/marcar_ferias.html' %}
@@ -66,19 +66,22 @@
       <div class="col-12 col-sm-6 col-lg-4">
         {% include 'modals/novo_trabalhador.html' %}
       </div>
+      {% if proximas_folgas %}
+        <div class='col-12'>
+          <div class="card my-5">
+            <div class="card-header">
+              <h4 class="card-title text-center">Próximas folgas</h4>
+            </div>
+            <div class="card-body">
+              {% include 'tables/proximas_folgas.html' %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
 
     </div>
   </div>
-  <div class='col-12 my-4'>
-    <div class="card m-2">
-      <div class="card-header">
-        <h4 class="card-title text-center">Próximas folgas</h4>
-      </div>
-      <div class="card-body">
-        {% include 'tables/proximas_folgas.html' %}
-      </div>
-    </div>
-  </div>
+
 
 {% endblock %}
 
