@@ -84,7 +84,7 @@
 
         		<small class="text-muted m-2 float-right">
 
-          		<small class="text-muted">{{ user.username }}</small>
+          		<small class="badge badge-pill badge-info text-light">{{ user.username }}</small>
 
         			<a href="{% url 'sair' %}" class="btn btn-outline-dark btn-sm sombra ml-1">Sair</a>
 
@@ -122,7 +122,7 @@
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/2a327097e3.js" crossorigin="anonymous"></script>
-    
+
     {% if messages %}
 
         <script>
