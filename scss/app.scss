@@ -4,10 +4,19 @@ $shadow: #065E6B;
 $glow: #38E4FF;
 $title: #DDDDFF;
 $primary: #17A2B8;
+$font_title: 'Bebas Neue', cursive;
+$font_subtitle: 'Dosis', sans-serif;
+$font_text: 'Abel', sans-serif;
+
+
 
 html, body, .page-header{
     max-width: 100%;
     overflow-x: hidden;
+
+    .page-header{
+      font-family: $font_text;
+    }
 }
 
 body {
@@ -33,17 +42,21 @@ body {
 
   .card-title{
     color: $title !important;
+    font-family: $font_title;
   }
   .card-subtitle{
     color: $subtitle !important;
+    font-family: $font_subtitle;
   }
   .card-text{
     color: $text !important;
+    font-family: $font_text;
   }
 
   .btn-card{
     background-color:$primary !important;
     color: $title !important;
+    font-family: $font_subtitle;
   }
 }
 
@@ -60,6 +73,11 @@ body {
     color:rgba(255,255,255,0.6);
 
   }
+
+  .modal-title{
+    font-family: $font_title;
+  }
+
   .modal-header, .modal-footer{
     background-color: $primary;
     color: $text;
@@ -73,9 +91,11 @@ body {
 
   thead tr{
     background-color: $shadow !important;
+    font-family: $font_subtitle;
   }
   tbody tr{
     background-color:$primary !important;
+    font-family: $font_text;
   }
 }
 
@@ -85,10 +105,12 @@ body {
 
   .toast-header{
     background-color: $subtitle !important;
+    font-family: $font_title;
   }
 
   .toast-body{
     background-color: $text !important;
+    font-family: $font_text;
   }
 }
 
@@ -96,6 +118,7 @@ body {
   height: 50px;
   padding-top:10px;
   padding-bottom: 10px;
+  font-family: $font_text;
 }
 .header-gradient, .navbar{
   background: rgb(6,94,107);
@@ -106,18 +129,22 @@ body {
 
   .nav-item a, .navbar-brand, .btn{
     color: $title !important;
+    font-family: $font_subtitle;
   }
 }
 
 .btn{
   .btn-big{
     box-shadow: 15px 12px 15px 22px #000 !important;
+    font-family: $font_title;
   }
   .btn-transparent{
     background-color: transparent;
+    font-family: $font_subtitle;
   }
   .btn-pesquisa{
     border-color: $subtitle !important;
     color: $text !important;
+    font-family: $font_subtitle;
   }
 }
