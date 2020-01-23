@@ -30,126 +30,136 @@
 
         {% if trabalhadores %}
           <div class="col-12">
-            {% include 'cards/trabalhador.html' %}
+            <div class="my-4">
+              {% include 'cards/trabalhador.html' %}
+            </div>
           </div>
         {% endif %}
 
         {% if setores %}
-          <div class="col-12 my-2">
-            <div class="card">
-              <div class="card-header">
-                <h5 class='card-title text-center'>Setores</h5>
-              </div>
-              <div class="card-body">
-                {% include 'tables/setores.html' %}
+          <div class="col-12">
+            <div class="my-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class='card-title text-center'>Setores</h5>
+                </div>
+                <div class="card-body">
+                  {% include 'tables/setores.html' %}
+                </div>
               </div>
             </div>
           </div>
         {% endif %}
 
         {% if ferias_futuras or ferias_fruidas or ferias_indeferidas %}
-          <div class="col-12 my-2">
-            <div class="card">
-              <div class="card-header">
-                <h5 class='card-title text-center'>Férias</h5>
-              </div>
-              <div class="card-body">
-                {% if ferias_futuras %}
-                  <h3 class="text-center text-primary">futuras</h3>
-                  {% with ferias=ferias_futuras %}
-                    <div class="my-2">
-                      {% include 'tables/ferias.html' %}
-                    </div>
-                  {% endwith %}
-                {% endif %}
-                {% if ferias_fruidas %}
-                  {% with ferias=ferias_fruidas %}
-                    <h3 class="text-center text-primary">fruídas</h3>
-                    <div class="my-2">
-                      {% include 'tables/ferias.html' %}
-                    </div>
-                  {% endwith %}
-                {% endif %}
-                {% if ferias_indeferidas %}
-                  {% with ferias=ferias_indeferidas %}
-                    <h3 class="text-center text-primary">indeferidas</h3>
-                    <div class="my-2">
-                      {% include 'tables/ferias.html' %}
-                    </div>
-                  {% endwith %}
-                {% endif %}
+          <div class="col-12">
+            <div class="my-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class='card-title text-center'>Férias</h5>
+                </div>
+                <div class="card-body">
+                  {% if ferias_futuras %}
+                    <h3 class="text-center text-primary">futuras</h3>
+                    {% with ferias=ferias_futuras %}
+                      <div class="my-2">
+                        {% include 'tables/ferias.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                  {% if ferias_fruidas %}
+                    {% with ferias=ferias_fruidas %}
+                      <h3 class="text-center text-primary">fruídas</h3>
+                      <div class="my-2">
+                        {% include 'tables/ferias.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                  {% if ferias_indeferidas %}
+                    {% with ferias=ferias_indeferidas %}
+                      <h3 class="text-center text-primary">indeferidas</h3>
+                      <div class="my-2">
+                        {% include 'tables/ferias.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                </div>
               </div>
             </div>
           </div>
         {% endif %}
 
         {% if licencas_futuras or licencas_fruidas or licencas_indeferidas %}
-          <div class="col-12 my-2">
-            <div class="card">
-              <div class="card-header">
-                <h5 class='card-title text-center'>Licenças-prêmio</h5>
-              </div>
-              <div class="card-body">
-                {% if licencas_futuras %}
-                  <h3 class="text-center text-primary">futuras</h3>
-                  {% with licencas=licencas_futuras %}
-                    <div class="my-2">
-                      {% include 'tables/licenca.html' %}
-                    </div>
-                  {% endwith %}
-                {% endif %}
-                {% if licencas_fruidas %}
-                  {% with licencas=licencas_fruidas %}
-                    <h3 class="text-center text-primary">fruídas</h3>
-                    <div class="my-2">
-                      {% include 'tables/licenca.html' %}
-                    </div>
-                  {% endwith %}
-                {% endif %}
-                {% if licencas_indeferidas %}
-                  {% with licencas=licencas_indeferidas %}
-                    <h3 class="text-center text-primary">indeferidas</h3>
-                    <div class="my-2">
-                      {% include 'tables/licenca.html' %}
-                    </div>
-                  {% endwith %}
-                {% endif %}
+          <div class="col-12">
+            <div class="my-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class='card-title text-center'>Licenças-prêmio</h5>
+                </div>
+                <div class="card-body">
+                  {% if licencas_futuras %}
+                    <h3 class="text-center text-primary">futuras</h3>
+                    {% with licencas=licencas_futuras %}
+                      <div class="my-2">
+                        {% include 'tables/licenca.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                  {% if licencas_fruidas %}
+                    {% with licencas=licencas_fruidas %}
+                      <h3 class="text-center text-primary">fruídas</h3>
+                      <div class="my-2">
+                        {% include 'tables/licenca.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                  {% if licencas_indeferidas %}
+                    {% with licencas=licencas_indeferidas %}
+                      <h3 class="text-center text-primary">indeferidas</h3>
+                      <div class="my-2">
+                        {% include 'tables/licenca.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                </div>
               </div>
             </div>
           </div>
         {% endif %}
 
         {% if abonos_futuros or abonos_fruidos or abonos_indeferidos %}
-          <div class="col-12 my-2">
+          <div class="col-12">
+            <div class="my-4">
             <div class="card">
-              <div class="card-header">
-                <h5 class='card-title text-center'>Abonos</h5>
-              </div>
-              <div class="card-body">
-                {% if abonos_futuros %}
-                  <h3 class="text-center text-primary">futuros</h3>
-                  {% with abonos=abonos_futuros %}
-                    <div class="my-2">
-                      {% include 'tables/abono.html' %}
-                    </div>
-                  {% endwith %}
-                {% endif %}
-                {% if abonos_fruidos %}
-                  {% with abonos=abonos_fruidos %}
-                    <h3 class="text-center text-primary">fruídos</h3>
-                    <div class="my-2">
-                      {% include 'tables/abono.html' %}
-                    </div>
-                  {% endwith %}
-                {% endif %}
-                {% if abonos_indeferidos %}
-                  {% with abonos=abonos_indeferidos %}
-                    <h3 class="text-center text-primary">indeferidos</h3>
-                    <div class="my-2">
-                      {% include 'tables/abono.html' %}
-                    </div>
-                  {% endwith %}
-                {% endif %}
+                <div class="card-header">
+                  <h5 class='card-title text-center'>Abonos</h5>
+                </div>
+                <div class="card-body">
+                  {% if abonos_futuros %}
+                    <h3 class="text-center text-primary">futuros</h3>
+                    {% with abonos=abonos_futuros %}
+                      <div class="my-2">
+                        {% include 'tables/abono.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                  {% if abonos_fruidos %}
+                    {% with abonos=abonos_fruidos %}
+                      <h3 class="text-center text-primary">fruídos</h3>
+                      <div class="my-2">
+                        {% include 'tables/abono.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                  {% if abonos_indeferidos %}
+                    {% with abonos=abonos_indeferidos %}
+                      <h3 class="text-center text-primary">indeferidos</h3>
+                      <div class="my-2">
+                        {% include 'tables/abono.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                </div>
               </div>
             </div>
           </div>

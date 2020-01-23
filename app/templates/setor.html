@@ -27,7 +27,9 @@
 
   <div class="m-3">
     {% for nome, dict in setores.items %}
-      {% include 'cards/trabalhador_dict.html' %}
+      <div class="my-4">
+        {% include 'cards/trabalhador_dict.html' %}
+      </div>
     {% endfor %}
   </div>
 
