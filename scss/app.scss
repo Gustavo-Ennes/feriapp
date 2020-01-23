@@ -21,11 +21,7 @@ html, body, .page-header{
 
 body {
 
-    background: url(fundo.jpg) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+  background-color: rgba(125,55,0,0.3)
 
 }
 .card{
@@ -148,4 +144,11 @@ body {
     color: $text !important;
     font-family: $font_subtitle;
   }
+}
+
+small, .nav-link,h4,h5{
+  font-family: $font_subtitle;
+}
+h1,h2,h3{
+  font-family: $font_title;
 }
