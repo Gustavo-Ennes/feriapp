@@ -3,8 +3,8 @@
 
 {% block header %}
 
-<div class='header-gradient' style="height:32px;margin-top:-15px;">
-  {% if proximas_folgas or proximos_retornos %}
+{% if proximas_folgas or proximos_retornos %}
+  <div class='header-gradient' style="height:32px;margin-top:-15px;">
     <div clas="row">
       <div class="col-12 letreiro">
         <marquee truespeed='100000' style='heigth:20px;'>
@@ -15,7 +15,7 @@
               {{ folga.trabalhador.nome }} entrará de férias em {{ folga.data_inicio|dias_ate }} dia(s)
             {% elif folga|verifica_tipo:'licenca' %}
                {{ folga.trabalhador.nome }} entrará de licença-prêmio em {{ folga.data_inicio|dias_ate }} dia(s)
-            {% elif folga|verifica_tipo:'abo  no' %}
+            {% elif folga|verifica_tipo:'abono' %}
               {{ folga.trabalhador.nome }} abonará em {{ folga.data|dias_ate }} dia(s)
             {% endif %}
             - - - -
@@ -38,9 +38,11 @@
         </marquee>
       </div>
     </div>
-  {% endif %}
 
-</div>
+  </div>
+{% endif %}
+
+
 {% endblock %}
 
 

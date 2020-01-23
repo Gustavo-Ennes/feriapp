@@ -26,6 +26,7 @@ def atualiza_situacoes_trabalhadores():
                     break
                 elif f.data_termino <= hoje:
                     f.fruida = True
+                    f.save()
 
         for f in licencas:
             if not f.fruida:
@@ -34,6 +35,7 @@ def atualiza_situacoes_trabalhadores():
                     break
                 elif f.data_termino <= hoje:
                     f.fruida = True
+                    f.save()
 
         for f in abonos:
             if not f.fruido:
@@ -42,6 +44,7 @@ def atualiza_situacoes_trabalhadores():
                     break
                 elif f.data < hoje:
                     f.fruido = True
+                    f.save()
 
 
         if atestado:

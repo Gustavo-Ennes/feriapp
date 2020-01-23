@@ -104,7 +104,7 @@ body {
   background: linear-gradient(90deg, rgba(6,94,107,1) 2%, rgba(23,162,184,1) 16%, rgba(56,228,255,1) 56%, rgba(255,255,255,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#065e6b",endColorstr="#ffffff",GradientType=1);
 
-  .nav-item, .navbar-brand, .btn{
+  .nav-item a, .navbar-brand, .btn{
     color: $title !important;
   }
 }
