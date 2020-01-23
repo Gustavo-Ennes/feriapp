@@ -20,11 +20,13 @@ html, body, .page-header{
 }
 
 body {
-  background: -moz-linear-gradient(top,  rgba(211,204,160,0) 0%, rgba(211,204,160,0.01) 1%, rgba(73,57,14,0.59) 78%, rgba(74,57,14,0.6) 79%, rgba(99,66,19,1) 100%);
-  background: -webkit-linear-gradient(top,  rgba(211,204,160,0) 0%,rgba(211,204,160,0.01) 1%,rgba(73,57,14,0.59) 78%,rgba(74,57,14,0.6) 79%,rgba(99,66,19,1) 100%);
-  background: linear-gradient(to bottom,  rgba(211,204,160,0) 0%,rgba(211,204,160,0.01) 1%,rgba(73,57,14,0.59) 78%,rgba(74,57,14,0.6) 79%,rgba(99,66,19,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00d3cca0', endColorstr='#634213',GradientType=0 );
 
+    background: url(fundo.png) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    
 }
 .card{
 
