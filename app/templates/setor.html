@@ -15,7 +15,9 @@
         <form method="POST" action="{% url 'pdf' %}" class="mr-1">
           {% csrf_token %}
           <input type='hidden' name='tipo' value="setor" />
-          <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info far fa-file-pdf" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not setores %}disabled{% endif %}></button>
+          <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not setores %}disabled{% endif %}>
+            <i class="far fa-file-pdf text-center"></i>
+          </button>
         </form>
       </div>
     </div>
