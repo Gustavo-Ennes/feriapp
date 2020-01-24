@@ -25,7 +25,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "rie%zge!3z3l*bfomasd2r!0eul()=9)218pr_olrjo^3(#tuz"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", True)
 
 # Application definition
 
@@ -204,7 +204,7 @@ LOGGING = {
 #sessão durará 10 horas
 SESSION_COOKIE_AGE = 60 * 60 * 10
 
-
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())

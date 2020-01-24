@@ -55,7 +55,7 @@ class Ferias(models.Model):
 
     class FeriasFruidas(models.Manager):
         def all(self):
-            return super().get_queryset().filter(Q(tipo='f') & Q(data_termino__lt=timezone.now().date()) & Q(deferido=True))
+            return super().get_queryset().filter(Q(tipo='f') & Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
             #return Ferias.objects.filter(Q(tipo='f') & Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
     class FeriasIndeferidas(models.Manager):
         def all(self):
@@ -103,7 +103,7 @@ class LicencaPremio(Ferias):
 
     class LicencasFruidas(models.Manager):
         def all(self):
-            return super().get_queryset().filter(Q(data_termino__lt=timezone.now().date()) & Q(deferido=True))
+            return super().get_queryset().filter(Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
             #return LicencaPremio.objects.filter(Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
     class LicencasIndeferidas(models.Manager):
         def all(self):
