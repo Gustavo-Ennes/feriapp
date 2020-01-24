@@ -90,10 +90,10 @@ def trabalhador(request):
         finally:
             context = {
                 'trabalhador' : trabalhador,
-                'ferias_futuras' : Ferias.objects.filter(Q(trabalhador=trabalhador) & Q(deferida=True) & Q(tipo='f') & Q(data_termino__gte=hoje)),
+                'ferias_futuras' : Ferias.objects.filter(Q(trabalhador=trabalhador) & Q(deferida=True) & Q(tipo='f') & Q(data_inicio__gte=hoje)),
                 'ferias_fruidas' : Ferias.fruidas.filter(Q(trabalhador=trabalhador)),
                 'ferias_indeferidas' : Ferias.indeferidas.filter(Q(trabalhador=trabalhador)),
-                'licencas_futuras' : LicencaPremio.objects.filter(Q(trabalhador=trabalhador) & Q(deferida=True) & Q(data_termino__gte=hoje)),
+                'licencas_futuras' : LicencaPremio.objects.filter(Q(trabalhador=trabalhador) & Q(deferida=True) & Q(data_inicio__gte=hoje)),
                 'licencas_fruidas' : LicencaPremio.fruidas.filter(Q(trabalhador=trabalhador)),
                 'licencas_indeferidas' : LicencaPremio.indeferidas.filter(Q(trabalhador=trabalhador)),
                 'abonos_futuros' : Abono.objects.filter(Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__gte=hoje)),

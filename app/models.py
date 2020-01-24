@@ -55,13 +55,17 @@ class Ferias(models.Model):
 
     class FeriasFruidas(models.Manager):
         def all(self):
-            return Ferias.objects.filter(Q(tipo='f') & Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
+            return super().get_queryset().filter(Q(tipo='f') & Q(data_termino__lt=timeone.now().date()) & Q(deferido=True))
+            #return Ferias.objects.filter(Q(tipo='f') & Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
     class FeriasIndeferidas(models.Manager):
         def all(self):
-            return Ferias.objects.filter(Q(deferida=False))
+            return super().get_queryset().filter(Q(deferida=False))
+
+            #return Ferias.objects.filter(Q(deferida=False))
     class FeriasEmAndamento(models.Manager):
         def all(self):
-            return Ferias.objects.filter(Q(tipo='f') & Q(deferida=True) & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()))
+            return super().get_queryset().filter(Q(tipo='f') & Q(data_inicio__lte=tizone.now().date()) & Q(data_termino__gte=timeone.now().date()) & Q(deferido=True))
+            #return Ferias.objects.filter(Q(tipo='f') & Q(deferida=True) & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()))
 
     fruidas = FeriasFruidas()
     indeferidas = FeriasIndeferidas()
@@ -99,13 +103,17 @@ class LicencaPremio(Ferias):
 
     class LicencasFruidas(models.Manager):
         def all(self):
-            return LicencaPremio.objects.filter(Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
+            return super().get_queryset().filter(Q(data_termino__lt=timeone.now().date()) & Q(deferido=True))
+            #return LicencaPremio.objects.filter(Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
     class LicencasIndeferidas(models.Manager):
         def all(self):
-            return LicencaPremio.objects.filter(Q(deferida=False))
+            return super().get_queryset().filter(Q(deferida=False))
+            #return LicencaPremio.objects.filter(Q(deferida=False))
     class LicencaEmAndamento(models.Manager):
         def all(self):
-            return LicencaPremio.objects.filter(Q(deferida=True) & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()))
+            return super().get_queryset().filter(Q(data_inicio__lte=timeone.now().date()) & Q(deferido=True) & Q(data_termino__gte=timezone.now().date()))
+
+            #return LicencaPremio.objects.filter(Q(deferida=True) & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()))
 
     fruidas = LicencasFruidas()
     indeferidas = LicencasIndeferidas()
@@ -132,13 +140,16 @@ class Abono(models.Model):
 
     class AbonosFruidos(models.Manager):
         def all(self):
-            return Abono.objects.filter(Q(data__lt=timezone.now().date()) & Q(deferido=True))
+
+            return super().get_queryset().filter(Q(data__lt=timeone.now().date()) & Q(deferido=True))
+            #return Abono.objects.filter(Q(data__lt=timezone.now().date()) & Q(deferido=True))
     class AbonosIndeferidos(models.Manager):
         def all(self):
-            return Abono.objects.filter(Q(deferido=False))
+            return super().get_queryset().filter(Q(deferido=True))
     class AbonoEmAndamento(models.Manager):
         def all(self):
-            return Abono.objects.filter(Q(deferido=True) & Q(data=timezone.now().date()))
+            return super().get_queryset().filter(Q(data__lt=timeone.now().date()) & Q(deferido=True))
+            #return Abono.objects.filter(Q(deferido=True) & Q(data=timezone.now().date()))
 
     fruidos = AbonosFruidos()
     indeferidos = AbonosIndeferidos()
