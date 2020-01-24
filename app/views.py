@@ -91,16 +91,17 @@ def trabalhador(request):
             context = {
                 'trabalhador' : trabalhador,
                 'ferias_futuras' : Ferias.objects.filter(Q(trabalhador=trabalhador) & Q(deferida=True) & Q(tipo='f') & Q(data_inicio__gte=hoje)),
-                'ferias_fruidas' : Ferias.fruidas.filter(Q(trabalhador=trabalhador)),
-                'ferias_indeferidas' : Ferias.indeferidas.filter(Q(trabalhador=trabalhador)),
+                'ferias_fruidas' : Ferias.fruidas.all().filter(Q(trabalhador=trabalhador)),
+                'ferias_indeferidas' : Ferias.indeferidas.all().filter(Q(trabalhador=trabalhador)),
                 'licencas_futuras' : LicencaPremio.objects.filter(Q(trabalhador=trabalhador) & Q(deferida=True) & Q(data_inicio__gte=hoje)),
-                'licencas_fruidas' : LicencaPremio.fruidas.filter(Q(trabalhador=trabalhador)),
-                'licencas_indeferidas' : LicencaPremio.indeferidas.filter(Q(trabalhador=trabalhador)),
+                'licencas_fruidas' : LicencaPremio.fruidas.all().filter(Q(trabalhador=trabalhador)),
+                'licencas_indeferidas' : LicencaPremio.indeferidas.all().filter(Q(trabalhador=trabalhador)),
                 'abonos_futuros' : Abono.objects.filter(Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__gte=hoje)),
-                'abonos_fruidos' : Abono.fruidos.filter(Q(trabalhador=trabalhador)),
-                'abonos_indeferidos' : Abono.indeferidos.filter(Q(trabalhador=trabalhador)),
+                'abonos_fruidos' : Abono.fruidos.all().filter(Q(trabalhador=trabalhador)),
+                'abonos_indeferidos' : Abono.indeferidos.all().filter(Q(trabalhador=trabalhador)),
                 'TrabalhadorForm' : TrabalhadorForm(),
             }
+            print(context)
             return render(request, 'trabalhador.html', context)
 
 @login_required(login_url='/entrar/')

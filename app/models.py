@@ -55,7 +55,7 @@ class Ferias(models.Model):
 
     class FeriasFruidas(models.Manager):
         def all(self):
-            return super().get_queryset().filter(Q(tipo='f') & Q(data_termino__lt=timeone.now().date()) & Q(deferido=True))
+            return super().get_queryset().filter(Q(tipo='f') & Q(data_termino__lt=timezone.now().date()) & Q(deferido=True))
             #return Ferias.objects.filter(Q(tipo='f') & Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
     class FeriasIndeferidas(models.Manager):
         def all(self):
@@ -64,7 +64,7 @@ class Ferias(models.Model):
             #return Ferias.objects.filter(Q(deferida=False))
     class FeriasEmAndamento(models.Manager):
         def all(self):
-            return super().get_queryset().filter(Q(tipo='f') & Q(data_inicio__lte=tizone.now().date()) & Q(data_termino__gte=timeone.now().date()) & Q(deferido=True))
+            return super().get_queryset().filter(Q(tipo='f') & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()) & Q(deferido=True))
             #return Ferias.objects.filter(Q(tipo='f') & Q(deferida=True) & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()))
 
     fruidas = FeriasFruidas()
@@ -103,7 +103,7 @@ class LicencaPremio(Ferias):
 
     class LicencasFruidas(models.Manager):
         def all(self):
-            return super().get_queryset().filter(Q(data_termino__lt=timeone.now().date()) & Q(deferido=True))
+            return super().get_queryset().filter(Q(data_termino__lt=timezone.now().date()) & Q(deferido=True))
             #return LicencaPremio.objects.filter(Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
     class LicencasIndeferidas(models.Manager):
         def all(self):
@@ -111,7 +111,7 @@ class LicencaPremio(Ferias):
             #return LicencaPremio.objects.filter(Q(deferida=False))
     class LicencaEmAndamento(models.Manager):
         def all(self):
-            return super().get_queryset().filter(Q(data_inicio__lte=timeone.now().date()) & Q(deferido=True) & Q(data_termino__gte=timezone.now().date()))
+            return super().get_queryset().filter(Q(data_inicio__lte=timezone.now().date()) & Q(deferido=True) & Q(data_termino__gte=timezone.now().date()))
 
             #return LicencaPremio.objects.filter(Q(deferida=True) & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()))
 
@@ -141,15 +141,13 @@ class Abono(models.Model):
     class AbonosFruidos(models.Manager):
         def all(self):
 
-            return super().get_queryset().filter(Q(data__lt=timeone.now().date()) & Q(deferido=True))
-            #return Abono.objects.filter(Q(data__lt=timezone.now().date()) & Q(deferido=True))
+            return super().get_queryset().filter(Q(data__lt=timezone.now().date()) & Q(deferido=True))
     class AbonosIndeferidos(models.Manager):
         def all(self):
-            return super().get_queryset().filter(Q(deferido=True))
+            return super().get_queryset().filter(Q(deferido=False))
     class AbonoEmAndamento(models.Manager):
         def all(self):
-            return super().get_queryset().filter(Q(data__lt=timeone.now().date()) & Q(deferido=True))
-            #return Abono.objects.filter(Q(deferido=True) & Q(data=timezone.now().date()))
+            return super().get_queryset().filter(Q(data__lt=timezone.now().date()) & Q(deferido=True))
 
     fruidos = AbonosFruidos()
     indeferidos = AbonosIndeferidos()
@@ -196,6 +194,7 @@ def valida_ferias(ferias):
             ferias.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
         elif inicio < hoje:
             ferias.observacoes = "data de agendamento anterior a hoje"
+            ferias.fruida = True
             return True
 
         return False
@@ -224,6 +223,7 @@ def valida_abono(abono):
             abono.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
         elif data < hoje:
             abono.observacoes = "data de agendamento anterior a hoje"
+            abono.fruido = True
             return True
 
         return False
