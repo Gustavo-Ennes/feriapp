@@ -25,7 +25,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "rie%zge!3z3l*bfomasd2r!0eul()=9)218pr_olrjo^3(#tuz"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'sass_processor',
     'crispy_forms',
     'app',
+    'compressor'
 ]
 
 MIDDLEWARE = [
