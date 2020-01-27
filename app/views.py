@@ -242,7 +242,7 @@ def pesquisa(request):
                 Q(data_termino__gte=hoje) &
                 Q(tipo='f')
             ),
-            'ferias_fruidas' : Ferias.fruidas.all()filter(
+            'ferias_fruidas' : Ferias.fruidas.all().filter(
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)

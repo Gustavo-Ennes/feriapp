@@ -85,6 +85,8 @@ class Ferias(models.Model):
     fruida = models.BooleanField(editable=False, default=False)
 
 
+
+
     def save(self, *args, **kwargs):
 
         self.data_termino = self.data_inicio + timedelta(days=self.qtd_dias)
