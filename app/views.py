@@ -242,12 +242,12 @@ def pesquisa(request):
                 Q(data_termino__gte=hoje) &
                 Q(tipo='f')
             ),
-            'ferias_fruidas' : Ferias.fruidas.filter(
+            'ferias_fruidas' : Ferias.fruidas.all()filter(
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
             ),
-            'ferias_indeferidas' : Ferias.indeferidas.filter(
+            'ferias_indeferidas' : Ferias.indeferidas.all().filter(
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
@@ -262,12 +262,12 @@ def pesquisa(request):
                 Q(deferida=True) &
                 Q(data_termino__gte=hoje)
             ),
-            'licencas_fruidas' : LicencaPremio.fruidas.filter(
+            'licencas_fruidas' : LicencaPremio.fruidas.all().filter(
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
             ),
-            'licencas_indeferidas' : LicencaPremio.indeferidas.filter(
+            'licencas_indeferidas' : LicencaPremio.indeferidas.all().filter(
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
@@ -281,12 +281,12 @@ def pesquisa(request):
                 Q(deferido=True) &
                 Q(data__gte=hoje)
             ),
-            'abonos_fruidos' : Abono.fruidos.filter(
+            'abonos_fruidos' : Abono.fruidos.all().filter(
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
             ),
-            'abonos_indeferidos' : Abono.indeferidos.filter(
+            'abonos_indeferidos' : Abono.indeferidos.all().filter(
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
