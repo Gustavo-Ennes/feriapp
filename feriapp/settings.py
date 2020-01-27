@@ -161,7 +161,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_STORAGE = 'app.storage.WhiteNoiseStaticFilesStorage'
 
 LOGGING = {
     'version': 1,
