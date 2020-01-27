@@ -19,6 +19,7 @@ class Setor(models.Model):
 
     class Meta:
         verbose_name_plural = 'Setores'
+        ordering = ['nome']
 
 class Trabalhador(models.Model):
     OPCOES = (
@@ -44,6 +45,7 @@ class Trabalhador(models.Model):
 
     class Meta:
         verbose_name_plural = 'Trabalhadores'
+        ordering = ['nome']
 
 class Ferias(models.Model):
     OPCOES = (
@@ -96,6 +98,7 @@ class Ferias(models.Model):
     class Meta:
         verbose_name_plural = "Férias"
         verbose_name = "Férias"
+        ordering = ['data_inicio']
 
 class LicencaPremio(Ferias):
 
@@ -132,6 +135,7 @@ class LicencaPremio(Ferias):
     class Meta:
         verbose_name_plural = "Licença Prêmio"
         verbose_name = "Licenças Prêmio"
+        ordering = ['data_inicio']
 
 class Abono(models.Model):
 
@@ -168,6 +172,9 @@ class Abono(models.Model):
 
     def __str__(self):
         return '%s - %s' % (self.trabalhador.nome, self.data.strftime("%d/%m/%Y"))
+
+    class Meta:
+        ordering = ['data']
 
 
 
