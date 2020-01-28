@@ -41,7 +41,9 @@
             {{ f.data_inicio|date:"d/m/Y" }}
             {% if not pdf and not query and not arquivada %}
               <small>
-                {% include 'modals/data.html' %}
+                {% with folga=f %}
+                  {% include 'modals/data.html' %}
+                {% endwith %}
               </small>
             {% endif %}
           </td>

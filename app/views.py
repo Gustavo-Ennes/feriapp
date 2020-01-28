@@ -314,12 +314,14 @@ def editar_data(request):
         tipo = request.POST['tipo']
         pk = int(request.POST['id'])
         data = request.POST['data']
+        data_antiga = None
 
         if tipo == 'licenca':
 
             obj = LicencaPremio.objects.get(id=pk)
             verbose_name = "licença-prêmio"
-            obj.data_inicio = datetime.strptime(data, '%d/%m/%Y')
+            data_antiga = obj.data_inicio
+            obj.data_inicio = datetime.strptime(data, '%d/%m/%Y').date()
             obj.data_termino = obj.data_inicio + timedelta(days=obj.qtd_dias - 1)
             obj.save()
             return_name = "licenca_premio"
@@ -328,7 +330,8 @@ def editar_data(request):
 
             obj = Abono.objects.get(id=pk)
             verbose_name = tipo
-            obj.data = datetime.strptime(data, '%d/%m/%Y')
+            data_antiga = obj.data
+            obj.data = datetime.strptime(data, '%d/%m/%Y').date()
             obj.save()
             return_name = "abono"
 
@@ -336,12 +339,30 @@ def editar_data(request):
 
             obj = Ferias.objects.get(id=pk)
             verbose_name = tipo
-            obj.data_inicio = datetime.strptime(data, '%d/%m/%Y')
+            data_antiga = obj.data_inicio
+            obj.data_inicio = datetime.strptime(data, '%d/%m/%Y').date()
             obj.data_termino = obj.data_inicio + timedelta(days=obj.qtd_dias - 1)
             obj.save()
             return_name = "ferias"
 
-        messages.success(request, "Você editou a data do(a) %s do servidor %s para %s." % (verbose_name, obj.trabalhador.nome, data))
+        if tipo == 'abono':
+            if obj.deferido:
+                messages.success(request, "Você editou a data do(a) %s do servidor %s para %s." % (verbose_name, obj.trabalhador.nome, data))
+                obj.observacoes = "reagendado"
+            else:
+                obj.data = data_antiga
+                messages.error(request, "O abono não pode ser editado por %s. A data original (%s) foi mantida" % ( obj.observacoes, obj.data.strftime("%d/%m/%Y")))
+        elif tipo == ("ferias" or 'licenca'):
+            if obj.deferida:
+                messages.success(request, "Você editou a data do(a) %s do servidor %s para %s." % (verbose_name, obj.trabalhador.nome, data))
+                obj.observacoes = "reagendada"
+            else:
+                obj.data_inicio = data_antiga
+                obj.data_termino = obj.data_inicio + timedelta(days=obj.qtd_dias - 1)
+                messages.error(request, "O(a) %s não pode ser editado por %s. A data original (%s) foi mantida" % ( verbose_name, obj.observacoes, obj.data_inicio.strftime("%d/%m/%Y")))
+                
+        obj.save()
+
 
         return redirect(return_name)
 

@@ -39,7 +39,9 @@
             {{ abono.data|date:"d/m/Y" }}
             {% if not pdf and not query and not arquivado %}
               <small>
-                {% include 'modals/data.html' %}
+                {% with folga=abono %}
+                  {% include 'modals/data.html' %}
+                {% endwith %}
               </small>
             {% endif %}
           </td>

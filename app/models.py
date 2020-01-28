@@ -188,13 +188,14 @@ def valida_ferias(ferias):
     f = Ferias.objects.filter(Q(trabalhador=trabalhador) & ( Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | Q(data_termino__range=(ferias.data_inicio, ferias.data_termino))) & Q(data_termino__gt=hoje) & Q(deferida=True) & Q(tipo='f'))
     l = LicencaPremio.objects.filter(Q(trabalhador=trabalhador) & ( Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | Q(data_termino__range=(ferias.data_inicio, ferias.data_termino))) & Q(deferida=True))
     a = Abono.objects.filter(Q(trabalhador=trabalhador) & Q(data__range=(ferias.data_inicio, ferias.data_termino)) & Q(deferido=True))
-    '''
-    if f or l or a:
-        return False
-    '''
-    if l or f or a or inicio < hoje or ferias.observacoes:
-        if ferias.observacoes:
-            pass
+
+    if ferias.tipo == 'f':
+        f = f.exclude(id=ferias.id)
+    elif ferias.tipo == 'l':
+        l = l.exclude(id=ferias.id)
+
+
+    if l or f or a or inicio < hoje or inicio.weekday() in [5,6]:
         if len(f):
             ferias.observacoes = "férias, de %s à %s, convergem com a data marcada" % ( f[0].data_inicio.strftime("%d/%m/%Y"),f[0].data_termino.strftime("%d/%m/%Y"))
         elif len(l):
@@ -205,6 +206,8 @@ def valida_ferias(ferias):
             ferias.observacoes = "data de agendamento anterior a hoje"
             ferias.fruida = True
             return True
+        elif inicio.weekday() in [5,6]:
+            ferias.observacoes = "agendamento em fim de semana"
 
         return False
 
@@ -220,11 +223,12 @@ def valida_abono(abono):
     l = LicencaPremio.objects.filter(Q(trabalhador=trabalhador) &  Q(data_inicio__lte=data) & Q(data_termino__gt=data) & Q(deferida=True))
     a = Abono.objects.filter(Q(trabalhador=trabalhador) & Q(data__year=abono.data.year) & Q(data__month=abono.data.month) & Q(data__day=abono.data.day) & Q(deferido=True))
 
+    a = a.exclude(id=abono.id)
 
-    if l or f or a or data < hoje or abono.observacoes or contagem_abonos(trabalhador) > 6 or abonou_esse_mes(trabalhador, data) or not e_dia_util(data):
-        if abono.observacoes:
-            pass
-        elif len(f):
+
+    print(type(data), type(hoje), type(data.weekday()))
+    if l or f or a or data < hoje or contagem_abonos(trabalhador) > 6 or abonou_esse_mes(trabalhador, data) or data.weekday() in [5,6]:
+        if len(f):
             abono.observacoes = "férias, de %s à %s, convergem com a data marcada" % (f[0].data_inicio.strftime("%d/%m/%Y"),f[0].data_termino.strftime("%d/%m/%Y"))
         elif len(l):
             abono.observacoes = "licença-prêmio de %s à %s, convergem com a data marcada" % ( l[0].data_inicio.strftime("%d/%m/%Y"),l[0].data_termino.strftime("%d/%m/%Y"))
@@ -238,7 +242,7 @@ def valida_abono(abono):
             abono.observacoes = "limite de seis abonos por ano já atingido"
         elif abonou_esse_mes(trabalhador, data):
             abono.observacoes = "trabalhador já abonou esse mês"
-        elif not e_dia_util(data):
+        elif data.weekday() in [5,6]:
             abono.observacoes = "agendamento em fim de semana"
 
         return False
@@ -250,6 +254,3 @@ def contagem_abonos(trabalhador):
 
 def abonou_esse_mes(trabalhador, data):
     return bool(Abono.objects.filter(Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__month=data.month) & Q(data__year=data.year)))
-
-def e_dia_util(data):
-    return data.weekday == ( 1 or 2 or 3 or 4 or 0 )
