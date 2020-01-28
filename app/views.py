@@ -146,7 +146,7 @@ def marcar_ferias(request):
         form = FeriasForm(request.POST)
         if form.is_valid():
             obj = form.save()
-            hoje = timzezone.now().date()
+            hoje = timezone.now().date()
             if obj and obj.deferida and obj.data_inicio >= hoje:
                 messages.success(request,'Você marcou férias para o servidor %s de %s à %s.' % (obj.trabalhador.nome, obj.data_inicio.strftime("%d/%d/%Y"), obj.data_termino.strftime("%d/%d/%Y")))
             else:
@@ -162,7 +162,7 @@ def marcar_licenca(request):
     if request.method == "POST":
         form = LicencaPremioForm(request.POST)
         if form.is_valid():
-            hoje = timzeone.now().date()
+            hoje = timezone.now().date()
             obj = form.save()
             if obj and obj.deferida and obj.data_inicio >= hoje:
                 messages.success(request,'Você marcou licença-prêmio para o servidor %s de %s à %s.' % (obj.trabalhador.nome, obj.data_inicio.strftime("%d/%d/%Y"), obj.data_termino.strftime("%d/%d/%Y")))
@@ -179,7 +179,7 @@ def marcar_abono(request):
     if request.method == "POST":
         form = AbonoForm(request.POST)
         if form.is_valid():
-            hoje = timzeone.now().date()
+            hoje = timezone.now().date()
             obj = form.save()
             if obj and obj.deferido and obj.data >= hoje:
                 messages.success(request,'Você marcou um abono para o servidor %s em %s.' % (obj.trabalhador.nome, obj.data.strftime("%d/%d/%Y")))
