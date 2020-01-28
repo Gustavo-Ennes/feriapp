@@ -236,7 +236,7 @@ def valida_abono(abono):
             return True
         elif contagem_abonos(trabalhador) > 6:
             abono.observacoes = "limite de seis abonos por ano já atingido"
-        elif abonou_esse_mes(trsabalhador, data.month):
+        elif abonou_esse_mes(trsabalhador, data):
             abono.observacoes = "trabalhador já abonou esse mês"
 
         return False
