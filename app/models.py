@@ -221,7 +221,7 @@ def valida_abono(abono):
     a = Abono.objects.filter(Q(trabalhador=trabalhador) & Q(data__year=abono.data.year) & Q(data__month=abono.data.month) & Q(data__day=abono.data.day) & Q(deferido=True))
 
 
-    if l or f or a or data < hoje or abono.observacoes:
+    if l or f or a or data < hoje or abono.observacoes or contagem_abonos(trabalhador) > 6 or abonou_esse_mes(trabalhador, data):
         if abono.observacoes:
             pass
         elif len(f):
@@ -234,7 +234,17 @@ def valida_abono(abono):
             abono.observacoes = "data de agendamento anterior a hoje"
             abono.fruido = True
             return True
+        elif contagem_abonos(trabalhador) > 6:
+            abono.observacoes = "limite de seis abonos por ano já atingido"
+        elif abonou_esse_mes(trsabalhador, data.month):
+            abono.observacoes = "trabalhador já abonou esse mês"
 
         return False
 
     return True
+
+def contagem_abonos(trabalhador):
+    return Abono.objects.filter(Q(trabalhador=trabalhador) & Q(deferido=True) & Q(fruido=True) & Q(data__year=timezone.now().date().year)).count()
+
+def abonou_esse_mes(trabalhador, data):
+    return bool(Abono.objects.filter(Q(trabalhador=trabalhador) & Q(deferido=True) & Q(fruido=True) & Q(data__month=data.month) & Q(data__year=data.year)))
