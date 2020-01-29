@@ -416,25 +416,46 @@ class Pdf(LoginRequiredMixin, View):
         if 'query' in request.POST:
             query = request.POST['query']
 
-        if not query:
+        if tipo == 'trabalhador_historico':
+            try:
+                trabalhador = Trabalhador.objects.get(id=int(request.POST['trabalhador_id']))
+            except:
+                messages.error(request, "Não existe trabalhador  com o id %d" % int(request.POST['trabalhador_id']))
+                return redirect('trabalhadores')
+
             context = {
                 'pdf' : True,
-                'today' : today,
-                'trabalhadores' : Trabalhador.objects.all(),
-                'setores' : Setor.objects.all(),
-                'ferias_futuras' : Ferias.objects.filter(Q(deferida=True) & Q(tipo='f') & Q(data_termino__gte=hoje)),
-                'ferias_fruidas' : Ferias.fruidas.all(),
-                'ferias_indeferidas' :  Ferias.indeferidas.all(),
-                'abonos_futuros' : Abono.objects.filter(Q(deferido=True) & Q(data__gte=hoje)),
-                'abonos_fruidos' : Abono.fruidos.all(),
-                'abonos_indeferidos' : Abono.indeferidos.all(),
-                'licencas_futuras' : LicencaPremio.objects.filter(Q(deferida=True) & Q(data_termino__gte=hoje)),
-                'licencas_fruidas' : LicencaPremio.fruidas.all(),
-                'licencas_indeferidas' : LicencaPremio.indeferidas.all(),
+                'ferias_futuras' : Ferias.objects.filter(Q(trabalhador=trabalhador) & Q(deferida=True) & Q(tipo='f') & Q(data_inicio__gt=hoje)),
+                'ferias_fruidas' : Ferias.fruidas.all().filter(Q(trabalhador=trabalhador)),
+                'ferias_indeferidas' :  Ferias.indeferidas.all().filter(Q(trabalhador=trabalhador)),
+                'abonos_futuros' : Abono.objects.filter(Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__gte=hoje)),
+                'abonos_fruidos' : Abono.fruidos.all().filter(Q(trabalhador=trabalhador)),
+                'abonos_indeferidos' : Abono.indeferidos.all().filter(Q(trabalhador=trabalhador)),
+                'licencas_futuras' : LicencaPremio.objects.filter(Q(trabalhador=trabalhador) & Q(deferida=True) & Q(data_inicio__gt=hoje)),
+                'licencas_fruidas' : LicencaPremio.fruidas.all().filter(Q(trabalhador=trabalhador)),
+                'licencas_indeferidas' : LicencaPremio.indeferidas.all().filter(Q(trabalhador=trabalhador)),
                 'tipo' : tipo,
-                'user' : request.user
+                'trabalhador' : trabalhador,
+
             }
-        else:
+
+        elif tipo == "setor_historico":
+            try:
+                setor = Setor.objects.get(id=int(request.POST['setor_id']))
+            except:
+                messages.error(request,"Não há setor com id  %d" % int(request.POST['setor_id']))
+                return redirect('setor')
+
+
+            context = {
+                'trabalhadores' : Trabalhador.objects.filter(Q(setor=setor)),
+                'tipo' : request.POST['tipo'],
+                'pdf' : True,
+                'setor': setor
+            }
+
+
+        elif query:
             context =  {
                 'ferias_futuras' : Ferias.objects.filter(
                     (
@@ -443,7 +464,7 @@ class Pdf(LoginRequiredMixin, View):
                         Q(trabalhador__setor__nome__icontains=query)
                     ) &
                     Q(deferida=True) &
-                    Q(data_termino__gte=hoje) &
+                    Q(data_inicio__gt=hoje) &
                     Q(tipo='f')
                 ),
                 'ferias_fruidas' : Ferias.fruidas.filter(
@@ -464,7 +485,7 @@ class Pdf(LoginRequiredMixin, View):
                         Q(trabalhador__setor__nome__icontains=query)
                     ) &
                     Q(deferida=True) &
-                    Q(data_termino__gte=hoje)
+                    Q(data_inicio__gt=hoje)
                 ),
                 'licencas_fruidas' : LicencaPremio.fruidas.filter(
                     Q(trabalhador__nome__icontains=query) |
@@ -483,7 +504,7 @@ class Pdf(LoginRequiredMixin, View):
                         Q(trabalhador__setor__nome__icontains=query)
                     ) &
                     Q(deferido=True) &
-                    Q(data__gte=hoje)
+                    Q(data__gt=hoje)
                 ),
                 'abonos_fruidos' : Abono.fruidos.filter(
                     Q(trabalhador__nome__icontains=query) |
@@ -507,6 +528,26 @@ class Pdf(LoginRequiredMixin, View):
                 'today' : today,
                 'user' : request.user
             }
+
+        else:
+            context = {
+                'pdf' : True,
+                'today' : today,
+                'trabalhadores' : Trabalhador.objects.all(),
+                'setores' : Setor.objects.all(),
+                'ferias_futuras' : Ferias.objects.filter(Q(deferida=True) & Q(tipo='f') & Q(data_inicio__gt=hoje)),
+                'ferias_fruidas' : Ferias.fruidas.all(),
+                'ferias_indeferidas' :  Ferias.indeferidas.all(),
+                'abonos_futuros' : Abono.objects.filter(Q(deferido=True) & Q(data__gte=hoje)),
+                'abonos_fruidos' : Abono.fruidos.all(),
+                'abonos_indeferidos' : Abono.indeferidos.all(),
+                'licencas_futuras' : LicencaPremio.objects.filter(Q(deferida=True) & Q(data_termino__gt=hoje)),
+                'licencas_fruidas' : LicencaPremio.fruidas.all(),
+                'licencas_indeferidas' : LicencaPremio.indeferidas.all(),
+                'tipo' : tipo,
+                'user' : request.user
+            }
+
         return Render.render('pdf.html', context)
 
 @login_required(login_url='/entrar/')
