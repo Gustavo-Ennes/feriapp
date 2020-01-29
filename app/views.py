@@ -154,7 +154,7 @@ def marcar_ferias(request):
         else:
             messages.error(request, form.errors)
 
-        return redirect("ferias")
+        return redirect('ferias_pdf', ferias_id=obj.id) if obj.deferida else redirect('ferias')
 
 
 @login_required(login_url='/entrar/')
@@ -171,7 +171,7 @@ def marcar_licenca(request):
         else:
             messages.error(request, form.errors)
 
-        return redirect("licenca_premio")
+        return redirect('licenca_pdf', licenca_id=obj.id) if obj.deferida else redirect("licenca_premio")
 
 
 @login_required(login_url='/entrar/')
@@ -188,7 +188,7 @@ def marcar_abono(request):
         else:
             messages.error(request, form.errors)
 
-        return redirect("abono")
+        return redirect('abono_pdf', abono_id=obj.id) if obj.deferido else redirect("abono")
 
 
 @login_required(login_url='/entrar/')
@@ -360,7 +360,7 @@ def editar_data(request):
                 obj.data_inicio = data_antiga
                 obj.data_termino = obj.data_inicio + timedelta(days=obj.qtd_dias - 1)
                 messages.error(request, "O(a) %s não pode ser editado por %s. A data original (%s) foi mantida" % ( verbose_name, obj.observacoes, obj.data_inicio.strftime("%d/%m/%Y")))
-                
+
         obj.save()
 
 
@@ -404,7 +404,7 @@ def excluir_trabalhador(request):
 
 class Pdf(LoginRequiredMixin, View):
 
-    login_url = '/index/'
+    login_url = '/entrar/'
     redirect_field_name ="index"
 
     def post(self, request):
@@ -507,7 +507,6 @@ class Pdf(LoginRequiredMixin, View):
                 'today' : today,
                 'user' : request.user
             }
-        print(context)
         return Render.render('pdf.html', context)
 
 @login_required(login_url='/entrar/')
@@ -586,6 +585,124 @@ def sair(request):
     return redirect("entrar")
 
 
+class AbonoPDF(LoginRequiredMixin, View):
+
+    login_url = '/entrar/'
+    redirect_field_name ="index"
+
+    def get(self, request, abono_id):
+        try:
+            abono = Abono.objects.get(id=abono_id)
+        except:
+            messages.error(request,"Não há abono com id %d" % abono_id)
+            return redirect('abono')
+
+        if not abono.deferido:
+            messages.error(request, "O abono(id=%d) solicitado foi deferido e não pode ser impresso" % abono_id)
+            return redirect('abono')
+
+        elif abono.fruido:
+            messages.error(request, "O abono(id=%d) já foi fruido" % abono_id)
+            return redirect('abono')
+
+        else:
+
+            hoje = timezone.now().date()
+
+            context = {
+                'data' : abono.data.strftime("%d/%m/%Y"),
+                'dia_hj' : hoje.day,
+                'mes_hj' : mes_escrito(hoje.month),
+                'ano_hj' : hoje.year,
+                'nome' : abono.trabalhador.nome,
+                'matricula' : abono.trabalhador.matricula,
+                'funcao' : abono.trabalhador.funcao,
+                'setor' : abono.trabalhador.setor.nome
+
+            }
+            return Render.render('template_abono.html', context)
+
+
+class FeriasPDF(LoginRequiredMixin, View):
+
+    login_url = '/entrar/'
+    redirect_field_name ="index"
+
+    def get(self, request, ferias_id):
+        try:
+            ferias = Ferias.objects.get(id=ferias_id)
+        except:
+            messages.error(request, "Não há férias com id %d" % ferias_id)
+            return redirect('ferias')
+
+        if not ferias.deferida:
+            messages.error(request, "A férias(id=%d) solicitada foi deferida e não pode ser impressa" % ferias_id)
+            return redirect('ferias')
+
+        elif ferias.fruida:
+            messages.error(request, "A férias(id=%d) já foi fruida" % ferias_id)
+            return redirect('ferias')
+
+        else:
+
+            hoje = timezone.now().date()
+
+            context = {
+                'qtd_dias' : ferias.qtd_dias,
+                'qtd_dias_escrito' : qtd_dias_escrito(ferias.qtd_dias),
+                'data_inicio' : ferias.data_inicio.strftime("%d/%m/%Y"),
+                'data_termino' : ferias.data_termino.strftime("%d/%m/%Y"),
+                'dia_hj' : hoje.day,
+                'mes_hj' : mes_escrito(hoje.month),
+                'ano_hj' : hoje.year,
+                'nome' : ferias.trabalhador.nome,
+                'matricula' : ferias.trabalhador.matricula,
+                'funcao' : ferias.trabalhador.funcao,
+                'setor' : ferias.trabalhador.setor.nome
+
+            }
+            return Render.render('template_ferias.html', context)
+
+
+class LicencaPDF(LoginRequiredMixin, View):
+
+    login_url = '/entrar/'
+    redirect_field_name ="index"
+
+    def get(self, request, licenca_id):
+        try:
+            licenca = LicencaPremio.objects.get(id=licenca_id)
+        except:
+            messages.error(request, "Não há licença-prêmio com id %d" % licenca_id)
+            return redirect('licenca_premio')
+
+        if not licenca.deferida:
+            messages.error(request, "A licença(id=%d) solicitada foi deferida e não pode ser impressa" % licenca_id)
+            return redirect('licenca_premio')
+
+        elif licenca.fruida:
+            messages.error(request, "A licença(id=%d) já foi fruida" % licenca_id)
+            return redirect('licenca_premio')
+
+        else:
+
+            hoje = timezone.now().date()
+
+            context = {
+                'data_inicio' : licenca.data_inicio.strftime("%d/%m/%Y"),
+                'data_termino' : licenca.data_termino.strftime("%d/%m/%Y"),
+                'dia_hj' : hoje.day,
+                'mes_hj' : mes_escrito(hoje.month),
+                'ano_hj' : hoje.year,
+                'nome' : licenca.trabalhador.nome,
+                'matricula' : licenca.trabalhador.matricula,
+                'funcao' : licenca.trabalhador.funcao,
+                'setor' : licenca.trabalhador.setor.nome
+
+            }
+            return Render.render('template_licenca.html', context)
+
+
 
 
 
@@ -622,3 +739,33 @@ def proximos_retornos():
     print('retornos', folgas)
 
     return folgas
+
+def qtd_dias_escrito(dias):
+    return 'quinze' if dias == 15 else 'trinta'
+
+
+def mes_escrito(num):
+    if num == 1:
+        return 'janeiro'
+    if num == 2:
+        return 'fevereiro'
+    if num == 3:
+        return 'março'
+    if num == 4:
+        return 'abril'
+    if num == 5:
+        return 'maio'
+    if num == 6:
+        return 'junho'
+    if num == 7:
+        return 'julho'
+    if num == 8:
+        return 'agosto'
+    if num == 9:
+        return 'setembro'
+    if num == 10:
+        return 'outubro'
+    if num == 11:
+        return 'novembro'
+    if num == 12:
+        return 'dezembro'

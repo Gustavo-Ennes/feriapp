@@ -27,5 +27,8 @@ urlpatterns = [
     path("indeferir/", views.indeferir, name='indeferir'),
     path('entrar/', views.entrar, name='entrar'),
     path('sair/', views.sair, name='sair'),
+    path('render/abono/<int:abono_id>/', views.AbonoPDF.as_view(), name='abono_pdf'),
+    path('render/ferias/<int:ferias_id>/', views.FeriasPDF.as_view(), name='ferias_pdf'),
+    path('render/licenca/<int:licenca_id>/', views.LicencaPDF.as_view(), name='licenca_pdf'),
 
 ]

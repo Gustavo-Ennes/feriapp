@@ -54,6 +54,13 @@
               <div class="col">
                 {% include 'modals/indeferir_licenca.html' %}
               </div>
+              <div class="col">
+                <form action="{% url 'licenca_pdf' f.id %}" method="GET">
+                  <button type='submit' class="btn btn-sm btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Imprimir licença-prêmio">
+                    <i class="fas fa-print"></i>
+                  </button>
+                </form>
+              </div>
             </td>
 
           {% endif %}

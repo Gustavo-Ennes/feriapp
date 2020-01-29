@@ -54,6 +54,13 @@
               <div class="col">
                 {% include 'modals/indeferir_ferias.html' %}
               </div>
+              <div class="col">
+                <form action="{% url 'ferias_pdf' f.id %}" method="GET">
+                  <button type='submit' class="btn btn-sm btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Imprimir férias">
+                    <i class="fas fa-print"></i>
+                  </button>
+                </form>
+              </div>
             </td>
 
           {% endif %}
