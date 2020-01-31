@@ -63,11 +63,11 @@ def qtd_servidores(setor):
 
 @register.filter
 def verifica_tipo(obj, tipo):
-    if tipo == "abono":
-        return type(obj) == Abono
-    if tipo == "licenca":
+    if type(obj) == Abono:
+        return True
+    elif tipo == "licenca":
         return obj.tipo == 'l'
-    if tipo == "ferias":
+    elif tipo == "ferias":
         return obj.tipo == 'f'
 
 @register.filter
