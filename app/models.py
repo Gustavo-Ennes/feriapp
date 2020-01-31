@@ -9,7 +9,7 @@ from django.utils import timezone
 
 
 class Setor(models.Model):
-    nome = models.CharField(max_length=100)
+    nome = models.CharField(max_length=100, unique=True)
     criado_em = models.DateTimeField(auto_now_add=True)
     modificado_em = models.DateTimeField(auto_now=True)
 
@@ -30,7 +30,7 @@ class Trabalhador(models.Model):
         ('atestado', "Atestado Médico"),
     )
 
-    nome = models.CharField(max_length=100)
+    nome = models.CharField(max_length=100, unique=True)
     matricula = models.CharField(unique=True, max_length=15)
     funcao = models.CharField(max_length=50)
     setor = models.ForeignKey(Setor, on_delete=models.SET_NULL, null=True)

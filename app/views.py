@@ -210,11 +210,19 @@ def novo_setor(request):
 def novo_trabalhador(request):
     if request.method == "POST":
         form = TrabalhadorForm(request.POST)
+        string = ''
         if form.is_valid():
             obj = form.save()
             messages.success(request,'Você cadastrou um novo trabalhador: %s - %s .' % (obj.nome, obj.funcao))
         else:
-            messages.error(request, form.errors)
+            if 'matricula' in form.errors:
+                string = 'Servidor não cadastrado: já existe servidor com essa matrícula'
+            elif 'nome' in form.errors:
+                string = 'Servidor não cadastrado: já existe servidor com esse nome'
+            else:
+                string = "Erro: " + form.errors
+
+            messages.error(request, string)
 
         return redirect("trabalhadores")
 
