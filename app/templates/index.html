@@ -28,8 +28,8 @@
               {% endif %}
             {% elif folga|verifica_tipo:'abono' %}
               {{ folga.trabalhador.nome }} abonará
-              {% if folga.data_inicio|dias_ate > 0 %}
-                em {{ folga.data_inicio|dias_ate }} dia(s)
+              {% if folga.data|dias_ate > 0 %}
+                em {{ folga.data|dias_ate }} dia(s)
               {% else %}
                 hoje
               {% endif %}
@@ -44,8 +44,6 @@
               {{ retorno.trabalhador.nome }} voltará de férias em {{ retorno.data_termino|dias_ate }} dia(s)
             {% elif retorno|verifica_tipo:'licenca' %}
               {{ retorno.trabalhador.nome }} voltará de licença-prêmio em {{ retorno.data_termino|dias_ate }} dia(s)
-            {% elif retorno|verifica_tipo:'abono' %}
-              {{ retorno.trabalhador.nome }} está abonando hoje.
             {% endif %}
             - - - -
 
