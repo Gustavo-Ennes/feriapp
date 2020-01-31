@@ -29,6 +29,7 @@ def index(request):
         'index' : True,
         'proximas_folgas': proximas_folgas(),
         'proximos_retornos' : proximos_retornos(),
+        'em_andamento' : em_andamento(),
         'AutorizacaoForm' : AutorizacaoForm(),
 
 
@@ -806,6 +807,22 @@ def proximos_retornos():
 
     #como o  tipo 'f' não foi especificado, e por LicencaPremio ser subclasse de Ferias, os dois tipos serão listados na próxima linha
     folgas = Ferias.objects.filter( Q(deferida=True) & Q(data_termino__gt=hoje) & Q(data_termino__lte=hoje+timedelta(days=limite_dias)))
+    abonos = Abono.objects.filter(Q(deferido=True) & Q(data=hoje))
+    folgas = list(chain(abonos, folgas))
+
+    print('antes do sort', folgas)
+    folgas = sorted( folgas, key=lambda obj: obj.data_inicio if "data_inicio" in dir(obj) else obj.data)
+    print('retornos', folgas)
+
+    return folgas
+
+
+def em_andamento():
+    hoje = timezone.now().date()
+    folgas = []
+
+    #como o  tipo 'f' não foi especificado, e por LicencaPremio ser subclasse de Ferias, os dois tipos serão listados na próxima linha
+    folgas = Ferias.objects.filter( Q(deferida=True) & Q(data_inicio__lte=hoje) & Q(data_termino__gte=hoje))
     abonos = Abono.objects.filter(Q(deferido=True) & Q(data=hoje))
     folgas = list(chain(abonos, folgas))
 

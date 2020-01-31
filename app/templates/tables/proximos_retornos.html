@@ -1,5 +1,5 @@
 {% load filtros %}
-{% if proximas_folgas %}
+{% if proximos_retornos %}
   <table class="table table-striped text-center">
     <thead>
       <tr>
@@ -8,12 +8,12 @@
         <th scope="col">Setor</th>
         <th scope="col">Pedido</th>
         <th scope='col'>Tipo</th>
-        <th scope="col">Início</th>
+        <th scope="col">Retorno</th>
       </tr>
     </thead>
     <tbody>
 
-      {% for folga in proximas_folgas %}
+      {% for folga in proximos_retornos %}
 
         <tr>
           <th scope="row">{{ folga.id }}</th>
@@ -50,7 +50,7 @@
           {% else %}
             <td>
               <strong>
-                {{ folga.data_inicio|date:"d/m/Y" }}
+                {{ folga.data_termino|date:"d/m/Y" }}
               </strong>
             </td>
           {% endif %}
@@ -62,5 +62,5 @@
     </tbody>
   </table>
 {% else %}
-  <h4 class='text-primary text-center'>Não há folgas cadastradas pelos próximos 7 dias</h4>
+  <h4 class='text-primary text-center'>Não há trabalhadores retornando nos próximos 7 dias</h4>
 {% endif %}

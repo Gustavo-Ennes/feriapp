@@ -1,65 +1,6 @@
 {% extends 'base.html' %}
 {% load filtros %}
 
-{% block header %}
-
-{% if proximas_folgas or proximos_retornos %}
-  <div class='header-gradient' style="height:32px;margin-top:-15px;">
-    <div clas="row">
-      <div class="col-12 letreiro">
-        <marquee truespeed='100000' style='heigth:20px;'>
-
-          {% for folga in proximas_folgas %}
-            - - - -
-
-            {% if folga|verifica_tipo:'licenca' %}
-               {{ folga.trabalhador.nome }} entrará de licença-prêmio
-               {% if folga.data_inicio|dias_ate > 0 %}
-                 em {{ folga.data_inicio|dias_ate }} dia(s)
-               {% else %}
-                 hoje
-               {% endif %}
-            {% elif folga|verifica_tipo:"ferias" %}
-              {{ folga.trabalhador.nome }} entrará de férias
-              {% if folga.data_inicio|dias_ate > 0 %}
-                em {{ folga.data_inicio|dias_ate }} dia(s)
-              {% else %}
-                hoje
-              {% endif %}
-            {% elif folga|verifica_tipo:'abono' %}
-              {{ folga.trabalhador.nome }} abonará
-              {% if folga.data|dias_ate > 0 %}
-                em {{ folga.data|dias_ate }} dia(s)
-              {% else %}
-                hoje
-              {% endif %}
-            {% endif %}
-            - - - -
-          {% endfor %}
-
-
-          {% for retorno in proximos_retornos %}
-          - - - -
-            {% if retorno|verifica_tipo:"ferias" %}
-              {{ retorno.trabalhador.nome }} voltará de férias em {{ retorno.data_termino|dias_ate }} dia(s)
-            {% elif retorno|verifica_tipo:'licenca' %}
-              {{ retorno.trabalhador.nome }} voltará de licença-prêmio em {{ retorno.data_termino|dias_ate }} dia(s)
-            {% endif %}
-            - - - -
-
-          {% endfor %}
-
-        </marquee>
-      </div>
-    </div>
-
-  </div>
-{% endif %}
-
-
-{% endblock %}
-
-
 {% block conteudo %}
 
 
@@ -87,15 +28,44 @@
         <div class='col-12'>
           <div class="card my-5">
             <div class="card-header">
-              <h4 class="card-title text-center">Próximas folgas</h4>
+              <h4 class="card-title text-center">OBSERVAÇÕES</h4>
             </div>
             <div class="card-body">
+              <h2 class='text-center text-info'>Próximas</h2>
               {% include 'tables/proximas_folgas.html' %}
+              <h2 class='text-center text-info'>Retornando</h2>
+                {% include 'tables/proximos_retornos.html' %}
+              <h2 class='text-center text-info'>Folgando Hoje</h2>
+                {% include 'tables/em_andamento.html' %}
             </div>
           </div>
         </div>
       {% endif %}
-
+      <!--
+      {% if proximos_retornos %}
+        <div class='col-12'>
+          <div class="card my-5">
+            <div class="card-header">
+              <h4 class="card-title text-center">Próximos retornos</h4>
+            </div>
+            <div class="card-body">
+              {% include 'tables/proximos_retornos.html' %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      {% if em_andamento %}
+        <div class='col-12'>
+          <div class="card my-5">
+            <div class="card-header">
+              <h4 class="card-title text-center">Folgando hoje</h4>
+            </div>
+            <div class="card-body">
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      -->
     </div>
   </div>
 
