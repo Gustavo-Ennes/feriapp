@@ -29,6 +29,7 @@ def index(request):
         'index' : True,
         'proximas_folgas': proximas_folgas(),
         'proximos_retornos' : proximos_retornos(),
+        'AutorizacaoForm' : AutorizacaoForm(),
 
 
     }
@@ -742,6 +743,39 @@ class LicencaPDF(LoginRequiredMixin, View):
 
             }
             return Render.render('template_licenca.html', context)
+
+
+
+class AutorizacaoHE(LoginRequiredMixin, View):
+
+    login_url = '/entrar/'
+    redirect_field_name ="index"
+
+    def get(self, request, trabalhador_id):
+        try:
+            trabalhador = Trabalhador.objects.get(id=trabalhador_id)
+        except:
+            messages.error(request, "Não há trabalhador com id %d" % trabalhador_id)
+            return redirect('trabalhadores')
+
+
+        context = {
+            'trabalhador':trabalhador,
+        }
+        return Render.render('autorizacao_he.html', context)
+
+    def post(self, request, trabalhador_id=-666):
+        print(request.POST['trabalhador_id'])
+        try:
+            trabalhador = Trabalhador.objects.get(id=int(request.POST['trabalhador_id']))
+        except:
+            messages.error(request, "Não há trabalhador com tal id")
+            return redirect('trabalhadores')
+
+        context = {
+            'trabalhador' : trabalhador,
+        }
+        return Render.render('autorizacao_he.html', context)
 
 
 

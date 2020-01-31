@@ -30,5 +30,6 @@ urlpatterns = [
     path('render/abono/<int:abono_id>/', views.AbonoPDF.as_view(), name='abono_pdf'),
     path('render/ferias/<int:ferias_id>/', views.FeriasPDF.as_view(), name='ferias_pdf'),
     path('render/licenca/<int:licenca_id>/', views.LicencaPDF.as_view(), name='licenca_pdf'),
+    path('render/autorizacao-he/<int:trabalhador_id>/', views.AutorizacaoHE.as_view(), name='autorizacao_he'),
 
 ]

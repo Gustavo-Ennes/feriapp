@@ -52,11 +52,16 @@
             {% if not pdf %}
               <td>
                 <small class='row justify-content-center align-items-center'>
-                  <div class="col-6">
+                  <div class="col">
                     {% include 'modals/editar_trabalhador.html' %}
                   </div>
-                  <div class='col-6'>
+                  <div class='col'>
                     {% include 'modals/excluir_trabalhador.html' %}
+                  </div>
+                  <div class='col'>
+                    <form action='{% url "autorizacao_he" trabalhador.id %}' method="GET">
+                      <button type='submit' class="btn btn-lg btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Autorização de horas extras">H.E.</button>
+                    </form>
                   </div>
 
                 </small>

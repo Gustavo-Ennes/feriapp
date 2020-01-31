@@ -19,7 +19,7 @@ def menos_que_sete(num):
 @register.filter
 def futuras_folgas(trabalhador):
     hoje = datetime.today()
-    ferias = Ferias.objects.filter(Q(data_inicio__gte=hoje) & Q(trabalhador=trabalhador) & Q(deferida=True))
+    ferias = Ferias.objects.filter(Q(data_inicio__gte=hoje) & Q(trabalhador=trabalhador) & Q(deferida=True) & Q(tipo='f'))
     licencas = LicencaPremio.objects.filter(Q(data_inicio__gte=hoje) & Q(trabalhador=trabalhador) & Q(deferida=True))
     if ferias:
         return ferias[0]
@@ -30,7 +30,7 @@ def futuras_folgas(trabalhador):
 @register.filter
 def folgas_acabando(trabalhador):
     hoje = datetime.today()
-    ferias = Ferias.objects.filter(Q(data_inicio__lte=hoje) & Q(data_termino__gt=hoje) & Q(trabalhador=trabalhador) & Q(deferida=True))
+    ferias = Ferias.objects.filter(Q(data_inicio__lte=hoje) & Q(data_termino__gt=hoje) & Q(trabalhador=trabalhador) & Q(deferida=True) & Q(tipo='f'))
     licencas = LicencaPremio.objects.filter(Q(data_inicio__lte=hoje) & Q(data_termino__gt=hoje) & Q(trabalhador=trabalhador) & Q(deferida=True))
     if ferias:
         return ferias[0]
@@ -66,6 +66,10 @@ def verifica_tipo(obj, tipo):
     if tipo == "abono":
         return type(obj) == Abono
     if tipo == "licenca":
-        return type(obj) == LicencaPremio
+        return obj.tipo == 'l'
     if tipo == "ferias":
-        return type(obj) == Ferias
+        return obj.tipo == 'f'
+
+@register.filter
+def inteiro(string):
+    return int(string)

@@ -25,7 +25,7 @@ class AbonoForm(forms.ModelForm):
 class TrabalhadorForm(forms.ModelForm):
     class Meta:
         model = Trabalhador
-        fields = "__all__"
+        exclude = ['data_admissao']
         widgets={'data_admissao': forms.TextInput(attrs={'class': 'datepicker2', 'autocomplete' : 'off'})}
 
 
@@ -47,3 +47,8 @@ class LoginForm(forms.Form):
 		'placeholder' : 'Sua senha',
 		'type' : 'password'
 	}))
+
+class AutorizacaoForm(forms.Form):
+    trabalhador_id = forms.ModelChoiceField(queryset=Trabalhador.objects.all(), widget=forms.Select(attrs={
+        'name' : 'trabalhador_id',
+    }))

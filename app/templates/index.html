@@ -11,12 +11,28 @@
 
           {% for folga in proximas_folgas %}
             - - - -
-            {% if folga|verifica_tipo:"ferias" %}
-              {{ folga.trabalhador.nome }} entrará de férias em {{ folga.data_inicio|dias_ate }} dia(s)
-            {% elif folga|verifica_tipo:'licenca' %}
-               {{ folga.trabalhador.nome }} entrará de licença-prêmio em {{ folga.data_inicio|dias_ate }} dia(s)
+
+            {% if folga|verifica_tipo:'licenca' %}
+               {{ folga.trabalhador.nome }} entrará de licença-prêmio
+               {% if folga.data_inicio|dias_ate > 0 %}
+                 em {{ folga.data_inicio|dias_ate }} dia(s)
+               {% else %}
+                 hoje
+               {% endif %}
+            {% elif folga|verifica_tipo:"ferias" %}
+              {{ folga.trabalhador.nome }} entrará de férias
+              {% if folga.data_inicio|dias_ate > 0 %}
+                em {{ folga.data_inicio|dias_ate }} dia(s)
+              {% else %}
+                hoje
+              {% endif %}
             {% elif folga|verifica_tipo:'abono' %}
-              {{ folga.trabalhador.nome }} abonará em {{ folga.data|dias_ate }} dia(s)
+              {{ folga.trabalhador.nome }} abonará
+              {% if folga.data_inicio|dias_ate > 0 %}
+                em {{ folga.data_inicio|dias_ate }} dia(s)
+              {% else %}
+                hoje
+              {% endif %}
             {% endif %}
             - - - -
           {% endfor %}
@@ -65,6 +81,9 @@
       </div>
       <div class="col-12 col-sm-6 col-lg-4">
         {% include 'modals/novo_trabalhador.html' %}
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        {% include 'modals/autorizacao_he.html' %}
       </div>
       {% if proximas_folgas %}
         <div class='col-12'>
