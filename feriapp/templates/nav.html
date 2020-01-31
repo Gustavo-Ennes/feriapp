@@ -21,6 +21,9 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'trabalhadores' %}">Colaboradores</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'autorizacao' %}">Autorização HE</a>
+      </li>
     </ul>
     <form class="form-inline my-2 my-lg-0" method="POST" action='{% url "pesquisa" %}'>
       {% csrf_token %}

@@ -41,7 +41,7 @@ class Trabalhador(models.Model):
 
 
     def __str__(self):
-        return '%s : %s - %s - desde %s' % (self.nome, self.funcao, self.setor.nome, self.criado_em.strftime("%d/%m/%Y"))
+        return '%s : %s - %s - desde %s' % (self.nome, self.funcao, self.setor.nome, self.data_admissao.strftime("%d/%m/%Y"))
 
     class Meta:
         verbose_name_plural = 'Trabalhadores'

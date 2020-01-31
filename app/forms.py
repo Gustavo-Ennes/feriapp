@@ -1,5 +1,10 @@
 from django import forms
 from app.models import *
+from django.forms import ModelChoiceField
+
+class MyModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.nome
 
 class FeriasForm(forms.ModelForm):
     class Meta:
@@ -49,6 +54,6 @@ class LoginForm(forms.Form):
 	}))
 
 class AutorizacaoForm(forms.Form):
-    trabalhador_id = forms.ModelChoiceField(queryset=Trabalhador.objects.all(), widget=forms.Select(attrs={
+    trabalhador = MyModelChoiceField(queryset=Trabalhador.objects.all(), widget=forms.Select(attrs={
         'name' : 'trabalhador_id',
     }))

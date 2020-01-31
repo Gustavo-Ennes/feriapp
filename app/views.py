@@ -766,9 +766,8 @@ class AutorizacaoHE(LoginRequiredMixin, View):
         return Render.render('autorizacao_he.html', context)
 
     def post(self, request, trabalhador_id=-666):
-        print(request.POST['trabalhador_id'])
         try:
-            trabalhador = Trabalhador.objects.get(id=int(request.POST['trabalhador_id']))
+            trabalhador = Trabalhador.objects.get(id=int(request.POST['trabalhador']))
         except:
             messages.error(request, "Não há trabalhador com tal id")
             return redirect('trabalhadores')
@@ -777,6 +776,14 @@ class AutorizacaoHE(LoginRequiredMixin, View):
             'trabalhador' : trabalhador,
         }
         return Render.render('autorizacao_he.html', context)
+
+
+@login_required(login_url='/entrar/')
+def autorizacao(request):
+    context = {
+        'AutorizacaoForm' : AutorizacaoForm(),
+    }
+    return render(request, 'justificativas_he.html', context)
 
 
 
