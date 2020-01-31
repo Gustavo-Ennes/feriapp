@@ -44,7 +44,7 @@
           {% if folga|verifica_tipo:'abono' %}
             <td>
               <strong>
-                {{ folga.data|date:"d/m/Y" }}
+                {{ folga.data|soma_dias:1 }}
               </strong>
             </td>
           {% else %}
@@ -62,5 +62,5 @@
     </tbody>
   </table>
 {% else %}
-  <h4 class='text-primary text-center'>Não há trabalhadores retornando nos próximos 7 dias</h4>
+  <h4 class='text-primary text-center'>Não há trabalhadores retornando nos próximos 3 dias</h4>
 {% endif %}

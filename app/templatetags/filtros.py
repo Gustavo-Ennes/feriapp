@@ -73,3 +73,7 @@ def verifica_tipo(obj, tipo):
 @register.filter
 def inteiro(string):
     return int(string)
+
+@register.filter
+def soma_dias(data, dias):
+    return (data + timedelta(days=dias)).strftime("%d/%m/%Y")
