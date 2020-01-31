@@ -13,6 +13,7 @@ class SetorAdmin(admin.ModelAdmin):
 	pass
 
 
+
 admin.site.register(Trabalhador, TrabalhadorAdmin)
 admin.site.register(Ferias, FeriasAdmin)
 admin.site.register(LicencaPremio, LicencaPremioAdmin)

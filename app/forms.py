@@ -1,6 +1,6 @@
 from django import forms
 from app.models import *
-from django.forms import ModelChoiceField
+from django.forms import ModelChoiceField, modelformset_factory
 
 class MyModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
@@ -30,7 +30,14 @@ class AbonoForm(forms.ModelForm):
 class TrabalhadorForm(forms.ModelForm):
     class Meta:
         model = Trabalhador
-        exclude = ['data_admissao']
+        fields = '__all__'
+        widgets={'data_admissao': forms.TextInput(attrs={'class': 'datepicker2', 'autocomplete' : 'off'})}
+
+
+class TrabalhadorFormSemAdmissao(forms.ModelForm):
+    class Meta:
+        model = Trabalhador
+        exclude = ['data_admissao',]
         widgets={'data_admissao': forms.TextInput(attrs={'class': 'datepicker2', 'autocomplete' : 'off'})}
 
 

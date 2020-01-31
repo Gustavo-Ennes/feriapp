@@ -101,7 +101,7 @@ def trabalhador(request):
                 'abonos_futuros' : Abono.objects.filter(Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__gte=hoje)),
                 'abonos_fruidos' : Abono.fruidos.all().filter(Q(trabalhador=trabalhador)),
                 'abonos_indeferidos' : Abono.indeferidos.all().filter(Q(trabalhador=trabalhador)),
-                'TrabalhadorForm' : TrabalhadorForm(),
+                'TrabalhadorForm' : TrabalhadorFormSemAdmissao(),
             }
             print(context)
             return render(request, 'trabalhador.html', context)
@@ -219,11 +219,12 @@ def novo_trabalhador(request):
         return redirect("trabalhadores")
 
 @login_required(login_url='/entrar/')
-def  trabalhadores(request):
+def trabalhadores(request):
     trabalhadores = Trabalhador.objects.all()
     context = {
         'trabalhadores' : trabalhadores,
-        'TrabalhadorForm' : TrabalhadorForm(),
+        'TrabalhadorFormSemAdmissao' : TrabalhadorFormSemAdmissao(),
+        "TrabalhadorForm" : TrabalhadorForm(),
     }
     return render(request, 'trabalhadores.html', context)
 
@@ -372,7 +373,7 @@ def editar_data(request):
 def editar_trabalhador(request):
     if request.method == "POST":
         trabalhador = Trabalhador.objects.get(id=int(request.POST['id']))
-        form = TrabalhadorForm(request.POST, instance=trabalhador)
+        form = TrabalhadorFormSemAdmissao(request.POST, instance=trabalhador)
         obj = form.save()
         messages.success(request, "Você editou os dados de %s." % (trabalhador.nome))
         return redirect("trabalhadores")

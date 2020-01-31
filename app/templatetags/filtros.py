@@ -48,7 +48,7 @@ def formulario_preenchido(tipo, pk):
 
     if tipo == "TrabalhadorForm":
         obj = Trabalhador.objects.get(id=pk)
-        form = TrabalhadorForm(instance=obj)
+        form = TrabalhadorFormSemAdmissao(instance=obj)
 
     if tipo == "SetorForm":
         obj = Setor.objects.get(id=pk)

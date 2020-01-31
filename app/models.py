@@ -31,7 +31,7 @@ class Trabalhador(models.Model):
     )
 
     nome = models.CharField(max_length=100)
-    matricula = models.CharField(max_length=15)
+    matricula = models.CharField(unique=True, max_length=15)
     funcao = models.CharField(max_length=50)
     setor = models.ForeignKey(Setor, on_delete=models.SET_NULL, null=True)
     data_admissao = models.DateTimeField()
