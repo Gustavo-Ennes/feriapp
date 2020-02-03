@@ -148,6 +148,8 @@ def marcar_ferias(request):
         form = FeriasForm(request.POST)
         if form.is_valid():
             obj = form.save()
+            obj.criado_por = request.user
+            obj.save()
             hoje = timezone.now().date()
             if obj and obj.deferida and obj.data_inicio >= hoje:
                 messages.success(request,'Você marcou férias para o servidor %s de %s à %s.' % (obj.trabalhador.nome, obj.data_inicio.strftime("%d/%d/%Y"), obj.data_termino.strftime("%d/%d/%Y")))
@@ -166,6 +168,8 @@ def marcar_licenca(request):
         if form.is_valid():
             hoje = timezone.now().date()
             obj = form.save()
+            obj.criado_por = request.user
+            obj.save()
             if obj and obj.deferida and obj.data_inicio >= hoje:
                 messages.success(request,'Você marcou licença-prêmio para o servidor %s de %s à %s.' % (obj.trabalhador.nome, obj.data_inicio.strftime("%d/%d/%Y"), obj.data_termino.strftime("%d/%d/%Y")))
             else:
@@ -183,6 +187,8 @@ def marcar_abono(request):
         if form.is_valid():
             hoje = timezone.now().date()
             obj = form.save()
+            obj.criado_por = request.user
+            obj.save()
             if obj and obj.deferido and obj.data >= hoje:
                 messages.success(request,'Você marcou um abono para o servidor %s em %s.' % (obj.trabalhador.nome, obj.data.strftime("%d/%d/%Y")))
             else:
@@ -199,6 +205,8 @@ def novo_setor(request):
         form = SetorForm(request.POST)
         if form.is_valid():
             obj = form.save()
+            obj.criado_por = request.user
+            obj.save()
             messages.success(request,'Você cadastrou um novo setor: %s.' % (obj.nome))
         else:
             messages.error(request, form.errors)
@@ -213,6 +221,8 @@ def novo_trabalhador(request):
         string = ''
         if form.is_valid():
             obj = form.save()
+            obj.criado_por = request.user
+            obj.save()
             messages.success(request,'Você cadastrou um novo trabalhador: %s - %s .' % (obj.nome, obj.funcao))
         else:
             if 'matricula' in form.errors:

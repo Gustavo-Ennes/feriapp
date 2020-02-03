@@ -21,6 +21,7 @@
             <th scope='col'>Setor</th>
             <th scope="col">Admissão</th>
             <th scope="col">Situação</th>
+            <th scope="col">Criador</th>
             <th scope='col'>Ações</th>
           </tr>
         </thead>
@@ -51,6 +52,7 @@
 
             <td>{{ trabalhador.data_admissao|date:"d/m/Y" }}</td>
             <td>{{ trabalhador.situacao|title }}</td>
+            <td>{{ trabalhador.criado_por.first_name }}</td>
             <td>
               <small class="row justify-content-center align-items-center">
                 <div class="col-6">
@@ -77,7 +79,7 @@
   <div class="card-footer">
     <div class="row justify-content-center align-items-center">
       <div class="col-6">
-        <small class="text-muted text-center"> {{ dict.contagem }} colaborador(es) </small>
+        <small class="text-muted text-center"> {{ dict.contagem }} colaborador(es) - criado por {{ dict.setor.criado_por.first_name }}</small>
       </div>
       <div class='col-6 text-right'>
         <div class="row justify-content-center align-items-center">

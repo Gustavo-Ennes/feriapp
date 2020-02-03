@@ -20,6 +20,7 @@
             <th scope='col'>Setor</th>
             <th scope="col">Admissão</th>
             <th scope="col">Situação</th>
+            <th scope="col">Criador</th>
             {% if not pdf %}
               <th scope="col">Ações</th>
             {% endif %}
@@ -49,6 +50,7 @@
             </td>
             <td>{{ trabalhador.data_admissao|date:"d/m/Y" }}</td>
             <td>{{ trabalhador.situacao|title }}</td>
+            <td>{{ trabalhador.criado_por.first_name }}</td>
             {% if not pdf %}
               <td>
                 <small class='row justify-content-center align-items-center'>

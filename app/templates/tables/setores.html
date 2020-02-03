@@ -7,6 +7,7 @@
       <th scope="col">Nome</th>
       <th scope="col">Qtd. servidores</th>
       <th scope="col">Desde</th>
+      <th scope="col">Criador</th>
       {% if not pdf and not query %}
         <th scope='col'>Ações<th>
       {% endif %}
@@ -30,6 +31,7 @@
         </td>
         <td>{{ setor|qtd_servidores }}</td>
         <td>{{ setor.criado_em|date:"d/m/Y" }}</td>
+        <td>{{ setor.criado_por.first_name }}</td>
         {% if not pdf and not query %}
           <td>
             <div class='row justify-content-center align-items-center'>
