@@ -10,7 +10,7 @@
         <th scope="col">Duração</th>
         <th scope="col">Início</th>
         <th scope="col">Retorno</th>
-        {% if not pdf and not query and not arquivada %}
+        {% if not pdf and not query and not arquivada or impressao %}
           <th scope="col">Ações</th>
         {% endif %}
       </tr>
@@ -55,13 +55,15 @@
                   {% include 'modals/indeferir_ferias.html' %}
                 </div>
               {% endif %}
-              <div class="col">
-                <form action="{% url 'ferias_pdf' f.id %}" method="GET">
-                  <button type='submit' class="btn btn-sm btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Imprimir férias">
-                    <i class="fas fa-print"></i>
-                  </button>
-                </form>
-              </div>
+              {% if impressao %}
+                <div class="col">
+                  <form action="{% url 'ferias_pdf' f.id %}" method="GET">
+                    <button type='submit' class="btn btn-sm btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Imprimir férias">
+                      <i class="fas fa-print"></i>
+                    </button>
+                  </form>
+                </div>
+              {% endif %}
             </td>
 
         </tr>
