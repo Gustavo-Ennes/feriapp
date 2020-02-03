@@ -39,12 +39,12 @@
     </nav>
     <div class="tab-content col-12 mt-4" id="nav-tabContent">
       <div class="tab-pane fade show active" id="futuros" role="tabpanel" aria-labelledby="futuros-tab">
-        {% with abonos=futuros %}
+        {% with abonos=futuros impressao=True %}
           {% include 'tables/abono.html' %}
         {% endwith %}
       </div>
       <div class="tab-pane fade show" id="andamento" role="tabpanel" aria-labelledby="andamento-tab">
-        {% with arquivado=True %}
+        {% with arquivado=True impressao=True %}
           {% with abonos=em_andamento %}
             {% include 'tables/abono.html' %}
           {% endwith %}
