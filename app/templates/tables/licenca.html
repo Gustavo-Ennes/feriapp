@@ -48,12 +48,13 @@
             {% endif %}
           </td>
           <td>{{ f.data_termino|date:"d/m/Y" }}</td>
-          {% if not pdf and not query and not arquivada %}
 
             <td class="row justify-content-center">
-              <div class="col">
-                {% include 'modals/indeferir_licenca.html' %}
-              </div>
+              {% if not pdf and not query and not arquivada %}
+                <div class="col">
+                  {% include 'modals/indeferir_licenca.html' %}
+                </div>
+              {% endif %}
               <div class="col">
                 <form action="{% url 'licenca_pdf' f.id %}" method="GET">
                   <button type='submit' class="btn btn-sm btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Imprimir licença-prêmio">
@@ -63,7 +64,6 @@
               </div>
             </td>
 
-          {% endif %}
         </tr>
       {% endfor %}
 
