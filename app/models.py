@@ -61,16 +61,12 @@ class Ferias(models.Model):
     class FeriasFruidas(models.Manager):
         def all(self):
             return super().get_queryset().filter(Q(tipo='f') & Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
-            #return Ferias.objects.filter(Q(tipo='f') & Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
     class FeriasIndeferidas(models.Manager):
         def all(self):
             return super().get_queryset().filter(Q(deferida=False))
-
-            #return Ferias.objects.filter(Q(deferida=False))
     class FeriasEmAndamento(models.Manager):
         def all(self):
-            return super().get_queryset().filter(Q(tipo='f') & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()) & Q(deferida=True))
-            #return Ferias.objects.filter(Q(tipo='f') & Q(deferida=True) & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()))
+            return super().get_queryset().filter(Q(tipo='f') & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gt=timezone.now().date()) & Q(deferida=True))
 
     fruidas = FeriasFruidas()
     indeferidas = FeriasIndeferidas()
@@ -113,16 +109,12 @@ class LicencaPremio(Ferias):
     class LicencasFruidas(models.Manager):
         def all(self):
             return super().get_queryset().filter(Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
-            #return LicencaPremio.objects.filter(Q(data_termino__lt=timezone.now().date()) & Q(deferida=True))
     class LicencasIndeferidas(models.Manager):
         def all(self):
             return super().get_queryset().filter(Q(deferida=False))
-            #return LicencaPremio.objects.filter(Q(deferida=False))
     class LicencaEmAndamento(models.Manager):
         def all(self):
-            return super().get_queryset().filter(Q(data_inicio__lte=timezone.now().date()) & Q(deferida=True) & Q(data_termino__gte=timezone.now().date()))
-
-            #return LicencaPremio.objects.filter(Q(deferida=True) & Q(data_inicio__lte=timezone.now().date()) & Q(data_termino__gte=timezone.now().date()))
+            return super().get_queryset().filter(Q(data_inicio__lte=timezone.now().date()) & Q(deferida=True) & Q(data_termino__gt=timezone.now().date()))
 
     fruidas = LicencasFruidas()
     indeferidas = LicencasIndeferidas()

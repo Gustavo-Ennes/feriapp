@@ -782,7 +782,7 @@ class AutorizacaoHE(LoginRequiredMixin, View):
         context = {
             'trabalhador':trabalhador,
         }
-        return Render.render('autorizacao_he.html', context)
+        return Render.render('template_autorizacao.html', context)
 
     def post(self, request, trabalhador_id=-666):
         try:
@@ -794,7 +794,7 @@ class AutorizacaoHE(LoginRequiredMixin, View):
         context = {
             'trabalhador' : trabalhador,
         }
-        return Render.render('autorizacao_he.html', context)
+        return Render.render('template_autorizacao.html', context)
 
 
 @login_required(login_url='/entrar/')
