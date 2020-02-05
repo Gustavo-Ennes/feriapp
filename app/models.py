@@ -223,7 +223,7 @@ def valida_abono(abono):
 
 
     print(type(data), type(hoje), type(data.weekday()))
-    if l or f or a or data < hoje or contagem_abonos(trabalhador) > 6 or abonou_esse_mes(trabalhador, data) or data.weekday() in [5,6]:
+    if l or f or a or data < hoje or contagem_abonos(trabalhador) > 6 or abonou_esse_mes(trabalhador, data, abono) or data.weekday() in [5,6]:
         if len(f):
             abono.observacoes = "férias, de %s à %s, convergem com a data marcada" % (f[0].data_inicio.strftime("%d/%m/%Y"),f[0].data_termino.strftime("%d/%m/%Y"))
         elif len(l):
@@ -236,7 +236,7 @@ def valida_abono(abono):
             return True
         elif contagem_abonos(trabalhador) > 6:
             abono.observacoes = "limite de seis abonos por ano já atingido"
-        elif abonou_esse_mes(trabalhador, data):
+        elif abonou_esse_mes(trabalhador, data, abono):
             abono.observacoes = "trabalhador já abonou esse mês"
         elif data.weekday() in [5,6]:
             abono.observacoes = "agendamento em fim de semana"
@@ -248,5 +248,7 @@ def valida_abono(abono):
 def contagem_abonos(trabalhador):
     return Abono.objects.filter(Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__year=timezone.now().date().year)).count()
 
-def abonou_esse_mes(trabalhador, data):
-    return bool(Abono.objects.filter(Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__month=data.month) & Q(data__year=data.year)))
+def abonou_esse_mes(trabalhador, data, abono):
+    abonos = Abono.objects.filter(Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__month=data.month) & Q(data__year=data.year)).exclude(id=abono.id)
+    print(trabalhador, data.strftime("%d/%m/%Y"), abonos)
+    return bool(abonos)
