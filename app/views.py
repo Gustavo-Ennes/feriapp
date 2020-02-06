@@ -189,8 +189,11 @@ def marcar_abono(request):
             obj = form.save()
             obj.criado_por = request.user
             obj.save()
-            if obj and obj.deferido and obj.data >= hoje:
-                messages.success(request,'Você marcou um abono para o servidor %s em %s.' % (obj.trabalhador.nome, obj.data.strftime("%d/%d/%Y")))
+            if obj and obj.deferido:
+                if obj.data >= hoje:
+                    messages.success(request,'Você marcou um abono para o servidor %s em %s.' % (obj.trabalhador.nome, obj.data.strftime("%d/%d/%Y")))
+                else:
+                    messages.warning(request, "Atenção: abono com %s" % obj.observacoes)
             else:
                 messages.error(request, "O trabalhador não pode abonar nessa data por %s." % obj.observacoes)
         else:
@@ -663,9 +666,6 @@ class AbonoPDF(LoginRequiredMixin, View):
             messages.error(request, "O abono(id=%d) solicitado foi deferido e não pode ser impresso" % abono_id)
             return redirect('abono')
 
-        elif abono.fruido:
-            messages.error(request, "O abono(id=%d) já foi fruido" % abono_id)
-            return redirect('abono')
 
         else:
 
