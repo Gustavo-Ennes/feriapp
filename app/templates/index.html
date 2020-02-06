@@ -24,19 +24,25 @@
       <div class="col-12 col-sm-6 col-lg-4">
         {% include 'modals/autorizacao_he.html' %}
       </div>
-      {% if proximas_folgas %}
+      {% if proximas_folgas or proximos_retornos or em_andamento %}
         <div class='col-12'>
           <div class="card my-5">
             <div class="card-header">
               <h4 class="card-title text-center">OBSERVAÇÕES</h4>
             </div>
             <div class="card-body">
-              <h2 class='text-center text-info'>Próximas</h2>
-              {% include 'tables/proximas_folgas.html' %}
-              <h2 class='text-center text-info'>Retornando</h2>
+              {% if proximas_folgas %}
+                <h2 class='text-center text-info'>Próximas</h2>
+                {% include 'tables/proximas_folgas.html' %}
+              {% endif %}
+              {% if proximos_retornos %}
+                <h2 class='text-center text-info'>Retornando</h2>
                 {% include 'tables/proximos_retornos.html' %}
-              <h2 class='text-center text-info'>Folgando Hoje</h2>
+              {% endif %}
+              {% if em_andamento %}
+                <h2 class='text-center text-info'>Folgando Hoje</h2>
                 {% include 'tables/em_andamento.html' %}
+              {% endif %}
             </div>
           </div>
         </div>
