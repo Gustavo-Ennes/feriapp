@@ -10,7 +10,12 @@ class FeriasForm(forms.ModelForm):
     class Meta:
         model = Ferias
         fields = "__all__"
-        widgets={'data_inicio': forms.TextInput(attrs={'class': 'datepicker', 'autocomplete' : 'off'})}
+        widgets={
+            'data_inicio': forms.TextInput(attrs={'class': 'datepicker', 'autocomplete' : 'off'}),
+        }
+        field_classes={
+            'trabalhador' : MyModelChoiceField,
+        }
 
 
 class LicencaPremioForm(forms.ModelForm):
@@ -18,6 +23,9 @@ class LicencaPremioForm(forms.ModelForm):
         model = LicencaPremio
         fields = "__all__"
         widgets={'data_inicio': forms.TextInput(attrs={'class': 'datepicker', 'autocomplete' : 'off'})}
+        field_classes={
+            'trabalhador' : MyModelChoiceField,
+        }
 
 
 class AbonoForm(forms.ModelForm):
@@ -25,6 +33,9 @@ class AbonoForm(forms.ModelForm):
         model = Abono
         fields = "__all__"
         widgets={'data': forms.TextInput(attrs={'class': 'datepicker', 'autocomplete' : 'off'})}
+        field_classes={
+            'trabalhador' : MyModelChoiceField,
+        }
 
 
 class TrabalhadorForm(forms.ModelForm):
@@ -32,6 +43,9 @@ class TrabalhadorForm(forms.ModelForm):
         model = Trabalhador
         fields = '__all__'
         widgets={'data_admissao': forms.TextInput(attrs={'class': 'datepicker2', 'autocomplete' : 'off'})}
+        field_classes={
+            'setor' : MyModelChoiceField,
+        }
 
 
 class TrabalhadorFormSemAdmissao(forms.ModelForm):
@@ -39,6 +53,9 @@ class TrabalhadorFormSemAdmissao(forms.ModelForm):
         model = Trabalhador
         exclude = ['data_admissao',]
         widgets={'data_admissao': forms.TextInput(attrs={'class': 'datepicker2', 'autocomplete' : 'off'})}
+        field_classes={
+            'setor' : MyModelChoiceField,
+        }
 
 
 class SetorForm(forms.ModelForm):

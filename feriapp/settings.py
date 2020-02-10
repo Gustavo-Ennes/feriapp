@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'sass_processor',
     'crispy_forms',
     'app',
-    'compressor'
+    'compressor',
+    'django_user_agents'
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'feriapp.urls'
@@ -208,6 +210,10 @@ LOGGING = {
 SESSION_COOKIE_AGE = 60 * 60 * 10
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+)
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())

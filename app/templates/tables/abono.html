@@ -1,80 +1,123 @@
-{% if abonos %}
-  <table class="table table-striped text-center">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Nome</th>
-        <th scope="col">Setor</th>
-        <th scope="col">Situação</th>
-        <th scope="col">Pedido</th>
-        <th scope="col">Data</th>
-        <th scope="col">Criador</th>
-        {% if not pdf and not query and not arquivado or impressao %}
-          <th scope='col'>Ações</th>
-        {% endif %}
-      </tr>
-    </thead>
-    <tbody>
+{% load user_agents %}
 
-      {% for abono in abonos %}
 
+{% if request|is_pc %}
+  {% if abonos %}
+    <table class="table table-striped text-center">
+      <thead>
         <tr>
-          <th scope="row">{{ abono.id }}</th>
-          <td>
-            <form id='trabalhadorForm{{ abono.id }}{{ abono.trabalhador.id }}' method='POST' action='{% url 'trabalhador' %}'>
-              {% csrf_token %}
-              <input type="hidden" name='trabalhador' value='{{ abono.trabalhador.id }}' />
-            </form>
-            <button form='trabalhadorForm{{ abono.id }}{{ abono.trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ abono.trabalhador.nome }}</button>
-          </td>
-          <td>
-            <form id='setorForm{{ abono.id}}{{ abono.trabalhador.setor.id }}' method='POST' action='{% url 'setor_espec' %}'>
-              {% csrf_token %}
-              <input type="hidden" name='setor' value='{{ abono.trabalhador.setor.id }}' />
-            </form>
-            <button form='setorForm{{ abono.id}}{{ abono.trabalhador.setor.id }}' class="btn btn-transparent text-light" type="submit">{{ abono.trabalhador.setor.nome }}</button>
-          </td>
-          <td>{{ abono.trabalhador.situacao|title }}</td>
-          <td>{{ abono.criado_em|date:"d/m/Y" }}</td>
-          <td>
-            {{ abono.data|date:"d/m/Y" }}
-            {% if not pdf and not query and not arquivado %}
-              <small>
-                {% with folga=abono %}
-                  {% include 'modals/data.html' %}
-                {% endwith %}
-              </small>
-            {% endif %}
-          </td>
-
-          <td>
-            {{ abono.criado_por.first_name }}
-          </td>
-
-          <td class="row justify-content-center">
-            {% if not pdf and not query and not arquivado %}
-              <div class="col">
-                {% include 'modals/indeferir_abono.html' %}
-              </div>
-            {% endif %}
-            {% if impressao %}
-              <div class="col">
-                <form action="{% url 'abono_pdf' abono.id %}" method="GET">
-                  <button type='submit' class="btn btn-sm btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Imprimir abono">
-                    <i class="fas fa-print"></i>
-                  </button>
-                </form>
-              </div>
-            {% endif %}
-          </td>
-
-
+          <th scope="col">#</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Setor</th>
+          <th scope="col">Situação</th>
+          <th scope="col">Pedido</th>
+          <th scope="col">Data</th>
+          <th scope="col">Criador</th>
+          {% if not pdf and not query and not arquivado or impressao %}
+            <th scope='col'>Ações</th>
+          {% endif %}
         </tr>
+      </thead>
+      <tbody>
 
-      {% endfor %}
+        {% for abono in abonos %}
 
-    </tbody>
-  </table>
+          <tr>
+            <th scope="row">{{ abono.id }}</th>
+            <td>
+              <form id='trabalhadorForm{{ abono.id }}{{ abono.trabalhador.id }}' method='POST' action='{% url 'trabalhador' %}'>
+                {% csrf_token %}
+                <input type="hidden" name='trabalhador' value='{{ abono.trabalhador.id }}' />
+              </form>
+              <button form='trabalhadorForm{{ abono.id }}{{ abono.trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ abono.trabalhador.nome }}</button>
+            </td>
+            <td>
+              <form id='setorForm{{ abono.id}}{{ abono.trabalhador.setor.id }}' method='POST' action='{% url 'setor_espec' %}'>
+                {% csrf_token %}
+                <input type="hidden" name='setor' value='{{ abono.trabalhador.setor.id }}' />
+              </form>
+              <button form='setorForm{{ abono.id}}{{ abono.trabalhador.setor.id }}' class="btn btn-transparent text-light" type="submit">{{ abono.trabalhador.setor.nome }}</button>
+            </td>
+            <td>{{ abono.trabalhador.situacao|title }}</td>
+            <td>{{ abono.criado_em|date:"d/m/Y" }}</td>
+            <td>
+              {{ abono.data|date:"d/m/Y" }}
+              {% if not pdf and not query and not arquivado %}
+                <small>
+                  {% with folga=abono %}
+                    {% include 'modals/data.html' %}
+                  {% endwith %}
+                </small>
+              {% endif %}
+            </td>
+
+            <td>
+              {{ abono.criado_por.first_name }}
+            </td>
+
+            <td class="row justify-content-center">
+              {% if not pdf and not query and not arquivado %}
+                <div class="col">
+                  {% include 'modals/indeferir_abono.html' %}
+                </div>
+              {% endif %}
+              {% if impressao %}
+                <div class="col">
+                  <form action="{% url 'abono_pdf' abono.id %}" method="GET">
+                    <button type='submit' class="btn btn-sm btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Imprimir abono">
+                      <i class="fas fa-print"></i>
+                    </button>
+                  </form>
+                </div>
+              {% endif %}
+            </td>
+
+
+          </tr>
+
+        {% endfor %}
+
+      </tbody>
+    </table>
+  {% else %}
+    <h4 class='text-primary text-center'>Ainda não há abonos cadastrados no sistema</h4>
+  {% endif %}
 {% else %}
-  <h4 class='text-primary text-center'>Ainda não há abonos cadastrados no sistema</h4>
+  {% if abonos %}
+    <div class="row justify-content-center align-items-center">
+      {% for abono in abonos %}
+          <div class="col-12">
+            <div class="card my-2 mr-5 w-100">
+              <div class="card-header">
+                <h3 class="card-title text-center">
+                  #{{ abono.id }} - {{ abono.trabalhador.nome }}
+                </h3>
+                <p class="card-subtitle text-center text-light">
+                  {{ abono.trabalhador.setor.nome }} - {{ abono.trabalhador.situacao|title }}
+                </p>
+              </div>
+            <div class="card-body">
+              <p>
+                Pedido: {{ abono.criado_em|date:"d/m/Y" }}
+              </p>
+              <p>
+                Data: {{ abono.data|date:"d/m/Y" }}
+              </p>
+              <p>
+                Criador: {{ abono.criado_por.first_name }}
+              </p>
+              {% if not pdf and not query and not arquivado %}
+                <p>
+                  Ações:
+                  <div>
+                    {% include 'modals/indeferir_abono.html' %}
+                  </div>
+
+                </p>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+  {% endif %}
 {% endif %}
