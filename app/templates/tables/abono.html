@@ -87,7 +87,7 @@
     <div class="row justify-content-center align-items-center">
       {% for abono in abonos %}
           <div class="col-12">
-            <div class="card my-2 mr-5 w-100">
+            <div class="card my-2 w-100">
               <div class="card-header">
                 <h3 class="card-title text-center">
                   #{{ abono.id }} - {{ abono.trabalhador.nome }}
@@ -107,17 +107,18 @@
                 Criador: {{ abono.criado_por.first_name }}
               </p>
               {% if not pdf and not query and not arquivado %}
-                <p>
+                <div>
                   Ações:
                   <div>
                     {% include 'modals/indeferir_abono.html' %}
                   </div>
 
-                </p>
+                </div>
               {% endif %}
             </div>
           </div>
-        {% endfor %}
-      </div>
+        </div>
+      {% endfor %}
+    </div>
   {% endif %}
 {% endif %}
