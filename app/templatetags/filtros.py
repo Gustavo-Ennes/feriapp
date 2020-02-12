@@ -1,7 +1,7 @@
 from django import template
 from app.models import *
 from app.forms import *
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db.models import Q
 
 register = template.Library()
@@ -77,3 +77,8 @@ def inteiro(string):
 @register.filter
 def soma_dias(data, dias):
     return (data + timedelta(days=dias)).strftime("%d/%m/%Y")
+
+@register.filter
+def subtrai_dias(data, dias):
+    data = datetime.strptime(data, "%d/%m/%Y")
+    return (data - timedelta(days=dias)).strftime("%d/%m/%Y")

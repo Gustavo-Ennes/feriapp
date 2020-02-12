@@ -42,7 +42,7 @@
     <div class="tab-content col-12 mt-4" id="nav-tabContent">
       <div class="tab-pane fade show active" id="futuros" role="tabpanel" aria-labelledby="futuros-tab">
         <div>
-          {% with licencas=futuras %}
+          {% with licencas=futuras impressao=True %}
             {% include 'tables/licenca.html' %}
           {% endwith %}
         </div>
@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="tab-pane fade" id="fruidos" role="tabpanel" aria-labelledby="fruidos-tab">
-        {% with arquivada=True %}
+        {% with arquivada=True impressao=True %}
           {% with licencas=fruidas %}
             {% include 'tables/licenca.html' %}
           {% endwith %}
