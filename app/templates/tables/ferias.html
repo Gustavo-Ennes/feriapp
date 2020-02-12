@@ -1,7 +1,7 @@
 {% load user_agents %}
 
 {% if ferias %}
-  {% if request|is_pc %}
+  {% if request|is_pc or impressao %}
     <table class="table table-striped text-center">
       <thead>
         <tr>
