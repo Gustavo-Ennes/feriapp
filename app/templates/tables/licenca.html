@@ -1,5 +1,6 @@
+{% load user_agents %}
 {% if licencas %}
-  {% if request|is_pc or impressao %}
+  {% if request|is_pc or tabela_impressa %}
     <table class="table table-striped text-center">
       <thead>
         <tr>

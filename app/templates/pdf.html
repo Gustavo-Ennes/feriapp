@@ -1,3 +1,4 @@
+{% load user_agents %}
 <!doctype html>
 <html>
   <head>
@@ -60,41 +61,41 @@
           {% include 'cards/trabalhador.html' %}
         {% elif tipo == 'ferias'%}
           <h3 class="text-center"> FÉRIAS  - futuras</h3><br/>
-          {% with ferias=ferias_futuras impressao=True %}
+          {% with ferias=ferias_futuras tabela_impressa=True %}
             {% include 'tables/ferias.html'%}
           {% endwith %}
           <h3 class="text-center"> FÉRIAS  - fruídas</h3><br/>
-          {% with ferias=ferias_fruidas impressao=True %}
+          {% with ferias=ferias_fruidas tabela_impressa=True %}
             {% include 'tables/ferias.html'%}
           {% endwith %}
           <h3 class="text-center"> FÉRIAS  - indeferidas</h3><br/>
-          {% with ferias=ferias_indeferidas impressao=True %}
+          {% with ferias=ferias_indeferidas tabela_impressa=True %}
             {% include 'tables/ferias.html'%}
           {% endwith %}
         {% elif tipo == 'abono'%}
           <h3 class="text-center"> ABONOS - futuros</h3><br/>
-          {% with abonos=abonos_futuros impressao=True %}
+          {% with abonos=abonos_futuros tabela_impressa=True %}
             {% include 'tables/abono.html'%}
           {% endwith %}
           <h3 class="text-center"> ABONOS - fruídos</h3><br/>
-          {% with abonos=abonos_fruidos impressao=True %}
+          {% with abonos=abonos_fruidos tabela_impressa=True %}
             {% include 'tables/abono.html'%}
           {% endwith %}
           <h3 class="text-center"> ABONOS - indeferidos</h3><br/>
-          {% with abonos=abonos_indeferidos impressao=True %}
+          {% with abonos=abonos_indeferidos tabela_impressa=True %}
             {% include 'tables/abono.html'%}
           {% endwith %}
         {% elif tipo == 'licenca'%}
           <h3 class="text-center"> LICENÇAS-PRÊMIO - futuras </h3><br/>
-          {% with licencas=licencas_futuras impressao=True %}
+          {% with licencas=licencas_futuras tabela_impressa=True %}
             {% include 'tables/licenca.html'%}
           {% endwith %}
           <h3 class="text-center"> LICENÇAS-PRÊMIO - fruídas </h3><br/>
-          {% with licencas=licencas_fruidas impressao=True %}
+          {% with licencas=licencas_fruidas tabela_impressa=True %}
             {% include 'tables/licenca.html'%}
           {% endwith %}
           <h3 class="text-center"> LICENÇAS-PRÊMIO - indeferidas </h3><br/>
-          {% with licencas=licencas_indeferidas impressao=True %}
+          {% with licencas=licencas_indeferidas tabela_impressa=True %}
             {% include 'tables/licenca.html'%}
           {% endwith %}
 
@@ -112,63 +113,63 @@
 
           {% if ferias_futuras %}
             <h3 class="text-center"> FÉRIAS  - futuras</h3><br/>
-            {% with ferias=ferias_futuras impressao=True %}
+            {% with ferias=ferias_futuras tabela_impressa=True %}
               {% include 'tables/ferias.html'%}
             {% endwith %}
           {% endif %}
 
           {% if ferias_fruidas %}
             <h3 class="text-center"> FÉRIAS  - fruídas</h3><br/>
-            {% with ferias=ferias_fruidas impressao=True %}
+            {% with ferias=ferias_fruidas tabela_impressa=True %}
               {% include 'tables/ferias.html'%}
             {% endwith %}
           {% endif %}
 
           {% if ferias_indeferidas %}
             <h3 class="text-center"> FÉRIAS  - indeferidas</h3><br/>
-            {% with ferias=ferias_indeferidas impressao=True %}
+            {% with ferias=ferias_indeferidas tabela_impressa=True %}
               {% include 'tables/ferias.html'%}
             {% endwith %}
           {% endif %}
 
           {% if abonos_futuros %}
             <h3 class="text-center"> ABONOS - futuros</h3><br/>
-            {% with abonos=abonos_futuros impressao=True %}
+            {% with abonos=abonos_futuros tabela_impressa=True %}
               {% include 'tables/abono.html'%}
             {% endwith %}
           {% endif %}
 
           {% if abonos_fruidos%}
             <h3 class="text-center"> ABONOS - fruídos</h3><br/>
-            {% with abonos=abonos_fruidos impressao=True %}
+            {% with abonos=abonos_fruidos tabela_impressa=True %}
               {% include 'tables/abono.html'%}
             {% endwith %}
           {% endif %}
 
           {% if abonos_indeferidos %}
             <h3 class="text-center"> ABONOS - indeferidos</h3><br/>
-            {% with abonos=abonos_indeferidos impressao=True %}
+            {% with abonos=abonos_indeferidos tabela_impressa=True %}
               {% include 'tables/abono.html'%}
             {% endwith %}
           {% endif %}
 
           {% if licencas_futuras %}
             <h3 class="text-center"> LICENÇAS-PRÊMIO - futuras </h3><br/>
-            {% with licencas=licencas_futuras impressao=True %}
+            {% with licencas=licencas_futuras tabela_impressa=True %}
               {% include 'tables/licenca.html'%}
             {% endwith %}
           {% endif %}
 
           {% if licencas_fruidas %}
             <h3 class="text-center"> LICENÇAS-PRÊMIO - fruídas </h3><br/>
-            {% with licencas=licencas_fruidas impressao=True %}
+            {% with licencas=licencas_fruidas tabela_impressa=True %}
               {% include 'tables/licenca.html'%}
             {% endwith %}
           {% endif %}
 
           {% if licencas_indeferidas %}
             <h3 class="text-center"> LICENÇAS-PRÊMIO - indeferidas </h3><br/>
-            {% with licencas=licencas_indeferidas impressao=True %}
+            {% with licencas=licencas_indeferidas tabela_impressa=True %}
               {% include 'tables/licenca.html'%}
             {% endwith %}
           {% endif %}
@@ -177,63 +178,63 @@
 
           {% if ferias_futuras %}
             <h3 class="text-center"> FÉRIAS  - futuras</h3><br/>
-            {% with ferias=ferias_futuras impressao=True %}
+            {% with ferias=ferias_futuras tabela_impressa=True %}
               {% include 'tables/ferias.html'%}
             {% endwith %}
           {% endif %}
 
           {% if ferias_fruidas %}
             <h3 class="text-center"> FÉRIAS  - fruídas</h3><br/>
-            {% with ferias=ferias_fruidas impressao=True %}
+            {% with ferias=ferias_fruidas tabela_impressa=True %}
               {% include 'tables/ferias.html'%}
             {% endwith %}
           {% endif %}
 
           {% if ferias_indeferidas %}
             <h3 class="text-center"> FÉRIAS  - indeferidas</h3><br/>
-            {% with ferias=ferias_indeferidas impressao=True %}
+            {% with ferias=ferias_indeferidas tabela_impressa=True %}
               {% include 'tables/ferias.html'%}
             {% endwith %}
           {% endif %}
 
           {% if abonos_futuros %}
             <h3 class="text-center"> ABONOS - futuros</h3><br/>
-            {% with abonos=abonos_futuros impressao=True %}
+            {% with abonos=abonos_futuros tabela_impressa=True %}
               {% include 'tables/abono.html'%}
             {% endwith %}
           {% endif %}
 
           {% if abonos_fruidos%}
             <h3 class="text-center"> ABONOS - fruídos</h3><br/>
-            {% with abonos=abonos_fruidos impressao=True %}
+            {% with abonos=abonos_fruidos tabela_impressa=True %}
               {% include 'tables/abono.html'%}
             {% endwith %}
           {% endif %}
 
           {% if abonos_indeferidos %}
             <h3 class="text-center"> ABONOS - indeferidos</h3><br/>
-            {% with abonos=abonos_indeferidos impressao=True %}
+            {% with abonos=abonos_indeferidos tabela_impressa=True %}
               {% include 'tables/abono.html'%}
             {% endwith %}
           {% endif %}
 
           {% if licencas_futuras %}
             <h3 class="text-center"> LICENÇAS-PRÊMIO - futuras </h3><br/>
-            {% with licencas=licencas_futuras impressao=True %}
+            {% with licencas=licencas_futuras tabela_impressa=True %}
               {% include 'tables/licenca.html'%}
             {% endwith %}
           {% endif %}
 
           {% if licencas_fruidas %}
             <h3 class="text-center"> LICENÇAS-PRÊMIO - fruídas </h3><br/>
-            {% with licencas=licencas_fruidas impressao=True %}
+            {% with licencas=licencas_fruidas tabela_impressa=True %}
               {% include 'tables/licenca.html'%}
             {% endwith %}
           {% endif %}
 
           {% if licencas_indeferidas %}
             <h3 class="text-center"> LICENÇAS-PRÊMIO - indeferidas </h3><br/>
-            {% with licencas=licencas_indeferidas impressao=True %}
+            {% with licencas=licencas_indeferidas tabela_impressa=True %}
               {% include 'tables/licenca.html'%}
             {% endwith %}
           {% endif %}
