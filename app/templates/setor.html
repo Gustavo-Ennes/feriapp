@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load filtros %}
+{% load user_agents %}
 
 {% block header %}
 
@@ -12,13 +13,15 @@
         {% include 'modals/novo_setor.html' %}
       </div>
       <div class="col-2">
-        <form method="POST" action="{% url 'pdf' %}" class="mr-1">
-          {% csrf_token %}
-          <input type='hidden' name='tipo' value="setor" />
-          <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not setores %}disabled{% endif %}>
-            <i class="far fa-file-pdf text-center"></i>
-          </button>
-        </form>
+        {% if request|is_pc %}
+          <form method="POST" action="{% url 'pdf' %}" class="mr-1">
+            {% csrf_token %}
+            <input type='hidden' name='tipo' value="setor" />
+            <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not setores %}disabled{% endif %}>
+              <i class="far fa-file-pdf text-center"></i>
+            </button>
+          </form>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -27,12 +30,8 @@
 
 {% block conteudo %}
 
-  <div class="m-3">
-    {% for nome, dict in setores.items %}
-      <div class="my-4">
-        {% include 'cards/trabalhador_dict.html' %}
-      </div>
-    {% endfor %}
+  <div class="m-3 my-4">
+    {% include 'tables/setores.html' %}
   </div>
 
 {% endblock %}

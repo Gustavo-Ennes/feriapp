@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load filtros %}
+{% load user_agents %}
 
 {% block header %}
 
@@ -9,14 +10,16 @@
         <h4 class="text-light ml-4">PESQUISA: {{query }}</h4>
       </div>
       <div class="col-2">
-        <form method="POST" action="{% url 'pdf' %}" class="mr-1">
-          {% csrf_token %}
-          <input type='hidden' name='tipo' value="pesquisa" />
-          <input type='hidden' name='query' value={{query}} />
-          <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not qtd_resultados %}disabled{% endif %}>
-            <i class="far fa-file-pdf text-light"></i>
-          </button>
-        </form>
+        {% if request|is_pc %}
+          <form method="POST" action="{% url 'pdf' %}" class="mr-1">
+            {% csrf_token %}
+            <input type='hidden' name='tipo' value="pesquisa" />
+            <input type='hidden' name='query' value={{query}} />
+            <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not qtd_resultados %}disabled{% endif %}>
+              <i class="far fa-file-pdf text-light"></i>
+            </button>
+          </form>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -33,7 +36,7 @@
         {% if trabalhadores %}
           <div class="col-12">
             <div class="my-4">
-              {% include 'cards/trabalhador.html' %}
+              {% include 'tables/trabalhador.html' %}
             </div>
           </div>
         {% endif %}

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load filtros %}
+{% load user_agents %}
 
 {% block header %}
 
@@ -18,14 +19,16 @@
         </h4>
       </div>
       <div class="col-2">
-        <form method="POST" action="{% url 'pdf' %}" class="mr-1" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
-          {% csrf_token %}
-          <input type='hidden' name='tipo' value="trabalhador_historico" />
-          <input type='hidden' name='trabalhador_id' value="{{ trabalhador.id }}" />
-          <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
-            <i class="far fa-file-pdf text-light"></i>
-          </button>
-        </form>
+        {% if request|is_pc %}
+          <form method="POST" action="{% url 'pdf' %}" class="mr-1" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
+            {% csrf_token %}
+            <input type='hidden' name='tipo' value="trabalhador_historico" />
+            <input type='hidden' name='trabalhador_id' value="{{ trabalhador.id }}" />
+            <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
+              <i class="far fa-file-pdf text-light"></i>
+            </button>
+          </form>
+        {% endif %}
       </div>
     </div>
   </div>

@@ -52,13 +52,13 @@
       <div class="container">
 
         {% if tipo == 'trabalhador' %}
-          {% include 'cards/trabalhador.html'%}
+          {% include 'tables/trabalhador.html'%}
         {% elif tipo == 'setor'%}
           <h3 class="text-center"> SETORES </h3><br/>
           {% include 'tables/setores.html'%}
         {% elif tipo == 'setor_historico' %}
           <h3 class="text-center"> SETOR: {{ setor.nome }} </h3><br/>
-          {% include 'cards/trabalhador.html' %}
+          {% include 'tables/trabalhador.html' %}
         {% elif tipo == 'ferias'%}
           <h3 class="text-center"> FÉRIAS  - futuras</h3><br/>
           {% with ferias=ferias_futuras tabela_impressa=True %}
@@ -103,7 +103,7 @@
           <h3 class="text-center"> PESQUISA : {{query}} </h3><br/>
 
           {% if trabalhadores %}
-            {% include 'cards/trabalhador.html' %}
+            {% include 'tables/trabalhador.html' %}
           {% endif %}
 
           {% if setores %}

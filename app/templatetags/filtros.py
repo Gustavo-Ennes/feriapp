@@ -58,6 +58,7 @@ def formulario_preenchido(tipo, pk):
 
 @register.filter
 def qtd_servidores(setor):
+    print(setor)
     return Trabalhador.objects.filter(setor=setor).count()
 
 

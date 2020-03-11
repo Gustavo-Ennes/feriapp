@@ -11,69 +11,8 @@
   </div>
   <div class="card-body">
 
-      <table class="table table-striped text-center">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Função</th>
-            <th scope='col'>Setor</th>
-            <th scope="col">Admissão</th>
-            <th scope="col">Situação</th>
-            <th scope="col">Criador</th>
-            {% if not pdf %}
-              <th scope="col">Ações</th>
-            {% endif %}
+    {% include  'tables/trabalhador.html' %}
 
-          </tr>
-        </thead>
-        <tbody>
-
-
-        {% for trabalhador in trabalhadores %}
-          <tr>
-            <th scope="row">{{ trabalhador.id }}</th>
-            <td>
-              <form id='trabalhadorForm{{ trabalhador.id }}' method='POST' action='{% url 'trabalhador' %}'>
-                {% csrf_token %}
-                <input type="hidden" name='trabalhador' value='{{ trabalhador.id }}' />
-              </form>
-              <button form='trabalhadorForm{{ trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ trabalhador.nome }}</button>
-            </td>
-            <td>{{ trabalhador.funcao }}</td>
-            <td>
-              <form id='setorForm{{ trabalhador.id }}' method='POST' action='{% url 'setor_espec' %}'>
-                {% csrf_token %}
-                <input type="hidden" name='setor' value='{{ trabalhador.setor.id }} '/>
-              </form>
-              <button form='setorForm{{ trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ trabalhador.setor.nome }}</button>
-            </td>
-            <td>{{ trabalhador.data_admissao|date:"d/m/Y" }}</td>
-            <td>{{ trabalhador.situacao|title }}</td>
-            <td>{{ trabalhador.criado_por.first_name }}</td>
-            {% if not pdf %}
-              <td>
-                <small class='row justify-content-center align-items-center'>
-                  <div class="col">
-                    {% include 'modals/editar_trabalhador.html' %}
-                  </div>
-                  <div class='col'>
-                    {% include 'modals/excluir_trabalhador.html' %}
-                  </div>
-                  <div class='col'>
-                    <form action='{% url "autorizacao_he" trabalhador.id %}' method="GET">
-                      <button type='submit' class="btn btn-lg btn-block btn-outline-light" data-toggle="tooltip" data-placement="top" title="Autorização de horas extras">H.E.</button>
-                    </form>
-                  </div>
-
-                </small>
-              </td>
-            {% endif %}
-          </tr>
-        {% endfor %}
-
-      </tbody>
-    </table>
   </div>
   <div class="card-footer">
     <div class="row justify-content-center align-items-center">

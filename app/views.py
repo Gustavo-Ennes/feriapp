@@ -108,21 +108,12 @@ def trabalhador(request):
 
 @login_required(login_url='/entrar/')
 def setor(request):
-    setores = {}
-
-    for setor in Setor.objects.all():
-        setores[setor.nome]  = {
-            'setor' : setor,
-            'trabalhadores' : Trabalhador.objects.filter(setor=setor),
-            'contagem' : Trabalhador.objects.filter(setor=setor).count(),
-            'SetorForm' : SetorForm(),
-        }
-
 
     context = {
-        'setores' : setores,
+        'setores' : Setor.objects.all(),
         'SetorForm' : SetorForm(),
     }
+
     return render(request, 'setor.html', context)
 
 @login_required(login_url='/entrar/')

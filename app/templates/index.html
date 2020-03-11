@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% load filtros %}
+{% load user_agents %}
+
 
 {% block conteudo %}
 
 
-  <div class="mr-5 my-5">
+  <div class="">
     <div class="row justify-content-center align-items-center">
       <div class="col-12 col-sm-6 col-lg-4">
         {% include 'modals/marcar_ferias.html' %}
@@ -21,9 +23,11 @@
       <div class="col-12 col-sm-6 col-lg-4">
         {% include 'modals/novo_trabalhador.html' %}
       </div>
-      <div class="col-12 col-sm-6 col-lg-4">
-        {% include 'modals/autorizacao_he.html' %}
-      </div>
+      {% if request|is_pc %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          {% include 'modals/autorizacao_he.html' %}
+        </div>
+      {% endif %}
       {% if proximas_folgas or proximos_retornos or em_andamento %}
         <div class='col-12'>
           <div class="card my-5">
