@@ -87,7 +87,7 @@ class Ferias(models.Model):
 
 
 
-    def save(self, validacao, *args, **kwargs):
+    def save(self, validacao=True, *args, **kwargs):
 
         self.data_termino = self.data_inicio + timedelta(days=self.qtd_dias)
 
