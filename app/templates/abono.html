@@ -33,9 +33,9 @@
   <div class='row align-items-center justify-content-center'>
 
     <nav class='col-12'>
-      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <div class="nav nav-tabs" id="nav-tab-abono" role="tablist">
         <a class="nav-item nav-link active text-light bg-primary" id="futuros-tab" data-toggle="tab" href="#futuros" role="tab" aria-controls="futuros" aria-selected="true">Futuros</a>
-        <a class="nav-item nav-link text-light bg-primary" id="andamento-tab" data-toggle="tab" href="#andamento" role="tab" aria-controls="andamento" aria-selected="true">Em andamento</a>
+        <a class="nav-item nav-link text-light bg-primary" id="andamento-tab" data-toggle="tab" href="#andamento" role="tab" aria-controls="andamento" aria-selected="false">Em andamento</a>
         <a class="nav-item nav-link text-light bg-primary" id="fruidos-tab" data-toggle="tab" href="#fruidos" role="tab" aria-controls="fruidos" aria-selected="false">Fruídos</a>
         <a class="nav-item nav-link text-light bg-primary" id="indeferidos-tab" data-toggle="tab" href="#indeferidos" role="tab" aria-controls="indeferidos" aria-selected="false">Indeferidos</a>
       </div>
@@ -70,4 +70,33 @@
     </div>
   </div>
 
+{% endblock %}
+
+{% block js %}
+  <script>
+    jQuery('#futuros-tab').click(function(){
+      $("#nav-tab-abono [aria-selected=true]").attr('aria-selected', false);
+      $("#nav-tab-abono [aria-selected=true]").removeClass("active")
+      $(self).attr('aria-selected', true);
+      $(self).addClass('active');
+    });
+    jQuery('#andamento-tab').click(function(){
+      $("#nav-tab-abono [aria-selected=true]").attr('aria-selected', false);
+      $("#nav-tab-abono [aria-selected=true]").removeClass("active")
+      $(self).attr('aria-selected', true);
+      $(self).addClass('active');
+    });
+    jQuery('#fruidos-tab').click(function(){
+      $("#nav-tab-abono [aria-selected=true]").attr('aria-selected', false);
+      $("#nav-tab-abono [aria-selected=true]").removeClass("active")
+      $(self).attr('aria-selected', true);
+      $(self).addClass('active');
+    });
+    jQuery('#indeferidos-tab').click(function(){
+      $("#nav-tab-abono [aria-selected=true]").attr('aria-selected', false);
+      $("#nav-tab-abono [aria-selected=true]").removeClass("active")
+      $(self).attr('aria-selected', true);
+      $(self).addClass('active');
+    });
+  </script>
 {% endblock %}
