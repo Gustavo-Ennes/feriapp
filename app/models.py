@@ -87,10 +87,15 @@ class Ferias(models.Model):
 
 
 
-    def save(self, *args, **kwargs):
+    def save(self, validacao, *args, **kwargs):
 
         self.data_termino = self.data_inicio + timedelta(days=self.qtd_dias)
-        self.deferida = valida_ferias(self)
+
+        if not validacao:
+            self.deferida = False
+        else:
+            self.deferida = valida_ferias(self)
+
         super(Ferias, self).save(*args, **kwargs)
 
 
@@ -123,12 +128,17 @@ class LicencaPremio(Ferias):
     def __str__(self):
         return '%d dias - %s -saindo %s' % (self.qtd_dias, self.trabalhador.nome, self.data_inicio.strftime("%d/%m/%Y"))
 
-    def save(self, *args, **kwargs):
+    def save(self, validacao=True, *args, **kwargs):
 
         self.data_termino = self.data_inicio + timedelta(days=self.qtd_dias)
         self.tipo = 'l'
-        valida_ferias(self)
-        super(LicencaPremio, self).save(*args, **kwargs)
+
+        if not validacao:
+            self.deferida = False
+        else:
+            self.deferida = valida_ferias(self)
+
+        super(LicencaPremio, self).save(validacao, *args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Licença Prêmio"
@@ -163,9 +173,12 @@ class Abono(models.Model):
     fruido = models.BooleanField(editable=False, default=False)
     criado_por = models.ForeignKey(User,on_delete=models.SET_NULL, editable=False, null=True, blank=True)
 
-    def save(self, *args, **kwargs):
+    def save(self, validacao=True, *args, **kwargs):
 
-        self.deferido = valida_abono(self)
+        if not validacao:
+            self.deferido = False
+        else:
+            self.deferido = valida_abono(self)
         super(Abono, self).save(*args, **kwargs)
 
     def __str__(self):

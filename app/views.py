@@ -606,7 +606,7 @@ def indeferir(request):
             voltar_para = "licenca_premio"
 
         obj.observacoes = mensagem
-        obj.save()
+        obj.save(validacao=False)
         messages.success(request, mensagem)
 
         return redirect(voltar_para)
