@@ -11,8 +11,12 @@
           <th scope="col">Setor</th>
           <th scope="col">Situação</th>
           <th scope="col">Pedido</th>
-          <th scope="col">Data</th>
-          <th scope="col">Criador</th>
+          {% if observacoes %}
+            <th scope="col">Observações</th>
+          {% else %}
+            <th scope="col">Data</th>
+            <th scope="col">Criador</th>
+          {% endif %}
           {% if not pdf and not query and not arquivado or impressao %}
             <th scope='col'>Ações</th>
           {% endif %}
@@ -40,37 +44,41 @@
             </td>
             <td>{{ abono.trabalhador.situacao|title }}</td>
             <td>{{ abono.criado_em|date:"d/m/Y" }}</td>
-            <td>
-              {{ abono.data|date:"d/m/Y" }}
-              {% if not pdf and not query and not arquivado %}
-                <small>
-                  {% with folga=abono %}
-                    {% include 'modals/data.html' %}
-                  {% endwith %}
-                </small>
-              {% endif %}
-            </td>
+            {% if observacoes %}
+              <td>{{ abono.observacoes|title }}</td>
+            {% else %}
+              <td>
+                {{ abono.data|date:"d/m/Y" }}
+                {% if not pdf and not query and not arquivado %}
+                  <small>
+                    {% with folga=abono %}
+                      {% include 'modals/data.html' %}
+                    {% endwith %}
+                  </small>
+                {% endif %}
+              </td>
 
-            <td>
-              {{ abono.criado_por.first_name }}
-            </td>
+              <td>
+                {{ abono.criado_por.first_name }}
+              </td>
 
-            <td class="row justify-content-center">
-              {% if not pdf and not query and not arquivado %}
-                <div class="col">
-                  {% include 'modals/indeferir_abono.html' %}
-                </div>
-              {% endif %}
-              {% if impressao %}
-                <div class="col">
-                  <form action="{% url 'abono_pdf' abono.id %}" method="GET">
-                    <button type='submit' class="btn btn-sm btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Imprimir abono">
-                      <i class="fas fa-print"></i>
-                    </button>
-                  </form>
-                </div>
-              {% endif %}
-            </td>
+              <td class="row justify-content-center">
+                {% if not pdf and not query and not arquivado %}
+                  <div class="col">
+                    {% include 'modals/indeferir_abono.html' %}
+                  </div>
+                {% endif %}
+                {% if impressao %}
+                  <div class="col">
+                    <form action="{% url 'abono_pdf' abono.id %}" method="GET">
+                      <button type='submit' class="btn btn-sm btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Imprimir abono">
+                        <i class="fas fa-print"></i>
+                      </button>
+                    </form>
+                  </div>
+                {% endif %}
+              </td>
+            {% endif %}
 
 
           </tr>
@@ -105,6 +113,9 @@
               </p>
               <p>
                 Criador: {{ abono.criado_por.first_name }}
+              </p>
+              <p>
+                Obs.: {{ abono.observacoes|title }}
               </p>
               {% if not pdf and not query and not arquivado %}
                 <div>

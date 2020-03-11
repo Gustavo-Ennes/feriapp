@@ -10,10 +10,14 @@
           <th scope="col">Setor</th>
           <th scope="col">Situação</th>
           <th scope="col">Pedido</th>
-          <th scope="col">Duração</th>
-          <th scope="col">Início</th>
-          <th scope="col">Retorno</th>
-          <th scope="col">Criador</th>
+          {% if observacoes %}
+            <th scope="col">Observações</th>
+          {% else %}
+            <th scope="col">Duração</th>
+            <th scope="col">Início</th>
+            <th scope="col">Retorno</th>
+            <th scope="col">Criador</th>
+          {% endif %}
           {% if not pdf and not query and not arquivada or impressao %}
             <th scope="col">Ações</th>
           {% endif %}
@@ -40,20 +44,24 @@
             </td>
             <td>{{ f.trabalhador.situacao|title }}</td>
             <td>{{ f.criado_em|date:"d/m/Y" }}</td>
-            <td>{{ f.qtd_dias }}</td>
-            <td>
-              {{ f.data_inicio|date:"d/m/Y" }}
-              {% if not pdf and not query and not arquivada %}
-                <small>
-                  {% with folga=f %}
-                    {% include 'modals/data.html' %}
-                  {% endwith %}
-                </small>
-              {% endif %}
-            </td>
-            <td>{{ f.data_termino|date:"d/m/Y" }}</td>
+            {% if observacoes %}
+              <td>{{ f.observacoes|title }}</td>
+            {% else %}
+              <td>{{ f.qtd_dias }}</td>
+              <td>
+                {{ f.data_inicio|date:"d/m/Y" }}
+                {% if not pdf and not query and not arquivada %}
+                  <small>
+                    {% with folga=f %}
+                      {% include 'modals/data.html' %}
+                    {% endwith %}
+                  </small>
+                {% endif %}
+              </td>
+              <td>{{ f.data_termino|date:"d/m/Y" }}</td>
 
-            <td>{{ f.criado_por.first_name }}</td>
+              <td>{{ f.criado_por.first_name }}</td>
+            {% endif %}
 
             <td class="row justify-content-center">
               {% if not pdf and not query and not arquivada %}
@@ -104,13 +112,16 @@
                 Retorno: {{ f.data_termino|date:'d/m/Y' }}
               </p>
               <p>
-                Criador: {{ f.criado_por|title }}
+                Criador: {{ f.criado_por.first_name|title }}
               </p>
-              {% if not pdf and not query and not arquivado %}
+              <p>
+                Obs.: {{ f.observacoes|title }}
+              </p>
+              {% if not pdf and not query and not arquivada %}
                 <div>
                   Ações:
                   <div>
-                    {% include 'modals/indeferir_abono.html' %}
+                    {% include 'modals/indeferir_ferias.html' %}
                   </div>
 
                 </div>

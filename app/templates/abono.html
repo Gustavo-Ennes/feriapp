@@ -59,7 +59,7 @@
       </div>
       <div class="tab-pane fade show" id="indeferidos" role="tabpanel" aria-labelledby="indeferidos-tab">
         {% with arquivado=True %}
-          {% with abonos=indeferidos %}
+          {% with abonos=indeferidos observacoes=True %}
             {% include 'tables/abono.html' %}
           {% endwith %}
         {% endwith %}

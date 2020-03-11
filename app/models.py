@@ -212,7 +212,7 @@ def valida_ferias(ferias):
         elif len(a):
             ferias.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
         elif inicio < hoje:
-            ferias.observacoes = "data de agendamento anterior a hoje"
+            ferias.observacoes = "data de agendamento Anterior a data do pedido"
             ferias.fruida = True
             return True
         elif inicio.weekday() in [5,6]:
@@ -244,7 +244,7 @@ def valida_abono(abono):
         elif len(a):
             abono.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
         elif data < hoje:
-            abono.observacoes = "data de agendamento anterior a hoje"
+            abono.observacoes = "data de agendamento Anterior a data do pedido"
             abono.fruido = True
             return True
         elif contagem_abonos(trabalhador) > 6:
