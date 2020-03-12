@@ -61,7 +61,7 @@
                   </small>
                 {% endif %}
               </td>
-              <td>{{ f.data_termino|date:"d/m/Y" }}</td>
+              <td>{{ f.data_termino|soma_dias:1 }}</td>
               <td>{{ f.criado_por.first_name }}</td>
 
             {% endif %}
@@ -112,7 +112,7 @@
                   Início: {{ f.data_inicio|date:'d/m/Y' }}
                 </p>
                 <p>
-                  Retorno: {{ f.data_termino|date:'d/m/Y' }}
+                  Retorno: {{ f.data_termino|soma_dias:1 }}
                 </p>
                 <p>
                   Criador: {{ f.criado_por.first_name|title }}

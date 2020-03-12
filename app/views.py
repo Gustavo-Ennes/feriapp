@@ -807,7 +807,7 @@ def proximas_folgas():
     limite_dias = 3
 
     #como o  tipo 'f' não foi especificado, e por LicencaPremio ser subclasse de Ferias, os dois tipos serão listados na próxima linha
-    folgas = Ferias.objects.filter( Q(deferida=True) & Q(data_inicio__gte=hoje) & Q(data_inicio__lt=hoje+timedelta(days=limite_dias)))
+    folgas = Ferias.objects.filter( Q(deferida=True) & Q(data_inicio__gt=hoje) & Q(data_inicio__lte=hoje+timedelta(days=limite_dias)))
     abonos = Abono.objects.filter(Q(deferido=True) & Q(data__gt=hoje) & Q(data__lt=hoje + timedelta(days=limite_dias)))
     folgas = list(chain(abonos, folgas))
 

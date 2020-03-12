@@ -56,7 +56,7 @@
             {% else %}
               <td>
                 <strong>
-                  {{ folga.data_termino|date:"d/m/Y" }}
+                  {{ folga.data_termino|soma_dias:1 }}
                 </strong>
               </td>
             {% endif %}
@@ -87,14 +87,14 @@
             <div class="card-body">
               <p>#{{ folga.id }}</p>
               <p>{{ folga.trabalhador.nome }} - {{ folga.trabalhador.setor.nome }}</p>
-              <p>Término:
+              <p>Retorno:
                 {% if folga|verifica_tipo:'abono' %}
                   <strong>
                     {{ folga.data|date:"d/m/Y" }}
                   </strong>
                 {% else %}
                   <strong>
-                    {{ folga.data_termino|date:"d/m/Y" }}
+                    {{ folga.data_termino|soma_dias:1 }}
                   </strong>
                 {% endif %}
               </p>
