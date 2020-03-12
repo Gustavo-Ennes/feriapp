@@ -1,4 +1,6 @@
 {% load user_agents %}
+{% load filtros %}
+
 {% if licencas %}
   {% if request|is_pc or tabela_impressa %}
     <table class="table table-striped text-center">
