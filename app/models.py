@@ -52,8 +52,8 @@ class Trabalhador(models.Model):
 
 class Ferias(models.Model):
     OPCOES = (
-        (14, "Quinze dias"),
-        (29, "Trinta dias"),
+        (15, "Quinze dias"),
+        (30, "Trinta dias"),
     )
 
     objects = models.Manager()
@@ -89,8 +89,7 @@ class Ferias(models.Model):
 
     def save(self, validacao=True, *args, **kwargs):
 
-        self.data_termino = self.data_inicio + timedelta(days=self.qtd_dias)
-        self.qtd_dias += 1
+        self.data_termino = self.data_inicio + timedelta(days=self.qtd_dias - 1)
 
         if not validacao:
             self.deferida = False
@@ -110,12 +109,12 @@ class Ferias(models.Model):
 
 class LicencaPremio(Ferias):
     OPCOES = (
-        (14, "Quinze dias"),
-        (29, "Trinta dias"),
-        (44, "Quarenta e cinco dias"),
-        (59, "Sessenta dias"),
-        (74, "Setenta e cinco dias"),
-        (89, "Noventa dias")
+        (15, "Quinze dias"),
+        (30, "Trinta dias"),
+        (45, "Quarenta e cinco dias"),
+        (60, "Sessenta dias"),
+        (75, "Setenta e cinco dias"),
+        (90, "Noventa dias")
     )
 
     objects = models.Manager()
@@ -139,7 +138,7 @@ class LicencaPremio(Ferias):
 
     def save(self, validacao=True, *args, **kwargs):
 
-        self.data_termino = self.data_inicio + timedelta(days=self.qtd_dias)
+        self.data_termino = self.data_inicio + timedelta(days=self.qtd_dias - 1)
         self.tipo = 'l'
 
         if not validacao:
