@@ -800,6 +800,7 @@ def autorizacao(request):
 def soma_justificativas(request):
     context = {
         'trabalhadores' : Trabalhador.objects.all(),
+        'setores' : Setor.objects.all(),
     }
     return render(request, 'soma_justificativas.html', context)
 

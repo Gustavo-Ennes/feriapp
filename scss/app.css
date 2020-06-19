@@ -8,7 +8,7 @@ body { background: url(fundo.png) repeat center center fixed; }
 
 .card .card-header, .card .card-footer { background-color: #065E6B !important; }
 
-.card .card-body { background-color: rgba(150, 150, 250, 0.5); }
+.card .card-body { background-color: rgba(237,245,252,0.8); }
 
 .card .card-title { color: #DDDDFF !important; font-family: "Bebas Neue", cursive; }
 

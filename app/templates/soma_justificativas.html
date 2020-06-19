@@ -14,14 +14,9 @@
 
 {% block conteudo %}
     <form action="" method="post">
-        <div class="row">
-            {% for trabalhador in trabalhadores %}
-                <div class="col-12 col-lg-3">
-
-                    <label class=""form-control-label>{{ trabalhador.nome }}:</label>
-                    <input value='0.0' step='0.1' min='0' class='form-control' name="{{ trabalhador.id }}horas" type="number" placeholder="Horas justificadas por {{ trabalhador.nome }}">
-
-                </div>
+        <div class="row justify-content-center">
+            {% for setor in setores %}
+                {% include 'cards/soma_justificativa_setor.html' %}
             {% endfor %}
             <div class="col-12">
                 <button class="btn btn-outline-info btn-lg btn-block mt-3" type="submit">Submeter horas justificadas</button>

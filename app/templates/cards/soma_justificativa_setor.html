@@ -1,0 +1,26 @@
+<div class="col-12">
+    <div class="card my-3">
+      <div class="card-header">
+        <div class="row justify-content-">
+          <div class='col-12 text-center'>
+            <h5 class="card-title"> {{ setor.nome }} </h5>
+          </div>
+        </div>
+      </div>
+      <div class="card-body bg-none">
+
+        {% for trabalhador in trabalhadores %}
+            {% if trabalhador.setor == setor %}
+
+                <div class="col-12 col-lg-3">
+
+                    <label for="{{ trabalhador.id }}id" class="form-control-label">{{ trabalhador.nome }}:</label>
+                    <input id='{{ trabalhador.id }}id' value='0.0' step='0.1' min='0' class='form-control mb-2' name="{{ trabalhador.id }}horas" type="number" placeholder="Horas justificadas por {{ trabalhador.nome }}">
+
+                </div>
+            {% endif %}
+        {% endfor %}
+
+      </div>
+    </div>
+</div>
