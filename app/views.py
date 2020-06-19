@@ -796,6 +796,12 @@ def autorizacao(request):
     return render(request, 'justificativas_he.html', context)
 
 
+@login_required(login_url='/entrar/')
+def soma_justificativas(request):
+    context = {
+        'trabalhadores' : Trabalhador.objects.all(),
+    }
+    return render(request, 'soma_justificativas.html', context)
 
 
 
