@@ -37,6 +37,25 @@
 
 {% block conteudo %}
 
+  <div class="row">
+    <div class="col-12 col-lg-3">
+
+      <small for="funcao">Função:</small>
+      <br>
+      <p id="funcao"> {{ trabalhador.funcao|title }} - {{ trabalhador.setor.nome }} </p>
+
+      <small for="matricula">Matrícula:</small>
+      <br>
+      <p id="matricula"> {{ trabalhador.matricula }} </p>
+
+      <small for="admissao">Função:</small>
+      <br>
+      <p id="admissao"> {{ trabalhador.data_admissao|date:"d/m/Y" }} </p>
+
+    </div>
+    <div class="col-12 col-lg-9">
+
+
   {% if ferias_futuras or ferias_fruidas or ferias_indeferidas %}
     <div class="col-12 my-2">
       <div class="card">
@@ -150,5 +169,10 @@
       </div>
     </div>
   {% endif %}
+
+    </div>
+
+  </div>
+
 
 {% endblock %}
