@@ -798,14 +798,150 @@ def autorizacao(request):
 
 @login_required(login_url='/entrar/')
 def soma_justificativas(request):
+
+    data = datetime.now()
+    if request.method == 'GET':
+        relatorios_deste_mes = Relatorio.objects.filter(Q(criado_em__year=data.year) & Q(criado_em__month=data.month))
+        if not relatorios_deste_mes:
+            context = {
+                'trabalhadores' : Trabalhador.objects.all(),
+                'setores' : Setor.objects.all(),
+            }
+            return render(request, 'soma_justificativas.html', context)
+        else:
+            for relatorio in relatorios_deste_mes:
+                if relatorio.estado == 'terminado':
+                    messages.warning(request, "Os relatórios estão concluídos. Vá em relatórios para editá-los")
+                    return redirect("relatorios")
+            messages.warning(request, "O relatório deste mês já foi gerado. Confira as horas no extrato de ponto, adicione as faltas e adicional noturno")
+            return redirect('soma_horas')
+
+    elif request.method == 'POST':
+        trabalhadores = Trabalhador.objects.all()
+        linhas = []
+
+        for trabalhador in trabalhadores:
+            string = str(trabalhador.id) + "horas"
+            #busco por relatórios desse mês
+            relatorio = busca_relatorio(request, trabalhador.setor)
+            if not relatorio:
+                # se não há eu gero
+                relatorio = gera_relatorio_em_branco(trabalhador.setor)
+
+            if string in request.POST:
+                linha = LinhaRelatorio.objects.create(
+                    trabalhador=trabalhador, 
+                    horas_extras=float(request.POST[string])
+                )        
+                relatorio.linhas.add(linha)
+                if relatorio.estado == 'vazio': 
+                    relatorio.estado = 'justificativas'
+                relatorio.save()
+
+        messages.success(request, "Soma das justificativas concluída")
+        return redirect('index')
+
+
+
+@login_required(login_url='/entrar/')
+def soma_horas(request):
+
+    # ver se tenho relatorio desse mes
+    data = datetime.now().date()
+    relatorios_deste_mes = Relatorio.objects.filter(Q(criado_em__year=data.year) & Q(criado_em__month=data.month))
+
+    if not relatorios_deste_mes:
+        messages.warning(request, "Não há relatórios deste mês. Some as justificativas primeiramente")
+        return redirect('soma_justificativas')
+
+    for relatorio in relatorios_deste_mes:
+        if relatorio.estado == "vazio":
+            messages.warning(request, "Algum relatório deste mês não possui as somas das justificativas ainda. Some as justificativas")
+            return redirect('soma_justificativas')
+
+
+    if request.method == "GET":
+
+        for relatorio in relatorios_deste_mes:
+            if relatorio.estado == 'terminado':
+                messages.info(request, "Os relatórios foram terminados. Edite-os em Relatórios")
+                return redirect('relatorios')
+
+        context = {
+            'trabalhadores': Trabalhador.objects.all(),
+            'setores': Setor.objects.all(),
+            'relatorios' : relatorios_deste_mes,
+        }          
+        return render(request, 'soma_horas.html', context)
+
+    elif request.method == "POST":
+
+        trabalhadores = Trabalhador.objects.all()
+        for trabalhador in trabalhadores:
+            # achar a linha do relatório desse mês correspondente ao trabalhador
+            relatorio = busca_relatorio(request, trabalhador.setor)
+            horas_extras = float(request.POST[str(trabalhador.id) + "horas"])
+            adc_noturno = float(request.POST[str(trabalhador.id) + 'adc_noturno'])
+            faltas = int(request.POST[str(trabalhador.id) + 'faltas'])
+            linha = None
+
+            try:
+                linha = relatorio.linhas.get(Q(trabalhador=trabalhador))
+            except Exception as e:
+                print(e)
+
+                linha = LinhaRelatorio.objects.create(
+                    horas_extras=horas_extras,
+                    adc_noturno=adc_noturno,
+                    faltas=faltas
+                )
+
+            linha.horas_extras = horas_extras
+            linha.adicional_noturno = adc_noturno
+            linha.faltas = faltas
+            linha.save()
+            relatorio.save()
+
+        for relatorio in relatorios_deste_mes:
+            relatorio.estado = "terminado"
+            relatorio.save()
+        messages.success(request, "Relatórios deste mês foram terminados")
+        #dps redirect relatórios
+        return redirect('index')
+
+
+
+
+@login_required(login_url='/entrar/')
+def relatorios(request):
     context = {
-        'trabalhadores' : Trabalhador.objects.all(),
-        'setores' : Setor.objects.all(),
+        'relatorios' : Relatorio.objects.all(),
     }
-    return render(request, 'soma_justificativas.html', context)
+    return render(request, 'relatorios.html', context)
 
 
 
+@login_required(login_url='/entrar/')
+def relatorio(request):
+    context = {
+        'relatorios' : Relatorio.objects.all(),
+    }
+    pass
+
+
+
+
+def busca_relatorio(request, setor, mes=datetime.now().month, ano=datetime.now().year):
+    try:
+        return Relatorio.objects.get(Q(setor=setor) & Q(criado_em__month=mes) & Q(criado_em__year=ano))
+    except:
+        messages.info(request, "Não há relatório do mês %d de %d, do setor %s. Um relatório em branco foi gerado " % (mes, ano, setor.nome))
+        return None
+
+
+
+def gera_relatorio_em_branco(setor):
+    return Relatorio.objects.create(setor=setor)
 
 
 def proximas_folgas():

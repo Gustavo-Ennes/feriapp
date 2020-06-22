@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.db.models import  Q
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 
@@ -194,6 +195,63 @@ class Abono(models.Model):
 
     class Meta:
         ordering = ['data']
+
+
+
+class LinhaRelatorio(models.Model):
+    trabalhador = models.ForeignKey(Trabalhador, on_delete=models.SET_NULL, null=True)
+    horas_extras = models.FloatField(default=0, validators=[MinValueValidator(0)])
+    adicional_noturno = models.FloatField(default=0, validators=[MinValueValidator(0)])
+    faltas = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    dias_faltas = []
+    criado_em = models.DateTimeField(auto_now_add=True)
+    modificado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = "Linha de Relatório"
+        verbose_name_plural = 'Linhas de Relatório'
+
+        
+
+def mes_anterior():
+    data = datetime.now()
+    return data.month - 1 if data.month > 1 else 12
+
+def ano_padrao():
+    data = datetime.now()
+    return data.year - 1 if data.month == 1 else data.year
+
+
+class Relatorio(models.Model):
+    setor = models.ForeignKey(Setor, on_delete=models.SET_NULL, null=True)
+    linhas = models.ManyToManyField(LinhaRelatorio, blank=True)
+    estado = models.CharField(max_length=100, default="vazio")
+    mes = models.IntegerField(
+        default=mes_anterior(), 
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(12),
+        ]
+    )
+    ano = models.IntegerField(default=ano_padrao(), validators=[MaxValueValidator(datetime.now().year)])
+    criado_em = models.DateTimeField(auto_now_add=True)
+    modificado_em = models.DateTimeField(auto_now=True)
+
+
+    class Meta:
+        verbose_name = "Relatório"
+        verbose_name_plural = "Relatórios"
+        ordering = ['-criado_em', 'setor__nome']
+
+
+
+
+
+
+
+
+
 
 
 

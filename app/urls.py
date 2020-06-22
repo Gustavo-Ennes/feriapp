@@ -33,5 +33,9 @@ urlpatterns = [
     path('render/autorizacao-he/<int:trabalhador_id>/', views.AutorizacaoHE.as_view(), name='autorizacao_he'),
     path('autorizacao-he/', views.autorizacao, name='autorizacao'),
     path('soma-justificativas/', views.soma_justificativas, name='soma_justificativas'),
+    path('soma-horas/', views.soma_horas, name='soma_horas'),
+    path('relatorios/', views.relatorios, name='relatorios'),
+    path('relatorio/', views.relatorio, name='relatorio'),
+
 
 ]

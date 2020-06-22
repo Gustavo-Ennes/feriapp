@@ -83,3 +83,28 @@ def soma_dias(data, dias):
 def subtrai_dias(data, dias):
     data = datetime.strptime(data, "%d/%m/%Y")
     return (data - timedelta(days=dias)).strftime("%d/%m/%Y")
+
+@register.filter 
+def horas_justificadas(trabalhador):
+    data = datetime.now()
+    relatorio = None
+    linha = None
+    try:
+        relatorio = Relatorio.objects.get(Q(setor=trabalhador.setor) & Q(criado_em__month=data.month) & Q(criado_em__year=data.year) & Q(estado='justificativas'))
+        linha = relatorio.linhas.get(Q(trabalhador=trabalhador))
+        print(relatorio, linha)
+    except:
+        print('Query de busca de relatório incorreta')
+        return
+    return str(linha.horas_extras).replace(',','.') if linha else 0.0
+
+@register.simple_tag 
+def mes_anterior():
+    data = datetime.now()
+    return data.month - 1 if data.month > 1 else 12
+
+@register.simple_tag
+def ano_padrao():
+    data = datetime.now()
+    return data.year - 1 if data.month == 1 else data.year
+
