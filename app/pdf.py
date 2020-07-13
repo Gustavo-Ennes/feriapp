@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta
+import os
+from datetime import datetime
 
 from django.db.models.query import QuerySet
 from reportlab.graphics.shapes import Drawing, Line
@@ -8,8 +9,9 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
-from reportlab.platypus import Paragraph, Table, TableStyle, Image, SimpleDocTemplate
+from reportlab.platypus import Paragraph, Table, TableStyle, SimpleDocTemplate
 
+from feriapp.settings import PROJECT_ROOT, BASE_DIR
 from .models import Relatorio, Abono, LicencaPremio, Ferias, Trabalhador, Setor, LinhaRelatorio
 
 
@@ -68,12 +70,13 @@ class RandomStuff:
 
 class PDF:
     MAX_TABLE_LINES_RELATORIO = 34
+    PDF_PATH = os.path.join(PROJECT_ROOT, 'temp/pdf.pdf')
 
     @staticmethod
     # std ==  SimpleDocTemplate
     def get_sdt():
         return SimpleDocTemplate(
-            "/kratos/python/feriapp/feriapp/temp/pdf.pdf",
+            PDF.PDF_PATH,
             pagesize=A4,
             rightMargin=10,
             leftMargin=10,
@@ -483,7 +486,7 @@ class PDF:
     @staticmethod
     def create_justificativa_pdf(trabalhador: Trabalhador):
 
-        c = canvas.Canvas('/kratos/python/feriapp/feriapp/temp/pdf.pdf', pagesize=A4)
+        c = canvas.Canvas(os.path.join(PROJECT_ROOT, 'temp/pdf.pdf'), pagesize=A4)
         start_y = 272 * mm
 
         PDF.draw_header(c)
@@ -500,7 +503,7 @@ class PDF:
     def create_licenca_pdf(licenca: LicencaPremio):
 
         trabalhador = licenca.trabalhador
-        c = canvas.Canvas('/kratos/python/feriapp/feriapp/temp/pdf.pdf', pagesize=A4)
+        c = canvas.Canvas(PDF.PDF_PATH, pagesize=A4)
         start_y = 265 * mm
         spacement = 10 * mm
 
@@ -591,7 +594,7 @@ class PDF:
     def create_ferias_pdf(ferias: Ferias):
 
         trabalhador = ferias.trabalhador
-        c = canvas.Canvas('/kratos/python/feriapp/feriapp/temp/pdf.pdf', pagesize=A4)
+        c = canvas.Canvas(PDF.PDF_PATH, pagesize=A4)
         start_y = 260 * mm
         spacement = 10 * mm
 
@@ -678,7 +681,7 @@ class PDF:
     def create_abono_pdf(abono: Abono):
 
         trabalhador = abono.trabalhador
-        c = canvas.Canvas('/kratos/python/feriapp/feriapp/temp/pdf.pdf', pagesize=A4)
+        c = canvas.Canvas(PDF.PDF_PATH, pagesize=A4)
         start_y = 260 * mm
         spacement = 10 * mm
 
@@ -824,7 +827,7 @@ class PDF:
     def draw_header(canvas):
         canvas.saveState()
         canvas.drawInlineImage(
-            '/kratos/python/feriapp/tests/header.jpeg',
+            os.path.join(BASE_DIR, 'tests/header.jpeg'),
             0,
             275 * mm,
             205 * mm,
@@ -836,7 +839,7 @@ class PDF:
     def draw_footer(canvas):
         canvas.saveState()
         canvas.drawInlineImage(
-            '/kratos/python/feriapp/tests/footer.jpeg',
+            os.path.join(BASE_DIR, 'tests/footer.jpeg'),
             0,
             1 * mm,
             217 * mm,
