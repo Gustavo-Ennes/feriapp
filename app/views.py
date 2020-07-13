@@ -3,18 +3,16 @@ from itertools import chain
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import FileResponse
 from django.shortcuts import render, redirect
-from django.views.generic import View
 
 from app.forms import *
 from feriapp.settings import PROJECT_ROOT
 from .pdf import PDFFactory
-from .render import Render
 from .tasks import *
 
 lembretes_exibidos = False
+
 
 @login_required(login_url='/entrar/')
 def index(request):
@@ -39,10 +37,6 @@ def index(request):
 
     return render(request, 'index.html', context)
 
-@login_required(login_url='/entrar/')
-def posterga_lembrete(request):
-    lembretes_exibidos = True
-    return redirect('index')
 
 @login_required(login_url='/entrar/')
 def divide_linha(request):
@@ -71,11 +65,12 @@ def divide_linha(request):
                         trabalhador=linha.trabalhador,
                         horas_extras=horas,
                         adicional_noturno=linha.adicional_noturno,
-                        faltas = linha.faltas,
+                        faltas=linha.faltas,
                     )
                 )
 
-        messages.success(request, "Você dividiu uma linha do relatório do(a) %s entre %d relatórios." % (relatorio.setor.nome, len(d)))
+        messages.success(request, "Você dividiu uma linha do relatório do(a) %s entre %d relatórios." % (
+        relatorio.setor.nome, len(d)))
 
         linha.delete()
     return redirect('relatorios')
@@ -208,7 +203,7 @@ def marcar_ferias(request):
                 messages.success(request, 'Você marcou férias para o servidor %s de %s à %s.' % (
                     obj.trabalhador.nome, obj.data_inicio.strftime("%d/%d/%Y"), obj.data_termino.strftime("%d/%d/%Y")))
                 PDFFactory.get_ferias_pdf(obj)
-                pdf =  open(temp_pdf, 'rb')
+                pdf = open(temp_pdf, 'rb')
                 return FileResponse(pdf, filename=temp_pdf)
             else:
                 messages.error(request, "O trabalhador não pode tirar férias nessa data por %s." % obj.observacoes)
@@ -217,7 +212,6 @@ def marcar_ferias(request):
 
         else:
             messages.error(request, form.errors)
-
 
         return redirect('ferias')
 
@@ -501,156 +495,6 @@ def excluir_trabalhador(request):
         return redirect("trabalhadores")
 
 
-class Pdf(LoginRequiredMixin, View):
-    login_url = '/entrar/'
-    redirect_field_name = "index"
-
-    def post(self, request):
-        tipo = request.POST['tipo']
-        query = None
-        today = timezone.now()
-        hoje = today.date()
-
-        if 'query' in request.POST:
-            query = request.POST['query']
-
-        if tipo == 'trabalhador_historico':
-            try:
-                trabalhador = Trabalhador.objects.get(id=int(request.POST['trabalhador_id']))
-            except:
-                messages.error(request, "Não existe trabalhador  com o id %d" % int(request.POST['trabalhador_id']))
-                return redirect('trabalhadores')
-
-            context = {
-                'pdf': True,
-                'ferias_futuras': Ferias.objects.filter(
-                    Q(trabalhador=trabalhador) & Q(deferida=True) & Q(tipo='f') & Q(data_inicio__gt=hoje)),
-                'ferias_fruidas': Ferias.fruidas.all().filter(Q(trabalhador=trabalhador)),
-                'ferias_indeferidas': Ferias.indeferidas.all().filter(Q(trabalhador=trabalhador)),
-                'abonos_futuros': Abono.objects.filter(
-                    Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__gte=hoje)),
-                'abonos_fruidos': Abono.fruidos.all().filter(Q(trabalhador=trabalhador)),
-                'abonos_indeferidos': Abono.indeferidos.all().filter(Q(trabalhador=trabalhador)),
-                'licencas_futuras': LicencaPremio.objects.filter(
-                    Q(trabalhador=trabalhador) & Q(deferida=True) & Q(data_inicio__gt=hoje)),
-                'licencas_fruidas': LicencaPremio.fruidas.all().filter(Q(trabalhador=trabalhador)),
-                'licencas_indeferidas': LicencaPremio.indeferidas.all().filter(Q(trabalhador=trabalhador)),
-                'tipo': tipo,
-                'trabalhador': trabalhador,
-
-            }
-
-        elif tipo == "setor_historico":
-            try:
-                setor = Setor.objects.get(id=int(request.POST['setor_id']))
-            except:
-                messages.error(request, "Não há setor com id  %d" % int(request.POST['setor_id']))
-                return redirect('setor')
-
-            context = {
-                'trabalhadores': Trabalhador.objects.filter(Q(setor=setor)),
-                'tipo': request.POST['tipo'],
-                'pdf': True,
-                'setor': setor
-            }
-
-
-        elif query:
-            context = {
-                'ferias_futuras': Ferias.objects.filter(
-                    (
-                            Q(trabalhador__nome__icontains=query) |
-                            Q(trabalhador__funcao__icontains=query) |
-                            Q(trabalhador__setor__nome__icontains=query)
-                    ) &
-                    Q(deferida=True) &
-                    Q(data_inicio__gt=hoje) &
-                    Q(tipo='f')
-                ),
-                'ferias_fruidas': Ferias.fruidas.filter(
-                    Q(trabalhador__nome__icontains=query) |
-                    Q(trabalhador__funcao__icontains=query) |
-                    Q(trabalhador__setor__nome__icontains=query)
-                ),
-                'ferias_indeferidas': Ferias.indeferidas.filter(
-                    Q(trabalhador__nome__icontains=query) |
-                    Q(trabalhador__funcao__icontains=query) |
-                    Q(trabalhador__setor__nome__icontains=query)
-
-                ),
-                'licencas_futuras': LicencaPremio.objects.filter(
-                    (
-                            Q(trabalhador__nome__icontains=query) |
-                            Q(trabalhador__funcao__icontains=query) |
-                            Q(trabalhador__setor__nome__icontains=query)
-                    ) &
-                    Q(deferida=True) &
-                    Q(data_inicio__gt=hoje)
-                ),
-                'licencas_fruidas': LicencaPremio.fruidas.filter(
-                    Q(trabalhador__nome__icontains=query) |
-                    Q(trabalhador__funcao__icontains=query) |
-                    Q(trabalhador__setor__nome__icontains=query)
-                ),
-                'licencas_indeferidas': LicencaPremio.indeferidas.filter(
-                    Q(trabalhador__nome__icontains=query) |
-                    Q(trabalhador__funcao__icontains=query) |
-                    Q(trabalhador__setor__nome__icontains=query)
-                ),
-                'abonos_futuros': Abono.objects.filter(
-                    (
-                            Q(trabalhador__nome__icontains=query) |
-                            Q(trabalhador__funcao__icontains=query) |
-                            Q(trabalhador__setor__nome__icontains=query)
-                    ) &
-                    Q(deferido=True) &
-                    Q(data__gt=hoje)
-                ),
-                'abonos_fruidos': Abono.fruidos.filter(
-                    Q(trabalhador__nome__icontains=query) |
-                    Q(trabalhador__funcao__icontains=query) |
-                    Q(trabalhador__setor__nome__icontains=query)
-                ),
-                'abonos_indeferidos': Abono.indeferidos.filter(
-                    Q(trabalhador__nome__icontains=query) |
-                    Q(trabalhador__funcao__icontains=query) |
-                    Q(trabalhador__setor__nome__icontains=query)
-                ),
-                'trabalhadores': Trabalhador.objects.filter(
-                    Q(nome__icontains=query) |
-                    Q(funcao__icontains=query) |
-                    Q(setor__nome__icontains=query)
-                ),
-                'setores': Setor.objects.filter(Q(nome__icontains=query)),
-                'query': query,
-                'tipo': tipo,
-                'pdf': True,
-                'today': today,
-                'user': request.user
-            }
-
-        else:
-            context = {
-                'pdf': True,
-                'today': today,
-                'trabalhadores': Trabalhador.objects.all(),
-                'setores': Setor.objects.all(),
-                'ferias_futuras': Ferias.objects.filter(Q(deferida=True) & Q(tipo='f') & Q(data_inicio__gt=hoje)),
-                'ferias_fruidas': Ferias.fruidas.all(),
-                'ferias_indeferidas': Ferias.indeferidas.all(),
-                'abonos_futuros': Abono.objects.filter(Q(deferido=True) & Q(data__gte=hoje)),
-                'abonos_fruidos': Abono.fruidos.all(),
-                'abonos_indeferidos': Abono.indeferidos.all(),
-                'licencas_futuras': LicencaPremio.objects.filter(Q(deferida=True) & Q(data_termino__gt=hoje)),
-                'licencas_fruidas': LicencaPremio.fruidas.all(),
-                'licencas_indeferidas': LicencaPremio.indeferidas.all(),
-                'tipo': tipo,
-                'user': request.user
-            }
-
-        return Render.render('pdf.html', context)
-
-
 @login_required(login_url='/entrar/')
 def indeferir(request):
     if request.method == "POST":
@@ -724,179 +568,6 @@ def sair(request):
     return redirect("entrar")
 
 
-'''
-
-class RelatorioPDF(LoginRequiredMixin, View):
-
-    login_url = '/entrar/'
-    redirect_field_name ="index"
-    template_name = 'relatorio.html'
-
-    def post(self, request):
-        relatorio_id = int(request.POST['relatorio_id'])
-        relatorio = Relatorio.objects.get(id=relatorio_id)
-        linhas = relatorio.linhas.all()
-        data = datetime.now()
-        context = {
-            'linhas' : linhas,
-            'num_oficio' : relatorio.num_oficio,
-            'ano_relatorio' : relatorio.ano,
-            'mes_relatorio' : relatorio.mes,
-            'ano' : data.year,
-            'mes' : data.month,
-            'dia' : data.day,
-            'mes_escrito' : mes_escrito(data.month),
-            'secretaria' : relatorio.setor.nome,
-        }
-        if 'copia' in request.POST:
-            context['copia'] = True
-
-        return Render.render(self.template_name, context, image=True)
-
-'''
-
-
-class AbonoPDF(LoginRequiredMixin, View):
-    login_url = '/entrar/'
-    redirect_field_name = "index"
-
-    def get(self, request, abono_id):
-        try:
-            abono = Abono.objects.get(id=abono_id)
-        except:
-            messages.error(request, "Não há abono com id %d" % abono_id)
-            return redirect('abono')
-
-        if not abono.deferido:
-            messages.error(request, "O abono(id=%d) solicitado foi deferido e não pode ser impresso" % abono_id)
-            return redirect('abono')
-
-
-        else:
-
-            hoje = timezone.now().date()
-
-            context = {
-                'data': abono.data.strftime("%d/%m/%Y"),
-                'dia_hj': hoje.day,
-                'mes_hj': mes_escrito(hoje.month),
-                'ano_hj': hoje.year,
-                'nome': abono.trabalhador.nome,
-                'matricula': abono.trabalhador.matricula,
-                'funcao': abono.trabalhador.funcao,
-                'setor': abono.trabalhador.setor.nome
-
-            }
-            return Render.render('template_abono.html', context)
-
-
-class FeriasPDF(LoginRequiredMixin, View):
-    login_url = '/entrar/'
-    redirect_field_name = "index"
-
-    def get(self, request, ferias_id):
-        try:
-            ferias = Ferias.objects.get(id=ferias_id)
-        except:
-            messages.error(request, "Não há férias com id %d" % ferias_id)
-            return redirect('ferias')
-
-        if not ferias.deferida:
-            messages.error(request, "A férias(id=%d) solicitada foi deferida e não pode ser impressa" % ferias_id)
-            return redirect('ferias')
-
-        elif ferias.fruida:
-            messages.error(request, "A férias(id=%d) já foi fruida" % ferias_id)
-            return redirect('ferias')
-
-        else:
-
-            hoje = timezone.now().date()
-
-            context = {
-                'qtd_dias': ferias.qtd_dias,
-                'qtd_dias_escrito': qtd_dias_escrito(ferias.qtd_dias),
-                'data_inicio': ferias.data_inicio.strftime("%d/%m/%Y"),
-                'data_termino': ferias.data_termino.strftime("%d/%m/%Y"),
-                'dia_hj': hoje.day,
-                'mes_hj': mes_escrito(hoje.month),
-                'ano_hj': hoje.year,
-                'nome': ferias.trabalhador.nome,
-                'matricula': ferias.trabalhador.matricula,
-                'funcao': ferias.trabalhador.funcao,
-                'setor': ferias.trabalhador.setor.nome
-
-            }
-            return Render.render('template_ferias.html', context)
-
-
-class LicencaPDF(LoginRequiredMixin, View):
-    login_url = '/entrar/'
-    redirect_field_name = "index"
-
-    def get(self, request, licenca_id):
-        try:
-            licenca = LicencaPremio.objects.get(id=licenca_id)
-        except:
-            messages.error(request, "Não há licença-prêmio com id %d" % licenca_id)
-            return redirect('licenca_premio')
-
-        if not licenca.deferida:
-            messages.error(request, "A licença(id=%d) solicitada foi deferida e não pode ser impressa" % licenca_id)
-            return redirect('licenca_premio')
-
-        elif licenca.fruida:
-            messages.error(request, "A licença(id=%d) já foi fruida" % licenca_id)
-            return redirect('licenca_premio')
-
-        else:
-
-            hoje = timezone.now().date()
-
-            context = {
-                'data_inicio': licenca.data_inicio.strftime("%d/%m/%Y"),
-                'data_termino': licenca.data_termino.strftime("%d/%m/%Y"),
-                'dia_hj': hoje.day,
-                'mes_hj': mes_escrito(hoje.month),
-                'ano_hj': hoje.year,
-                'nome': licenca.trabalhador.nome,
-                'matricula': licenca.trabalhador.matricula,
-                'funcao': licenca.trabalhador.funcao,
-                'setor': licenca.trabalhador.setor.nome
-
-            }
-            return Render.render('template_licenca.html', context)
-
-
-class AutorizacaoHE(LoginRequiredMixin, View):
-    login_url = '/entrar/'
-    redirect_field_name = "index"
-
-    def get(self, request, trabalhador_id):
-        try:
-            trabalhador = Trabalhador.objects.get(id=trabalhador_id)
-        except:
-            messages.error(request, "Não há trabalhador com id %d" % trabalhador_id)
-            return redirect('trabalhadores')
-
-        context = {
-            'trabalhador': trabalhador,
-        }
-        return Render.render('template_autorizacao.html', context)
-
-    def post(self, request, trabalhador_id=-666):
-        try:
-            trabalhador = Trabalhador.objects.get(id=int(request.POST['trabalhador']))
-        except:
-            messages.error(request, "Não há trabalhador com tal id")
-            return redirect('trabalhadores')
-
-        context = {
-            'trabalhador': trabalhador,
-        }
-        return Render.render('template_autorizacao.html', context)
-
-
 @login_required(login_url='/entrar/')
 def autorizacao(request):
     context = {
@@ -911,7 +582,8 @@ def soma_justificativas(request):
     data = datetime.now()
     if request.method == 'GET':
         if not Relatorio.vigentes.finalizados():
-            relatorios_deste_mes = Relatorio.objects.filter(Q(criado_em__year=data.year) & Q(criado_em__month=data.month))
+            relatorios_deste_mes = Relatorio.objects.filter(
+                Q(criado_em__year=data.year) & Q(criado_em__month=data.month))
             if not relatorios_deste_mes:
                 context = {
                     'trabalhadores': Trabalhador.objects.all(),
@@ -959,7 +631,6 @@ def soma_justificativas(request):
 @login_required(login_url='/entrar/')
 @permission_required('app.add_relatorio')
 def soma_horas(request):
-
     # ver se tenho relatorio desse mes
     if not Relatorio.vigentes.finalizados():
         relatorios_deste_mes = Relatorio.vigentes.em_aberto()
@@ -1021,7 +692,8 @@ def soma_horas(request):
             for relatorio in relatorios_deste_mes:
                 relatorio.estado = "terminado"
                 relatorio.save()
-            messages.success(request, "Relatórios deste mês foram terminados. Eles ainda podem ser editados. Quando acabarem as edições, clique em 'Finalizar Relatórios em Aberto'")
+            messages.success(request,
+                             "Relatórios deste mês foram terminados. Eles ainda podem ser editados. Quando acabarem as edições, clique em 'Finalizar Relatórios em Aberto'")
             return redirect('relatorios')
     else:
         messages.warning(request, "Os relatórios deste mês já foram finalizados")
@@ -1040,6 +712,7 @@ def relatorios(request):
     }
     return render(request, 'relatorios.html', context)
 
+
 @login_required(login_url='/entrar/')
 @permission_required('app.add_relatorio')
 def finalizar_relatorios(request):
@@ -1050,8 +723,6 @@ def finalizar_relatorios(request):
             r.save()
         messages.success(request, "%d relatórios foram finalizados e é impossível editá-los" % relatorios.count())
         return redirect('relatorios')
-
-
 
 
 @login_required(login_url='/entrar/')
@@ -1194,7 +865,7 @@ def pdf(request, tipo, obj_id):
             for setor in Setor.objects.all():
                 d[setor.nome] = setor.trabalhador_set.all()
             obj = {
-                'setor_dict' : d,
+                'setor_dict': d,
             }
         elif tipo == 'trabalhadores':
             obj = {
@@ -1335,7 +1006,7 @@ def relatorio_edicao(request, relatorio_id):
         context = {
             'relatorio': relatorio,
             'relatorios': relatorios.exclude(id=relatorio_id),
-            'todos_relatorios' : relatorios
+            'todos_relatorios': relatorios
         }
         return render(request, 'relatorio_edicao.html', context)
 
@@ -1408,15 +1079,7 @@ def modifica_relatorio(request):
                 messages.success(request, "Você a deletou de a linha de id %d" % (linha.id))
                 linha.delete()
 
-
         return redirect('relatorio_edicao', relatorio[0].id) if relatorio.count() else redirect('relatorios')
-
-
-
-
-
-
-
 
 
 def gera_relatorio_em_branco(setor, num_oficio):
@@ -1428,7 +1091,8 @@ def proximas_folgas():
     folgas = []
     limite_dias = 3
 
-    # como o  tipo 'f' não foi especificado, e por LicencaPremio ser subclasse de Ferias, os dois tipos serão listados na próxima linha
+    # como o  tipo 'f' não foi especificado, e por LicencaPremio ser subclasse de Ferias, os dois tipos serão
+    # listados na próxima linha
     folgas = Ferias.objects.filter(
         Q(deferida=True) & Q(data_inicio__gt=hoje) & Q(data_inicio__lte=hoje + timedelta(days=limite_dias)))
     abonos = Abono.objects.filter(Q(deferido=True) & Q(data__gt=hoje) & Q(data__lt=hoje + timedelta(days=limite_dias)))
@@ -1446,7 +1110,8 @@ def proximos_retornos():
     folgas = []
     limite_dias = 3
 
-    # como o  tipo 'f' não foi especificado, e por LicencaPremio ser subclasse de Ferias, os dois tipos serão listados na próxima linha
+    # como o  tipo 'f' não foi especificado, e por LicencaPremio ser subclasse de Ferias, os dois tipos serão
+    # listados na próxima linha
     folgas = Ferias.objects.filter(
         Q(deferida=True) & Q(data_termino__gt=hoje) & Q(data_termino__lte=hoje + timedelta(days=limite_dias)))
     abonos = Abono.objects.filter(Q(deferido=True) & Q(data=hoje))
@@ -1504,5 +1169,3 @@ def mes_escrito(num):
         return 'novembro'
     if num == 12:
         return 'dezembro'
-
-
