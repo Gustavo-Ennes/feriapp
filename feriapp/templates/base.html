@@ -21,34 +21,38 @@
       <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 
-      <!-- fonts -->
-      <link href="https://fonts.googleapis.com/css?family=Abel|Bebas+Neue|Dosis&display=swap" rel="stylesheet">
+      <!-- fonts 
+      <link href="https://fonts.googleapis.com/css?family=Abel|Bebas+Neue|Dosis&display=swap" rel="stylesheet">-->
+      <link href="https://fonts.googleapis.com/css2?family=Abel&family=Noto+Serif&family=Roboto+Slab:wght@200&family=Codystar&display=swap" rel="stylesheet">
 
 	    <!-- scss -->
-	    <link href="{% static 'app.css' %}" rel="stylesheet" type="text/css">
+	    <!--<link href="{% static 'app.css' %}" rel="stylesheet" type="text/css">-->
+      <link href="{% sass_src 'app.scss' %}" rel="stylesheet" type="text/css" />
+
+      <link rel="icon" type="image/png" sizes="32x32" href='{% sass_src "logo.png" %}'>
 
 
-	    <title> Feriapp </title>
-
-      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-60x60.png" %}>
-      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-57x57.png" %}>
-      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-72x72.png" %}>
-      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-76x76.png" %}>
-      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-114x114.png" %}>
-      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-120x120.png" %}>
-      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-144x144.png" %}>
-      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-152x152.png" %}>
-      <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-180x180.png" %}>
-      <link rel="icon" type="image/png" sizes="192x192" href={% sass_src "android-icon-192x192.png" %}>
-      <link rel="icon" type="image/png" sizes="32x32" href={% sass_src "favicon-32x32.png" %}>
-      <link rel="apple-touch-icon" sizes="96x96" href={% sass_src "favicon-96x96.png" %}>
-      <link rel="apple-touch-icon" sizes="16x16" href={% sass_src "favicon-16x16.png" %}>
-      <link rel="manifest" href="{% sass_src 'manifest.json'%}">
-      <meta name="msapplication-TileColor" content="#ffffff">
-      <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-      <meta name="theme-color" content="#ffffff">
-
-	    {% block head %} {% endblock %}
+        <title> Feriapp </title>
+        <!--
+          <link rel="apple-touch-icon" sizes="57x57" href='{% sass_src "apple-icon-60x60.png" %}'>
+          <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-57x57.png" %}>
+          <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-72x72.png" %}>
+          <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-76x76.png" %}>
+          <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-114x114.png" %}>
+          <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-120x120.png" %}>
+          <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-144x144.png" %}>
+          <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-152x152.png" %}>
+          <link rel="apple-touch-icon" sizes="57x57" href={% sass_src "apple-icon-180x180.png" %}>
+          <link rel="icon" type="image/png" sizes="192x192" href={% sass_src "android-icon-192x192.png" %}>
+          <link rel="icon" type="image/png" sizes="32x32" href={% sass_src "favicon-32x32.png" %}>
+          <link rel="apple-touch-icon" sizes="96x96" href={% sass_src "favicon-96x96.png" %}>
+          <link rel="apple-touch-icon" sizes="16x16" href={% sass_src "favicon-16x16.png" %}>
+          <link rel="manifest" href="{% sass_src 'manifest.json'%}">
+          <meta name="msapplication-TileColor" content="#ffffff">
+          <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+          <meta name="theme-color" content="#ffffff">
+            -->
+	        {% block head %} {% endblock %}
     </head>
     <body>
 
@@ -79,18 +83,29 @@
 
           </div>
 
-          {% block header %}{% endblock %}
         	{% if user.is_authenticated %}
+                <div class="row justify-content-end align-items-top my-1">
 
-        		<small class="text-muted m-2 float-right">
+                    <small class="col-6">
 
-          		<i class="badge badge-pill badge-info text-light">{{ user.username }}</i>
+                        <i class="text-primary float-left ml-2">{{ user.username|title }}</i>
 
-        			<a href="{% url 'sair' %}" class="btn btn-outline-dark btn-sm sombra ml-1">Sair</a>
+                    </small>
 
-        		</small>
+                    <small class="col-6">
+
+                        <a href="{% url 'sair' %}" class="text-danger sombra float-right mr-2">Sair</a>
+
+                    </small>
+
+
+                </div>
+
+
 
         	{% endif %}
+
+            {% block header %}{% endblock %}
         </div>
 
         <div class='container-fluid'>
@@ -138,7 +153,7 @@
 
 
     <script>
-      $( function(){
+        $( function(){
         $( ".datepicker" ).datepicker({minDate: 0});
         $( ".datepicker" ).datepicker( "option", "dateFormat", "dd/mm/yy" );
         $( ".datepicker" ).datepicker( "option", "showAnim", 'slideDown' );
@@ -146,8 +161,19 @@
         $( ".datepicker2" ).datepicker({maxDate: 0, changeMonth:true, changeYear:true});
         $( ".datepicker2" ).datepicker( "option", "dateFormat", "dd/mm/yy" );
         $( ".datepicker2" ).datepicker( "option", "showAnim", 'slideDown' );
-      });
+        });
 
+    </script>
+    <script>
+        $("#btn_nav").on('click', function(){
+            if ( $('#btn_nav').hasClass('collapsed') ){
+                $("#span_nav").removeClass('fa-sort-up');
+                $("#span_nav").addClass('fa-sort-down');
+            }else{
+                $("#span_nav").removeClass('fa-sort-down');
+                $("#span_nav").addClass('fa-sort-up');
+            }
+        });
     </script>
 
     {% block js %} {% endblock %}

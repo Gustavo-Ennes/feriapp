@@ -1,12 +1,13 @@
 {% load crispy_forms_tags %}
 {% load filtros %}
 
-<button class="btn btn-lg btn-block btn-outline-warning fas fa-pen" data-toggle="modal" data-target="#modalEditarTrabalhador{{ trabalhador.id }}" data-toggle="tooltip" data-placement="top" title="Editar Trabalhador">
+<button class="btn btn-warning btn-sm btn-block" data-toggle="modal" data-target="#modalEditarTrabalhador{{ trabalhador.id }}" data-toggle="tooltip" data-placement="top" title="Editar Trabalhador">
+  <i class=" fas fa-pen text-primary"></i>
 </button>
 
 <div class="modal fade" id="modalEditarTrabalhador{{ trabalhador.id }}" tabindex="-1" role="dialog" aria-labelledby="labelEditarTrabalhador{{ trabalhador.id }}" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <di v class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="labelEditarTrabalhador{{ trabalhador.id }}">Editar Trabalhador</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

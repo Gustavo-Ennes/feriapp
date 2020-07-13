@@ -37,7 +37,7 @@
                 {% csrf_token %}
                 <input type="hidden" name='trabalhador' value='{{ trabalhador.id }}' />
               </form>
-              <button form='trabalhadorForm{{ trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ trabalhador.nome }}</button>
+              <button form='trabalhadorForm{{ trabalhador.id }}' class="btn btn-sm btn-block btn-transparent" type="submit">{{ trabalhador.nome }}</button>
             </td>
             <td>{{ trabalhador.funcao }}</td>
             <td>
@@ -46,7 +46,7 @@
                 {% csrf_token %}
                 <input type="hidden" name='setor' value='{{ trabalhador.setor.id }}' />
               </form>
-              <button form='setorForm{{ trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ trabalhador.setor.nome }}</button>
+              <button form='setorForm{{ trabalhador.id }}' class="btn btn-sm btn-block btn-transparent" type="submit">{{ trabalhador.setor.nome }}</button>
 
             </td>
 

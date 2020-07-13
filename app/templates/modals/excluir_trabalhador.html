@@ -1,7 +1,8 @@
 {% load crispy_forms_tags %}
 {% load filtros %}
 
-<button class="btn btn-lg btn-block btn-outline-danger fas fa-trash" data-toggle="modal" data-target="#modalExcluirTrabalhador{{ trabalhador.id }}" data-toggle="tooltip" data-placement="top" title="Excluir Trabalhador">
+<button class="btn btn-danger btn-sm btn-block" data-toggle="modal" data-target="#modalExcluirTrabalhador{{ trabalhador.id }}" data-toggle="tooltip" data-placement="top" title="Excluir Trabalhador">
+  <i class='text-warning fas fa-trash'></i>
 </button>
 
 <div class="modal fade" id="modalExcluirTrabalhador{{ trabalhador.id }}" tabindex="-1" role="dialog" aria-labelledby="labelExcluirTrabalhador{{ trabalhador.id }}" aria-hidden="true">
@@ -25,7 +26,7 @@
       	</div>
       	<div class="modal-footer">
 	        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-	        <button class="btn btn-lg btn-danger btn-block" type='submit'>Excluir</button>
+	        <button class="btn btn-danger" type='submit'>Excluir</button>
 	     	</div>
   		</form>
 

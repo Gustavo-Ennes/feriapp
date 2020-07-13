@@ -1,12 +1,19 @@
-$subtitle: #6B2F00;
-$text: #B85E16;
-$shadow: #065E6B;
-$glow: #38E4FF;
-$title: #DDDDFF;
-$primary: #17A2B8;
-$font_title: 'Bebas Neue', cursive;
-$font_subtitle: 'Dosis', sans-serif;
-$font_text: 'Abel', sans-serif;
+//colors
+$main: #488DD6;
+$main_darker: #21548A;
+$secondary: #C2D633;
+$secondary_darker: #7D8A28;
+$terceary: #D6675E;
+$terceary_darker: #964942;
+$background: #EDF6FF;
+$shadow: #DAE2EA;
+$text: #002233;
+$warning: #E3C22D;
+//fonts
+$text_font: 'Roboto Slab', serif;
+$title_font: 'Noto Serif', serif;
+
+$obs_font: 'Abel', sans-serif;
 
 
 
@@ -15,13 +22,13 @@ html, body, .page-header{
     overflow-x: hidden;
 
     .page-header{
-      font-family: $font_text;
+      font-family: $title_font;
     }
 }
 
 body {
 
-    background: url(fundo.png) repeat center center fixed;
+    background-color: $background;
 
 }
 .card{
@@ -30,69 +37,82 @@ body {
 
 
   .card-header, .card-footer{
-    background-color: $shadow !important;
+    background-color: $main !important;
+
   }
 
   .card-body{
-    background-color: rgba(237,245,252,0.8);
+    background-color: $background;
+    color:#002233;
   }
 
   .card-title{
-    color: $title !important;
-    font-family: $font_title;
+    color: $secondary !important;
+    font-family: $title_font;
   }
   .card-subtitle{
-    color: $subtitle !important;
-    font-family: $font_subtitle;
+    color: $shadow !important;
+    font-family: $obs_font;
   }
   .card-text{
     color: $text !important;
-    font-family: $font_text;
+    font-family: $text_font;
   }
 
   .btn-card{
-    background-color:$primary !important;
-    color: $title !important;
-    font-family: $font_subtitle;
+    background-color:$main !important;
+    color: $background !important;
+    font-family: $obs_font;
   }
 }
 
 .modal{
 
-    background: rgb(0,0,0);
-    background: -moz-linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(96,96,96,0.6923144257703081) 84%, rgba(232,232,232,1) 100%);
-    background: -webkit-linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(96,96,96,0.6923144257703081) 84%, rgba(232,232,232,1) 100%);
-    background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(96,96,96,0.6923144257703081) 84%, rgba(232,232,232,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#e8e8e8",GradientType=1);
+  background-color: rgba(0,0,0, 0.5 );
 
   .modal-content{
-    background-color:$shadow;
-    color:rgba(255,255,255,0.6);
 
   }
 
   .modal-title{
-    font-family: $font_title;
+    font-family: $title_font;
   }
 
   .modal-header, .modal-footer{
-    background-color: $primary;
-    color: $text;
+    background-color: $main;
+    color: $background;
   }
 
 }
 
+.form-control{
+  background-color: rgba(255, 255, 255, 0.4);
+  &:focus{  
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+}
+
 .table{
 
-  color:$title !important;
+  color: $main !important;
+  max-height: 600px !important;
 
   thead tr{
-    background-color: $shadow !important;
-    font-family: $font_subtitle;
+    background-color: $main !important;
+    font-family: $title_font !important;
+    color: $secondary !important;
   }
   tbody tr{
-    background-color:$primary !important;
-    font-family: $font_text;
+    background-color:$background !important;
+    font-family: $text_font !important;
+  }
+  th{
+    color:$secondary !important;
+    text-shadow:1px 1px 2px $main_darker !important;
+  }
+
+  td, td strong{
+    color:$main_darker !important;
   }
 }
 
@@ -101,54 +121,168 @@ body {
   color:#dde !important;
 
   .toast-header{
-    background-color: $subtitle !important;
-    font-family: $font_title;
+    background-color: $main !important;
+    font-family: $title_font !important;
   }
 
   .toast-body{
-    background-color: $text !important;
-    font-family: $font_text;
+    background-color: $main_darker !important;
+    font-family: $text_font !important;
+  }
+}
+
+nav{
+  &.navbar{
+    background-color: $main !important;
+    box-shadow: 1px 0px 1px 1px $main_darker !important;
+  }
+  .navbar-brand{
+
+    color: $secondary !important;
+    text-shadow: 1px 1px 1px $secondary_darker !important;
+    font-family: 'Codystar', cursive;
+  }
+
+  .nav-link{
+    color:$background !important;
+  }
+
+  .nav-tabs{
+
+    padding:5px;
+    border-bottom: 2px solid $secondary_darker; 
+
+    .nav-item{
+      background-color: $main;
+      box-shadow: 1px 1px 2px 1px #main_darker;
+      }
+    .nav-item.active{
+      background-color: $main_darker;
+      box-shadow: 1px 1px 2px 1px #main;
+      color: $secondary;
+
+
+    }
   }
 }
 
 .header-gradient{
-  height: 50px;
-  padding-top:10px;
-  padding-bottom: 10px;
-  font-family: $font_text;
+  margin-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
-.header-gradient, .navbar{
-  background: rgb(6,94,107);
-  background: -moz-linear-gradient(90deg, rgba(6,94,107,1) 2%, rgba(23,162,184,1) 16%, rgba(56,228,255,1) 56%, rgba(255,255,255,1) 100%);
-  background: -webkit-linear-gradient(90deg, rgba(6,94,107,1) 2%, rgba(23,162,184,1) 16%, rgba(56,228,255,1) 56%, rgba(255,255,255,1) 100%);
-  background: linear-gradient(90deg, rgba(6,94,107,1) 2%, rgba(23,162,184,1) 16%, rgba(56,228,255,1) 56%, rgba(255,255,255,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#065e6b",endColorstr="#ffffff",GradientType=1);
 
-  .nav-item a, .navbar-brand, .btn{
-    color: $title !important;
-    font-family: $font_subtitle;
-  }
+.badge{
+  background-color: #main !important;
+  color: $secondary !important;
+}
+
+
+.text-success{
+
+  color: $secondary !important;
+  text-shadow: 1px 1px 1px $main_darker !important;
+}
+
+.text-primary{
+
+  color: $main !important;
+  text-shadow: 1px 1px 1px $secondary_darker !important;
+}
+.fas, .far{
+  font-size: 14px !important;
+}
+
+.big-fas{
+  font-size: 2em !important;
 }
 
 .btn{
-  .btn-big{
-    box-shadow: 15px 12px 15px 22px #000 !important;
-    font-family: $font_title;
-  }
-  .btn-transparent{
-    background-color: transparent;
-    font-family: $font_subtitle;
-  }
-  .btn-pesquisa{
-    border-color: $subtitle !important;
-    color: $text !important;
-    font-family: $font_subtitle;
+
+  margin: 2px;
+
+  &.btn-sm{
+
+    color: $main;
+
   }
 }
 
+.btn-transparent{
+  color:$main_darker !important;
+}
+
+.btn-link{
+  color: $main_darker !important;
+}
+
+.btn-success{
+  background-color: $secondary !important;
+  box-shadow: 1px 1px 2px 1px $secondary_darker !important;
+  color: $main_darker !important;
+  font-family: $title_font !important;
+
+}
+
+.btn-big{
+  height: 180px;
+
+  &:hover{
+    border: 3px solid $secondary !important;
+    color: $secondary !important;
+    box-shadow: 3px 3px 5px 2px $secondary_darker !important;
+  }
+}
+
+
+.btn-primary{
+
+  background-color: $main !important;
+  box-shadow: 1px 1px 2px 1px $secondary_darker !important;
+  color: $background !important;
+  font-family: $title_font !important;
+  text-shadow: 0px 1px 0px $secondary_darker !important;
+  border: 2px solid $secondary_darker !important;
+
+  &:hover{
+    border:2px solid $secondary !important;
+    box-shadow: 2px 2px 3px 1px $secondary_darker !important;
+  }
+
+  
+}
+
+.btn-danger{
+
+  background-color: $terceary !important;
+  box-shadow: 1px 1px 2px 1px $terceary_darker !important;
+  color: $background !important;
+  font-family: $title_font !important;
+  text-shadow: 0px 1px 0px #shadow !important;
+
+  &:hover{
+    border-bottom:1px solid $secondary !important;
+    box-shadow: 2px 2px 3px 1px $terceary_darker !important;
+  }
+
+}
+
+.btn-warning{
+
+  background-color: $secondary !important;
+  box-shadow: 1px 1px 2px 1px $secondary_darker !important;
+  color: $warning !important;
+  font-family: $title_font !important;
+  border: 1px solid $secondary_darker;
+  text-shadow: 0px 1px 0px #secondary_darker;
+
+}
+
+
+
 small, .nav-link,h4,h5{
-  font-family: $font_subtitle;
+  font-family: $text_font !important;
 }
 h1,h2,h3{
-  font-family: $font_title;
+  font-family: $title_font !important !important;
 }

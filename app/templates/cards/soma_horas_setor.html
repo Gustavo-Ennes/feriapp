@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="card-body bg-none">
-      {% for trabalhador in trabalhadores %}
+      {% for trabalhador in setor.trabalhador_set.all %}
         <small class="my-2">{{ trabalhador.nome|upper }}</small>
         <div class='row justify-content-center align-items-center border rounded pt-2'>
           {% if trabalhador.setor == setor %}
@@ -19,7 +19,7 @@
               <small>
                 <label for='{{ trabalhador.id }}horas'>Horas Extras</label>
               </small>
-              <input id='{{ trabalhador.id }}horas' value="{{ trabalhador|horas_justificadas }}"step='0.1' min='0' class='form-control mb-2' name="{{ trabalhador.id }}horas" type="number" placeholder="Horas justificadas por {{ trabalhador.nome }}">
+              <input id='{{ trabalhador.id }}horas' value="{{ trabalhador|horas_justificadas }}" step='0.1' min='0' class='form-control mb-2' name="{{ trabalhador.id }}horas" type="number" placeholder="Horas justificadas por {{ trabalhador.nome }}">
               
 
             </div>

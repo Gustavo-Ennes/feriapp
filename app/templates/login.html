@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block conteudo %}
 
-	<section class="row justify-content-center">
+	<section class="row justify-content-center align-items-center">
+
+		<div class="col-12">
+			<img class="rounded mx-auto d-block my-4" src="{% static 'logo.png' %}" alt="Prefeitura Municipal de Ilha Solteira">
+		</div>
 
 		<section class="col-12 text-center">
-			<h1 class="my-5">Entrar</h1>
+			<h1 class="text-success my-5">Entrar</h1>
 		</section>
 
 		<section class='col-12 col-md-8 col-lg-6 col-xl-4'>
@@ -19,12 +24,13 @@
 
 				<div class="form-check my-4">
 				  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name='remember_me'>
-				  <label class="form-check-label" for="defaultCheck1">
+				  <label class="form-check-label text-primary" for="defaultCheck1">
 				    Lembrar de mim
 				  </label>
 				</div>
 
-				<button class="btn btn-outline-info">Entrar</button>
+				<button class="btn btn-success">Entrar</button>
+			</form>
 
 
 		</section>

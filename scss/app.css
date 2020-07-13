@@ -1,55 +1,97 @@
 html, body, .page-header { max-width: 100%; overflow-x: hidden; }
 
-html .page-header, body .page-header, .page-header .page-header { font-family: "Abel", sans-serif; }
+html .page-header, body .page-header, .page-header .page-header { font-family: "Noto Serif", serif; }
 
-body { background: url(fundo.png) repeat center center fixed; }
+body { background-color: #EDF6FF; }
 
-.card { box-shadow: 2px 2px 10px 2px #065E6B; }
+.card { box-shadow: 2px 2px 10px 2px #DAE2EA; }
 
-.card .card-header, .card .card-footer { background-color: #065E6B !important; }
+.card .card-header, .card .card-footer { background-color: #488DD6 !important; }
 
-.card .card-body { background-color: rgba(237,245,252,0.8); }
+.card .card-body { background-color: #EDF6FF; color: #002233; }
 
-.card .card-title { color: #DDDDFF !important; font-family: "Bebas Neue", cursive; }
+.card .card-title { color: #C2D633 !important; font-family: "Noto Serif", serif; }
 
-.card .card-subtitle { color: #6B2F00 !important; font-family: "Dosis", sans-serif; }
+.card .card-subtitle { color: #DAE2EA !important; font-family: "Abel", sans-serif; }
 
-.card .card-text { color: #B85E16 !important; font-family: "Abel", sans-serif; }
+.card .card-text { color: #002233 !important; font-family: "Roboto Slab", serif; }
 
-.card .btn-card { background-color: #17A2B8 !important; color: #DDDDFF !important; font-family: "Dosis", sans-serif; }
+.card .btn-card { background-color: #488DD6 !important; color: #EDF6FF !important; font-family: "Abel", sans-serif; }
 
-.modal { background: black; background: -moz-linear-gradient(180deg, black 0%, rgba(96, 96, 96, 0.692314) 84%, #e8e8e8 100%); background: -webkit-linear-gradient(180deg, black 0%, rgba(96, 96, 96, 0.692314) 84%, #e8e8e8 100%); background: linear-gradient(180deg, black 0%, rgba(96, 96, 96, 0.692314) 84%, #e8e8e8 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#e8e8e8",GradientType=1); }
+.modal { background-color: rgba(0, 0, 0, 0.5); }
 
-.modal .modal-content { background-color: #065E6B; color: rgba(255, 255, 255, 0.6); }
+.modal .modal-title { font-family: "Noto Serif", serif; }
 
-.modal .modal-title { font-family: "Bebas Neue", cursive; }
+.modal .modal-header, .modal .modal-footer { background-color: #488DD6; color: #EDF6FF; }
 
-.modal .modal-header, .modal .modal-footer { background-color: #17A2B8; color: #B85E16; }
+.form-control { background-color: rgba(255, 255, 255, 0.4); }
 
-.table { color: #DDDDFF !important; }
+.form-control:focus { background-color: rgba(255, 255, 255, 0.6); }
 
-.table thead tr { background-color: #065E6B !important; font-family: "Dosis", sans-serif; }
+.table { color: #488DD6 !important; max-height: 600px !important; }
 
-.table tbody tr { background-color: #17A2B8 !important; font-family: "Abel", sans-serif; }
+.table thead tr { background-color: #488DD6 !important; font-family: "Noto Serif", serif !important; color: #C2D633 !important; }
+
+.table tbody tr { background-color: #EDF6FF !important; font-family: "Roboto Slab", serif !important; }
+
+.table th { color: #C2D633 !important; text-shadow: 1px 1px 2px #21548A !important; }
+
+.table td, .table td strong { color: #21548A !important; }
 
 .toast { color: #dde !important; }
 
-.toast .toast-header { background-color: #6B2F00 !important; font-family: "Bebas Neue", cursive; }
+.toast .toast-header { background-color: #488DD6 !important; font-family: "Noto Serif", serif !important; }
 
-.toast .toast-body { background-color: #B85E16 !important; font-family: "Abel", sans-serif; }
+.toast .toast-body { background-color: #21548A !important; font-family: "Roboto Slab", serif !important; }
 
-.header-gradient { height: 50px; padding-top: 10px; padding-bottom: 10px; font-family: "Abel", sans-serif; }
+nav.navbar { background-color: #488DD6 !important; box-shadow: 1px 0px 1px 1px #21548A !important; }
 
-.header-gradient, .navbar { background: #065e6b; background: -moz-linear-gradient(90deg, #065e6b 2%, #17a2b8 16%, #38e4ff 56%, white 100%); background: -webkit-linear-gradient(90deg, #065e6b 2%, #17a2b8 16%, #38e4ff 56%, white 100%); background: linear-gradient(90deg, #065e6b 2%, #17a2b8 16%, #38e4ff 56%, white 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#065e6b",endColorstr="#ffffff",GradientType=1); }
+nav .navbar-brand { color: #C2D633 !important; text-shadow: 1px 1px 1px #7D8A28 !important; font-family: 'Codystar', cursive; }
 
-.header-gradient .nav-item a, .header-gradient .navbar-brand, .header-gradient .btn, .navbar .nav-item a, .navbar .navbar-brand, .navbar .btn { color: #DDDDFF !important; font-family: "Dosis", sans-serif; }
+nav .nav-link { color: #EDF6FF !important; }
 
-.btn .btn-big { box-shadow: 15px 12px 15px 22px #000 !important; font-family: "Bebas Neue", cursive; }
+nav .nav-tabs { padding: 5px; border-bottom: 2px solid #7D8A28; }
 
-.btn .btn-transparent { background-color: transparent; font-family: "Dosis", sans-serif; }
+nav .nav-tabs .nav-item { background-color: #488DD6; box-shadow: 1px 1px 2px 1px #main_darker; }
 
-.btn .btn-pesquisa { border-color: #6B2F00 !important; color: #B85E16 !important; font-family: "Dosis", sans-serif; }
+nav .nav-tabs .nav-item.active { background-color: #21548A; box-shadow: 1px 1px 2px 1px #main; color: #C2D633; }
 
-small, .nav-link, h4, h5 { font-family: "Dosis", sans-serif; }
+.header-gradient { margin-top: 10px; padding-left: 10px; padding-right: 10px; }
 
-h1, h2, h3 { font-family: "Bebas Neue", cursive; }
+.badge { background-color: #main !important; color: #C2D633 !important; }
+
+.text-success { color: #C2D633 !important; text-shadow: 1px 1px 1px #21548A !important; }
+
+.text-primary { color: #488DD6 !important; text-shadow: 1px 1px 1px #7D8A28 !important; }
+
+.fas, .far { font-size: 14px !important; }
+
+.big-fas { font-size: 2em !important; }
+
+.btn { margin: 2px; }
+
+.btn.btn-sm { color: #488DD6; }
+
+.btn-transparent { color: #21548A !important; }
+
+.btn-link { color: #21548A !important; }
+
+.btn-success { background-color: #C2D633 !important; box-shadow: 1px 1px 2px 1px #7D8A28 !important; color: #21548A !important; font-family: "Noto Serif", serif !important; }
+
+.btn-big { height: 180px; }
+
+.btn-big:hover { border: 3px solid #C2D633 !important; color: #C2D633 !important; box-shadow: 3px 3px 5px 2px #7D8A28 !important; }
+
+.btn-primary { background-color: #488DD6 !important; box-shadow: 1px 1px 2px 1px #7D8A28 !important; color: #EDF6FF !important; font-family: "Noto Serif", serif !important; text-shadow: 0px 1px 0px #7D8A28 !important; border: 2px solid #7D8A28 !important; }
+
+.btn-primary:hover { border: 2px solid #C2D633 !important; box-shadow: 2px 2px 3px 1px #7D8A28 !important; }
+
+.btn-danger { background-color: #D6675E !important; box-shadow: 1px 1px 2px 1px #964942 !important; color: #EDF6FF !important; font-family: "Noto Serif", serif !important; text-shadow: 0px 1px 0px #shadow !important; }
+
+.btn-danger:hover { border-bottom: 1px solid #C2D633 !important; box-shadow: 2px 2px 3px 1px #964942 !important; }
+
+.btn-warning { background-color: #C2D633 !important; box-shadow: 1px 1px 2px 1px #7D8A28 !important; color: #E3C22D !important; font-family: "Noto Serif", serif !important; border: 1px solid #7D8A28; text-shadow: 0px 1px 0px #secondary_darker; }
+
+small, .nav-link, h4, h5 { font-family: "Roboto Slab", serif !important; }
+
+h1, h2, h3 { font-family: "Noto Serif", serif !important !important; }

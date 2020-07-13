@@ -36,46 +36,25 @@
             </div>
             <div class="card-body">
               {% if proximas_folgas %}
-                <h2 class='text-center text-info'>Próximas</h2>
+                <h2 class='text-center text-primary'>Próximas</h2>
                 {% include 'tables/proximas_folgas.html' %}
               {% endif %}
               {% if proximos_retornos %}
-                <h2 class='text-center text-info'>Retornando</h2>
+                <h2 class='text-center text-primary'>Retornando</h2>
                 {% include 'tables/proximos_retornos.html' %}
               {% endif %}
               {% if em_andamento %}
-                <h2 class='text-center text-info'>Folgando Hoje</h2>
+                <h2 class='text-center text-primary'>Folgando Hoje</h2>
                 {% include 'tables/em_andamento.html' %}
               {% endif %}
             </div>
           </div>
         </div>
       {% endif %}
-      <!--
-      {% if proximos_retornos %}
-        <div class='col-12'>
-          <div class="card my-5">
-            <div class="card-header">
-              <h4 class="card-title text-center">Próximos retornos</h4>
-            </div>
-            <div class="card-body">
-              {% include 'tables/proximos_retornos.html' %}
-            </div>
-          </div>
-        </div>
+      {% if relatorios %}
+        {% include 'modals/lembrete_relatorio.html' %}
+
       {% endif %}
-      {% if em_andamento %}
-        <div class='col-12'>
-          <div class="card my-5">
-            <div class="card-header">
-              <h4 class="card-title text-center">Folgando hoje</h4>
-            </div>
-            <div class="card-body">
-            </div>
-          </div>
-        </div>
-      {% endif %}
-      -->
     </div>
   </div>
 
@@ -83,4 +62,12 @@
 {% endblock %}
 
 {% block js %}
+  {% if relatorios and not lembretes_exibidos %}
+    <script>
+      $('#modal_lembrete_relatorio').modal({
+        keyboard: false
+      })
+    </script>
+  {% endif %}
+
 {% endblock %}

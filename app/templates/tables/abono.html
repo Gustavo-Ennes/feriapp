@@ -34,14 +34,14 @@
                 {% csrf_token %}
                 <input type="hidden" name='trabalhador' value='{{ abono.trabalhador.id }}' />
               </form>
-              <button form='trabalhadorForm{{ abono.id }}{{ abono.trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ abono.trabalhador.nome }}</button>
+              <button form='trabalhadorForm{{ abono.id }}{{ abono.trabalhador.id }}' class="btn btn-sm btn-block btn-transparent " type="submit">{{ abono.trabalhador.nome }}</button>
             </td>
             <td>
               <form id='setorForm{{ abono.id}}{{ abono.trabalhador.setor.id }}' method='POST' action='{% url 'setor_espec' %}'>
                 {% csrf_token %}
                 <input type="hidden" name='setor' value='{{ abono.trabalhador.setor.id }}' />
               </form>
-              <button form='setorForm{{ abono.id}}{{ abono.trabalhador.setor.id }}' class="btn btn-transparent text-light" type="submit">{{ abono.trabalhador.setor.nome }}</button>
+              <button form='setorForm{{ abono.id}}{{ abono.trabalhador.setor.id }}' class="btn btn-sm btn-block btn-transparent " type="submit">{{ abono.trabalhador.setor.nome }}</button>
             </td>
             <td>{{ abono.trabalhador.situacao|title }}</td>
             <td>{{ abono.criado_em|date:"d/m/Y" }}</td>
@@ -71,8 +71,8 @@
                 {% endif %}
                 {% if impressao %}
                   <div class="col">
-                    <form action="{% url 'abono_pdf' abono.id %}" method="GET">
-                      <button type='submit' class="btn btn-sm btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Imprimir abono">
+                    <form action="{% url 'pdf' 'abono' abono.id %}" method="GET">
+                      <button type='submit' class="btn btn-sm btn-block btn-success mb-2" data-toggle="tooltip" data-placement="top" title="Imprimir abono">
                         <i class="fas fa-print"></i>
                       </button>
                     </form>
@@ -101,7 +101,7 @@
                 <h3 class="card-title text-center">
                   #{{ abono.id }} - {{ abono.trabalhador.nome }}
                 </h3>
-                <p class="card-subtitle text-center text-light">
+                <p class="card-subtitle text-center ">
                   {{ abono.trabalhador.setor.nome }} - {{ abono.trabalhador.situacao|title }}
                 </p>
               </div>

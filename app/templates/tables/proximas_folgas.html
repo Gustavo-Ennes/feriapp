@@ -27,14 +27,14 @@
                 {% csrf_token %}
                 <input type="hidden" name='trabalhador' value='{{ folga.trabalhador.id }}' />
               </form>
-              <button form='trabalhadorForm{{ folga.trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ folga.trabalhador.nome }}</button>
+              <button form='trabalhadorForm{{ folga.trabalhador.id }}' class="btn btn-sm btn-block btn-transparent" type="submit">{{ folga.trabalhador.nome }}</button>
             </td>
             <td>
               <form id='setorForm{{ folga.trabalhador.id }}' method='POST' action='{% url 'setor_espec' %}'>
                 {% csrf_token %}
                 <input type="hidden" name='setor' value='{{ folga.trabalhador.setor.id }}' />
               </form>
-              <button form='setorForm{{ folga.trabalhador.id }}' class="btn btn-transparent text-light" type="submit">{{ folga.trabalhador.setor.nome }}</button>
+              <button form='setorForm{{ folga.trabalhador.id }}' class="btn btn-sm btn-block btn-transparent" type="submit">{{ folga.trabalhador.setor.nome }}</button>
             </td>
             <td>{{ folga.criado_em|date:"d/m/Y" }}</td>
             <td>

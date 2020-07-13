@@ -1,0 +1,51 @@
+{% load filtros %}
+{% if not finalizados %}
+  <button class='col-6 col-lg-2 btn btn-transparent' data-toggle="modal" data-target="#modalRelatorio{{ relatorio.id}}">
+    <h5 class='text-center text-success'> {{ relatorio.setor.nome|upper }}</h5>
+    <h1 class="display-1 text-primary text-center">
+      <i class="fas big-fas fa-file-invoice"></i>
+    </h1>
+    <strong class="text-success text-center m-0">
+        {{ relatorio.criado_em|date:'m' }}/{{ relatorio.criado_em|date:'Y' }}
+    </strong>
+  </button>
+{% else %}
+  <button class='col-4 col-lg-1 btn btn-transparent' data-toggle="modal" data-target="#modalRelatorio{{ relatorio.id}}">
+    <small class='text-center text-success'> {{ relatorio.setor.nome|upper }}</small>
+      <p><i class="fas big-fas fa-file-invoice"></i></p>
+    <small class="text-success text-center m-0">
+        {{ relatorio.criado_em|date:'m' }}/{{ relatorio.criado_em|date:'Y' }}
+    </small>
+
+  </button>
+{% endif %}
+
+<!-- Modal -->
+<div class="modal fade" id="modalRelatorio{{ relatorio.id}}" tabindex="-1" role="dialog" aria-labelledby="modalRelatorioLabel{{ relatorio.id}}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalRelatorioLabel{{ relatorio.id}}">Selecione a ação</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action='{% url "pdf" "relatorio" relatorio.id %}' method='get'>
+          <button class="btn btn-success btn-sm btn-block my-1" type='submit'>Ver Original</button>
+        </form>
+        <form action='{% url "pdf" "relatorio-copia" relatorio.id %}' method='get'>
+          <button class="btn btn-success btn-sm btn-block my-2" type='submit'>Ver Cópia</button>
+        </form>
+        {% if relatorio.estado != 'oficial' %}
+          <form action='{% url "relatorio_edicao" relatorio.id %}' method='GET'>
+            {% if user|has_group:'relatorio' %}
+              <button class="btn btn-success btn-sm btn-block my-2" type='submit'>Editar</button>
+            {% endif %}
+          </form>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>

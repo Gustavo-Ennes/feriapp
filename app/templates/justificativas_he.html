@@ -6,7 +6,7 @@
   <div class="header-gradient">
     <div class="row justify-content-center align-items-center">
       <div class="col">
-        <h4 class="text-light ml-4">AUTORIZAÇÃO DE HORAS EXTRAS</h4>
+        <h4 class="text-primary ml-4">AUTORIZAÇÃO DE HORAS EXTRAS</h4>
       </div>
     </div>
   </div>
@@ -16,10 +16,10 @@
   <div class="row justify-content-center align-items-center">
     <h1 class="col-12 text-center text-primary">Selecione o servidor:</h1>
     <div class='col-12'>
-      <form action="{% url 'autorizacao_he' 0|inteiro %}" method="POST" enctype="multipart/form-data" class="text-left">
+      <form action="{% url 'pdf' 'justificativa' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
           {% csrf_token %}
           {{ AutorizacaoForm|crispy }}
-          <button class="btn btn-block btn-success" type='submit'>Imprimir</button>
+          <button class="btn btn-success btn-lg btn-block" type='submit'>Imprimir</button>
   		</form>
     </div>
   </div>

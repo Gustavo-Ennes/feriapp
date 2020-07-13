@@ -7,7 +7,7 @@
   <div class="header-gradient">
     <div class="row justify-content-center align-items-center">
       <div class="col-10">
-        <h4 class="text-light ml-4">
+        <h4 class="text-primary ml-4">
           {{ trabalhador.nome }}
           {% if trabalhador.situacao == 'abono' %}
             - abonando hoje
@@ -20,11 +20,8 @@
       </div>
       <div class="col-2">
         {% if request|is_pc %}
-          <form method="POST" action="{% url 'pdf' %}" class="mr-1" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
-            {% csrf_token %}
-            <input type='hidden' name='tipo' value="trabalhador_historico" />
-            <input type='hidden' name='trabalhador_id' value="{{ trabalhador.id }}" />
-            <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
+          <form method="GET" action="{% url 'pdf' 'trabalhador_historico' trabalhador.id %}" class="mr-1" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
+            <button type='submit' class="btn btn-sm btn-block btn-success" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
               <i class="far fa-file-pdf text-light"></i>
             </button>
           </form>
@@ -56,15 +53,23 @@
     <div class="col-12 col-lg-9">
 
 
-  {% if ferias_futuras or ferias_fruidas or ferias_indeferidas %}
+  {% if ferias_futuras or ferias_fruidas or ferias_indeferidas or ferias_em_andamento %}
     <div class="col-12 my-2">
       <div class="card">
         <div class="card-header">
-          <h5 class='card-title text-center'>Férias</h5>
+          <h3 class='card-title text-center'>Férias</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body h-300">
+          {% if ferias_em_andamento %}
+            <h5 class="text-center text-primary">em andamento</h5>
+            {% with ferias=ferias_em_andamento tipo='ferias' arquivada=True %}
+              <div class="my-2">
+                {% include 'tables/ferias.html' %}
+              </div>
+            {% endwith %}
+          {% endif %}
           {% if ferias_futuras %}
-            <h3 class="text-center text-primary">futuras</h3>
+            <h5 class="text-center text-primary">futuras</h5>
             {% with ferias=ferias_futuras tipo='ferias' %}
               <div class="my-2">
                 {% include 'tables/ferias.html' %}
@@ -74,7 +79,7 @@
           {% with arquivada=True %}
             {% if ferias_fruidas %}
               {% with ferias=ferias_fruidas %}
-                <h3 class="text-center text-primary">fruídas</h3>
+                <h5 class="text-center text-primary">fruídas</h5>
                 <div class="my-2">
                   {% include 'tables/ferias.html' %}
                 </div>
@@ -82,7 +87,7 @@
               {% endif %}
             {% if ferias_indeferidas %}
               {% with ferias=ferias_indeferidas %}
-                <h3 class="text-center text-primary">indeferidas</h3>
+                <h5 class="text-center text-primary">indeferidas</h5>
                 <div class="my-2">
                   {% include 'tables/ferias.html' %}
                 </div>
@@ -94,13 +99,21 @@
     </div>
   {% endif %}
 
-  {% if licencas_futuras or licencas_fruidas or licencas_indeferidas %}
+  {% if licencas_futuras or licencas_fruidas or licencas_indeferidas or licencas_em_andamento%}
     <div class="col-12 my-2">
       <div class="card">
         <div class="card-header">
-          <h5 class='card-title text-center'>Licenças-prêmio</h5>
+          <h3 class='card-title text-center'>Licenças-prêmio</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body h-300">
+          {% if licencas_em_andamento %}
+            <h5 class="text-center text-primary">em andamento</h5>
+            {% with licencas=licencas_em_andamento tipo='licenca' arquivada=True %}
+              <div class="my-2">
+                {% include 'tables/licenca.html' %}
+              </div>
+            {% endwith %}
+          {% endif %}
           {% if licencas_futuras %}
             <h3 class="text-center text-primary">futuras</h3>
             {% with licencas=licencas_futuras tipo='licenca' %}
@@ -112,7 +125,7 @@
           {% with arquivada=True %}
             {% if licencas_fruidas %}
               {% with licencas=licencas_fruidas %}
-                <h3 class="text-center text-primary">fruídas</h3>
+                <h5 class="text-center text-primary">fruídas</h5>
                 <div class="my-2">
                   {% include 'tables/licenca.html' %}
                 </div>
@@ -120,7 +133,7 @@
             {% endif %}
             {% if licencas_indeferidas %}
               {% with licencas=licencas_indeferidas %}
-                <h3 class="text-center text-primary">indeferidas</h3>
+                <h5 class="text-center text-primary">indeferidas</h5>
                 <div class="my-2">
                   {% include 'tables/licenca.html' %}
                 </div>
@@ -132,15 +145,23 @@
     </div>
   {% endif %}
 
-  {% if abonos_futuros or abonos_fruidos or abonos_indeferidos %}
+  {% if abonos_futuros or abonos_fruidos or abonos_indeferidos or abonos_em_andamento %}
     <div class="col-12 my-2">
       <div class="card">
         <div class="card-header">
-          <h5 class='card-title text-center'>Abonos</h5>
+          <h3 class='card-title text-center'>Abonos</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body h-300">
+          {% if abonos_em_andamento %}
+            <h5 class="text-center text-primary">em andamento</h5>
+            {% with abonos=abonos_em_andamento tipo='abono' arquivado=True %}
+              <div class="my-2">
+                {% include 'tables/abono.html' %}
+              </div>
+            {% endwith %}
+          {% endif %}
           {% if abonos_futuros %}
-            <h3 class="text-center text-primary">futuros</h3>
+            <h5 class="text-center text-primary">futuros</h5>
             {% with abonos=abonos_futuros tipo='abono' %}
               <div class="my-2">
                 {% include 'tables/abono.html' %}
@@ -150,7 +171,7 @@
           {% with arquivado=True %}
             {% if abonos_fruidos %}
               {% with abonos=abonos_fruidos %}
-                <h3 class="text-center text-primary">fruídos</h3>
+                <h5 class="text-center text-primary">fruídos</h5>
                 <div class="my-2">
                   {% include 'tables/abono.html' %}
                 </div>
@@ -158,7 +179,7 @@
             {% endif %}
             {% if abonos_indeferidos %}
               {% with abonos=abonos_indeferidos %}
-                <h3 class="text-center text-primary">indeferidos</h3>
+                <h5 class="text-center text-primary">indeferidos</h5>
                 <div class="my-2">
                   {% include 'tables/abono.html' %}
                 </div>

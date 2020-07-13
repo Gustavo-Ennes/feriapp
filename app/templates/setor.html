@@ -7,17 +7,16 @@
   <div class="header-gradient">
     <div class="row justify-content-center align-items-center">
       <div class="col-8">
-        <h4 class="text-light ml-4">SETORES</h4>
+        <h4 class="text-primary ml-4">SETORES</h4>
       </div>
       <div class="col-2">
         {% include 'modals/novo_setor.html' %}
       </div>
       <div class="col-2">
         {% if request|is_pc %}
-          <form method="POST" action="{% url 'pdf' %}" class="mr-1">
+          <form method="POST" action="{% url 'pdf' 'setores' 0 %}" class="mr-1">
             {% csrf_token %}
-            <input type='hidden' name='tipo' value="setor" />
-            <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not setores %}disabled{% endif %}>
+            <button type='submit' class="btn btn-success btn-sm btn-block" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not setores %}disabled{% endif %}>
               <i class="far fa-file-pdf text-center"></i>
             </button>
           </form>

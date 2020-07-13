@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load filtros %}
+{% load user_agents %}
+
+{% block header %}
+
+  <div class="header-gradient">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-10">
+        <h4 class="text-primary ml-4">EDIÇÃO: Relatório do(a) {{ relatorio.setor.nome }} - {% if relatorio.mes < 10 %}0{% endif %}{{ relatorio.mes }}/{{ relatorio.ano }}</h4>
+      </div>
+      <div class="col-2">
+        <div class="m-2">
+        <a href="{% url 'pdf' 'relatorio' relatorio.id %}" class='btn btn-sm btn-block btn-primary'>Ver</a></div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block conteudo %}
+
+  <div class='row justify-content-center align-items-center'>
+    <div class="col-12">
+      {% include 'tables/relatorio.html' %}
+    </div>
+  </div>
+
+{% endblock %}

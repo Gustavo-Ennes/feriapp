@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'app',
     'compressor',
-    'django_user_agents'
+    'django_user_agents',
+    'easy_pdf'
 ]
 
 MIDDLEWARE = [

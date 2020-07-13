@@ -7,18 +7,17 @@
   <div class="header-gradient">
     <div class="row justify-content-center align-items-center">
       <div class="col-8">
-        <h4 class="text-light ml-4">LICENÇAS-PRÊMIO</h4>
+        <h4 class="text-primary ml-4">LICENÇAS-PRÊMIO</h4>
       </div>
       <div class="col-2">
         {% include 'modals/marcar_licenca.html' %}
       </div>
       <div class="col-2">
         {% if request|is_pc %}
-          <form method="POST" action="{% url 'pdf' %}" class="mr-1">
+          <form method="POST" action="{% url 'pdf' 'licenca' 0 %}" class="mr-1">
             {% csrf_token %}
-            <input type='hidden' name='tipo' value="licenca" />
-            <button style='color: #4a4;' type='submit' class="btn btn-sm btn-block btn-info" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not futuras and not fruidas and not indeferidas and not em_andamento %}disabled{% endif %}>
-              <i class="far fa-file-pdf text-light"></i>
+            <button type='submit' class="btn btn-success btn-sm btn-block" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not futuras and not fruidas and not indeferidas and not em_andamento %}disabled{% endif %}>
+              <i class="far fa-file-pdf"></i>
             </button>
           </form>
         {% endif %}
@@ -36,10 +35,10 @@
 
     <nav class='col-12'>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <a class="nav-item nav-link active text-light bg-primary" id="futuros-tab" data-toggle="tab" href="#futuros" role="tab" aria-controls="futuros" aria-selected="true">Futuras</a>
-        <a class="nav-item nav-link text-light bg-primary" id="andamento-tab" data-toggle="tab" href="#andamento" role="tab" aria-controls="andamento" aria-selected="false">Em andamento</a>
-        <a class="nav-item nav-link text-light bg-primary" id="fruidos-tab" data-toggle="tab" href="#fruidos" role="tab" aria-controls="fruidos" aria-selected="false">Fruídas</a>
-        <a class="nav-item nav-link text-light bg-primary" id="indeferidos-tab" data-toggle="tab" href="#indeferidos" role="tab" aria-controls="indeferidos" aria-selected="false">Indeferidas</a>
+        <a class="nav-item nav-link active" id="futuros-tab" data-toggle="tab" href="#futuros" role="tab" aria-controls="futuros" aria-selected="true">Futuras</a>
+        <a class="nav-item nav-link" id="andamento-tab" data-toggle="tab" href="#andamento" role="tab" aria-controls="andamento" aria-selected="false">Em andamento</a>
+        <a class="nav-item nav-link" id="fruidos-tab" data-toggle="tab" href="#fruidos" role="tab" aria-controls="fruidos" aria-selected="false">Fruídas</a>
+        <a class="nav-item nav-link" id="indeferidos-tab" data-toggle="tab" href="#indeferidos" role="tab" aria-controls="indeferidos" aria-selected="false">Indeferidas</a>
       </div>
     </nav>
     <div class="tab-content col-12 mt-4" id="nav-tabContent">

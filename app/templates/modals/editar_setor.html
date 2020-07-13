@@ -1,14 +1,15 @@
 {% load crispy_forms_tags %}
 {% load filtros %}
 
-<button class="btn btn-lg btn-block btn-outline-warning fas fa-pen" data-toggle="modal" data-target="#modalEditarSetor{{ setor.id }}" data-toggle="tooltip" data-placement="top" title="Editar Setor">
+<button class="btn btn-warning btn-sm btn-block" data-toggle="modal" data-target="#modalEditarSetor{{ setor.id }}" data-toggle="tooltip" data-placement="top" title="Editar Setor">
+  <i class='fas fa-pen text-primary'></i>
 </button>
 
-<div class="modal fade" id="modalEditarSetor{{ setor.id }}" tabindex="-1" role="dialog" aria-labelledby="labelEditarSetor" aria-hidden="true">
+<div class="modal fade" id="modalEditarSetor{{ setor.id }}" tabindex="-1" role="dialog" aria-labelledby="labelEditarSetor{{ setor.id }}" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="labelEditarSetor">Editar Setor</h5>
+        <h5 class="modal-title" id="labelEditarSetor{{ setor.id }}">Editar Setor</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

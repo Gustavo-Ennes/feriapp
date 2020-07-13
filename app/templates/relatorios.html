@@ -6,8 +6,27 @@
 
   <div class="header-gradient">
     <div class="row justify-content-center align-items-center">
-      <div class="col-12">
-        <h4 class="text-light ml-4">RELATÓRIOS</h4>
+      <div class="col-8">
+        <h4 class="text-primary ml-4">RELATÓRIOS</h4>
+      </div>
+      <div class="col-4">
+        {% if relatorios_em_aberto %}
+          {% if relatorios_em_aberto.1.estado == 'justificativas' %}
+            <form action="{% url 'soma_horas' %}" method="GET">
+              <button class="btn btn-sm btn-block btn-primary" type="submit" {% if not user|has_group:'relatorio' %}disabled{% endif %}>
+                Concluir Relatórios
+              </button>
+            </form>
+
+          {% else %}
+            <form action="{% url 'finalizar_relatorios' %}" method="POST">
+              {% csrf_token %}
+              <button class="btn btn-sm btn-block btn-primary" type="submit" {% if not user|has_group:'relatorio' %}disabled{% endif %}>
+                Finalizar Relatório(s) em Aberto
+              </button>
+            </form>
+          {% endif %}
+        {% endif %}
       </div>
     </div>
   </div>
@@ -15,33 +34,64 @@
 {% endblock %}
 
 {% block conteudo %}
+  {% if relatorios_finalizados_antigos %}
 
-  <div class="m-3 my-4">
     <div class="row justify-content-center align-items-center">
-      {% for relatorio in relatorios %}
-
-        <form action="{% url 'relatorio' %}" method="POST">
-          {% csrf_token %}
-          <input type='hidden' name='relatorio_id' value='{{ relatorio.id }}'>
-          <button class='col-6 col-lg-3 btn btn-transparent' type='submit'>
-            <p class='text-center'> {{ relatorio.setor.nome }}</p>
-            <h1 class="display-1 text-info text-center">
-              <i class="fas fa-file-invoice"></i>
-            </h1>
-            <small class="text-muted">
-              <p class="text-center m-0">
-                {{ relatorio.criado_em|date:'m' }}/{{ relatorio.criado_em|date:'Y' }}
-              </p>
-            </small>
-          </button>
-          
-
-        </form>
-
-
+      {% for relatorio in relatorios_finalizados_antigos %}
+        {% with finalizados=True %}
+          {% include 'modals/relatorio.html' %}
+        {% endwith %}
       {% endfor %}
-      
     </div>
-  </div>
+
+  {% endif %}
+
+  {% if relatorios_finalizados or relatorios_em_aberto or relatorios_finalizados_antigos %}
+    <div class="m-3 my-4">
+      {% if relatorios_finalizados_antigos %}
+        <div class="row justify-content-center align-items-center ">
+          <div class="{% if not relatorios_finalizados %}col-12{% else %}col-6{% endif %}"><h3 class="text-success text-center">Finalizados Antigos</h3></div>
+          {% for relatorio in relatorios_finalizados_antigos %}
+            {% with finalizados=True %}
+
+              {% include 'modals/relatorio.html' %}
+
+            {% endwith %}
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if relatorios_finalizados %}
+        <div class="row justify-content-center align-items-center ">
+          <div class="{% if not relatorios_finalizados_antigos %}col-12{% else %}col-6{% endif %}"><h3 class="text-success text-center">Finalizados {{ relatorios_finalizados.0.mes|mes_escrito }}/{{ relatorios_finalizados.0.ano }}</h3></div>
+          {% for relatorio in relatorios_finalizados %}
+            {% with finalizados=True %}
+
+              {% include 'modals/relatorio.html' %}
+
+            {% endwith %}
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if relatorios_em_aberto %}
+        <div class="row justify-content-center align-items-center">
+          <div class="col-12"><h3 class="text-success text-center">Em Aberto</h3></div>
+            {% for relatorio in relatorios_em_aberto %}
+
+              {% include 'modals/relatorio.html' %}
+
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+  {% else %}
+    <div class="row justify-content-center align-items-center">
+      <div class="col-12 text-center">
+        <a class="btn btn-lg btn-success text-center" href="{% url 'soma_horas' %}" {% if not user|has_group:'relatorio' %}disabled{% endif %}>Começar a somar as justificativas</a>
+      </div>
+    </div>
+
+  {% endif %}
 
 {% endblock %}

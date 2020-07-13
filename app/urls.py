@@ -27,15 +27,21 @@ urlpatterns = [
     path("indeferir/", views.indeferir, name='indeferir'),
     path('entrar/', views.entrar, name='entrar'),
     path('sair/', views.sair, name='sair'),
-    path('render/abono/<int:abono_id>/', views.AbonoPDF.as_view(), name='abono_pdf'),
-    path('render/ferias/<int:ferias_id>/', views.FeriasPDF.as_view(), name='ferias_pdf'),
-    path('render/licenca/<int:licenca_id>/', views.LicencaPDF.as_view(), name='licenca_pdf'),
-    path('render/autorizacao-he/<int:trabalhador_id>/', views.AutorizacaoHE.as_view(), name='autorizacao_he'),
-    path('autorizacao-he/', views.autorizacao, name='autorizacao'),
     path('soma-justificativas/', views.soma_justificativas, name='soma_justificativas'),
     path('soma-horas/', views.soma_horas, name='soma_horas'),
     path('relatorios/', views.relatorios, name='relatorios'),
-    path('relatorio/', views.relatorio, name='relatorio'),
-
+    path('autorizacao-he/', views.autorizacao, name='autorizacao'),
+    path('relatorio-edicao/<int:relatorio_id>', views.relatorio_edicao, name='relatorio_edicao'),
+    path('modifica-relatorio/', views.modifica_relatorio, name='modifica_relatorio'),
+    path('pdf/<str:tipo>/<int:obj_id>/', views.pdf, name='pdf'),
+    path('posterga-lembrete/', views.posterga_lembrete, name='posterga_lembrete'),
+    path('divide-linha/', views.divide_linha, name='divide_linha'),
+    path('finalizar_relatorios/', views.finalizar_relatorios, name='finalizar_relatorios')
 
 ]
+
+'''
+    path('render/ferias/<int:ferias_id>/', views.FeriasPDF.as_view(), name='ferias_pdf'),
+    path('render/abono/<int:abono_id>/', views.AbonoPDF.as_view(), name='abono_pdf'),
+    path('render/licenca/<int:licenca_id>/', views.LicencaPDF.as_view(), name='licenca_pdf'),
+'''

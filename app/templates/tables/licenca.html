@@ -34,14 +34,14 @@
                 {% csrf_token %}
                 <input type="hidden" name='trabalhador' value='{{ f.trabalhador.id }}' />
               </form>
-              <button form='trabalhadorForm{{ f.trabalhador.id }}{{ f.id }}' class="btn btn-transparent text-light" type="submit">{{ f.trabalhador.nome }}</button>
+              <button form='trabalhadorForm{{ f.trabalhador.id }}{{ f.id }}' class="btn btn-sm btn-block  btn-transparent " type="submit">{{ f.trabalhador.nome }}</button>
             </td>
             <td>
               <form id='setorForm{{ f.trabalhador.setor.id }}{{ f.id }}' method='POST' action='{% url 'setor_espec' %}'>
                 {% csrf_token %}
                 <input type="hidden" name='setor' value='{{ f.trabalhador.setor.id }}' />
               </form>
-              <button form='setorForm{{ f.trabalhador.setor.id }}{{ f.id }}' class="btn btn-transparent text-light" type="submit">{{ f.trabalhador.setor.nome }}</button>
+              <button form='setorForm{{ f.trabalhador.setor.id }}{{ f.id }}' class="btn btn-sm btn-block  btn-transparent " type="submit">{{ f.trabalhador.setor.nome }}</button>
             </td>
             <td>{{ f.trabalhador.situacao|title }}</td>
             <td>{{ f.criado_em|date:"d/m/Y" }}</td>
@@ -76,8 +76,8 @@
               {% endif %}
               {% if impressao %}
                 <div class="col">
-                  <form action="{% url 'licenca_pdf' f.id %}" method="GET">
-                    <button type='submit' class="btn btn-sm btn-block btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Imprimir licença-prêmio">
+                  <form action="{% url 'pdf' 'licenca' f.id %}" method="GET">
+                    <button type='submit' class="btn btn-sm btn-block btn-success" data-toggle="tooltip" data-placement="top" title="Imprimir licença-prêmio">
                       <i class="fas fa-print"></i>
                     </button>
                   </form>
@@ -99,7 +99,7 @@
                   <h3 class="card-title text-center">
                     #{{ f.id }} - {{ f.trabalhador.nome }}
                   </h3>
-                  <p class="card-subtitle text-center text-light">
+                  <p class="card-subtitle text-center ">
                     {{ f.trabalhador.setor.nome }} - {{ f.trabalhador.situacao|title }}
                   </p>
                 </div>
