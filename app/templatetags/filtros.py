@@ -152,3 +152,8 @@ def mes_escrito(num):
     if num == 12:
         return 'dezembro'
 
+
+@register.filter(name='has_group')
+def has_group(user, group_name):
+    return user.groups.filter(name=group_name).exists()
+
