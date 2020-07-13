@@ -81,7 +81,7 @@
 
 
                 {% if not user|has_group:"relatorio" %}
-
+                  <p>{{ linha.adicional_noturno }}</p>
                 {% else %}
                     <!-- btn trigger modal -->
                   <button type="button" class="btn btn-sm btn-block btn-transparent " data-toggle="modal" data-target="#modalRelatorioAdicional-{{ linha.id }}">
@@ -123,10 +123,10 @@
             <td>
 
               {% if not user|has_group:'relatorio' %}
-
+                <p>{{ linha.faltas }}</p>
               {% else %}
                 <!-- btn trigger modal -->
-                <button type="button" class="btn btn-sm btn-block btn-transparent " data-toggle="modal" data-target="#modalRelatorioFaltas-{{ linha.id }}" {% if not user|has_group:'relatorio' %}disabled{% endif %}>
+                <button type="button" class="btn btn-sm btn-block btn-transparent " data-toggle="modal" data-target="#modalRelatorioFaltas-{{ linha.id }}">
                   {{ linha.faltas }}
                 </button>
 
