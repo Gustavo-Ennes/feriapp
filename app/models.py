@@ -218,7 +218,7 @@ class LinhaRelatorio(models.Model):
     modificado_em = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['trabalhador__nome']
         verbose_name = "Linha de Relatório"
         verbose_name_plural = 'Linhas de Relatório'
 

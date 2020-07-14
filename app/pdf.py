@@ -209,7 +209,8 @@ class PDF:
                             alignment=TA_CENTER,
                             fontsize=12,
                             bold=True,
-                            spaceBefore=5 * mm
+                            spaceBefore=5 * mm,
+                            spaceAfter=5 * mm
                         )
                     )
                 )
