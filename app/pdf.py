@@ -218,8 +218,8 @@ class PDF:
                 Table(
                     table_data,
                     style=PDF.get_table_style(len(table_data)),
-                    spaceAfter=5 * mm if not space_after else space_after,
-                    spaceBefore=(5 * mm if not label else mm))) if not space_before else space_before
+                    spaceAfter=15 * mm if not space_after else space_after,
+                    spaceBefore=(10 * mm if not label else mm))) if not space_before else space_before
 
         return flowables
 
@@ -768,9 +768,10 @@ class PDF:
         data = datetime.now()
         doc = PDF.get_sdt()
         flowables = []
-        style_linha = ParagraphStyle(name='linha', bold=True, fontSize=12, leftIndent=15 * mm, spaceAfter=mm)
+        style_primeira_linha = ParagraphStyle(name='linha', bold=True, fontSize=12, leftIndent=15 * mm, spaceAfter=2*mm, spaceBefore=10*mm)
+        style_linha = ParagraphStyle(name='linha', bold=True, fontSize=12, leftIndent=15 * mm, spaceAfter=2*mm)
         style_copia = ParagraphStyle(name='copia', bold=True, fontSize=11, alignment=TA_RIGHT, spaceBefore=10 * mm)
-        style_data = ParagraphStyle(name='data', alignment=TA_RIGHT, fontSize=12, rightIndent=15*mm, spaceAfter=10*mm)
+        style_data = ParagraphStyle(name='data', alignment=TA_RIGHT, fontSize=12, rightIndent=15*mm, spaceAfter=20*mm)
 
         if copia:
             flowables.append(
@@ -785,7 +786,7 @@ class PDF:
         flowables.append(
             Paragraph(
                 "Ofício:<b>%s</b>" % relatorio.num_oficio,
-                style=style_linha,
+                style=style_primeira_linha,
             )
         )
 
@@ -817,8 +818,9 @@ class PDF:
         )
 
         table_data, label = PDF.get_table_data('relatorio', relatorio.linhas.all())
-
-        flowables = PDF.build_table(table_data, None, flowables, space_after=15 * mm)
+        space_after = 5*mm if len(table_data) > 20 else None
+        space_before = 5*mm if len(table_data) > 20 else None
+        flowables = PDF.build_table(table_data, None, flowables, space_after=space_after, space_before=space_before)
 
         flowables.append(Paragraph("Ilha Solteira, %d de %s de %s" % (data.day, RandomStuff.mes_escrito(data.month), data.year), style=style_data))
 
@@ -921,27 +923,15 @@ class PDF:
             ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
             ('ALIGN', (0, 0), (-1, -1), "CENTER"),
-            ('FONTSIZE', (0, 0), (-1, 0), 10.5),
-            ('FONTSIZE', (0, 1), (-1, -1), 10.5),
+            ('FONTSIZE', (0, 0), (-1, 0), 11.5),
+            ('FONTSIZE', (0, 1), (-1, -1), 11),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 2),
+            ('TOPPADDING', (0, 0), (-1, 0), 2),
         ]
 
-        # font size and padding according to the lines quantity
-        if 0 < lines_qtt < 5:
-            # top line and all others above
-            table_style.append(('TOPPADDING', (0, 0), (-1, -1), 3))
-            table_style.append(('BOTTOMPADDING', (0, 0), (-1, -1), 3))
-        elif lines_qtt < 10:
-            table_style.append(('TOPPADDING', (0, 0), (-1, -1), 2))
-            table_style.append(('BOTTOMPADDING', (0, 0), (-1, -1), 2))
-        elif lines_qtt < 15:
-            table_style.append(('TOPPADDING', (0, 0), (-1, -1), 1))
-            table_style.append(('BOTTOMPADDING', (0, 0), (-1, -1), 1))
-        elif lines_qtt < 20:
-            table_style.append(('TOPPADDING', (0, 0), (-1, -1), 1))
-            table_style.append(('BOTTOMPADDING', (0, 0), (-1, -1), 1))
-        elif lines_qtt < 35:
-            table_style.append(('TOPPADDING', (0, 0), (-1, -1), 1))
-            table_style.append(('BOTTOMPADDING', (0, 0), (-1, -1), 1))
+        if lines_qtt > 20:
+            table_style.append(('FONTSIZE', (0, 0), (-1, 0), 9.5))
+            table_style.append(('FONTSIZE', (0, 1), (-1, -1), 9))
 
         return TableStyle(table_style)
 
@@ -987,9 +977,9 @@ class PDF:
     def assinatura_de(quem, flowables, legenda=None, sub_legenda=None):
         style_traco = ParagraphStyle(name='traco', alignment=TA_CENTER)
         style = ParagraphStyle(name='assinatura', alignment=TA_CENTER, fontsize=12,
-                               spaceAfter=mm if legenda else 10 * mm)
+                               spaceAfter=mm if legenda else 15 * mm)
         style_leg = ParagraphStyle(name='assinatura', alignment=TA_CENTER, fontsize=10,
-                                   spaceAfter=mm if sub_legenda else 10 * mm)
+                                   spaceAfter=mm if sub_legenda else 5 * mm)
         style_sub_leg = ParagraphStyle(name='assinatura', alignment=TA_CENTER, fontsize=9, spaceAfter=10 * mm)
         traco_texto = "____________________________________"
         flowables.append(

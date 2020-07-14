@@ -64,7 +64,7 @@
                           <p>Insira as horas extras atualizadas</p>
                           <input type='hidden' name='tipo' value='horas_extras'>
                           <input type='hidden' name='linha_id' value='{{ linha.id }}'>
-                          <input placeholder='{{ linha.horas_extras }}' type='number' step='0.1' class='form-control' name='qtd_horas_extras-{{ linha.id }}' min='1' autofocus='true'>
+                          <input placeholder='{{ linha.horas_extras }}' type='number' step='0.1' class='form-control' name='qtd_horas_extras-{{ linha.id }}' min='0.1' autofocus='true' required>
                         </form>
                       </div>
                       <div class="modal-footer">
@@ -107,7 +107,7 @@
                             <p>Insira o adicional noturno atualizado</p>
                             <input type='hidden' name='tipo' value='adicional_noturno'>
                             <input type='hidden' name='linha_id' value='{{ linha.id }}'>
-                            <input placeholder='{{ linha.adicional_noturno }}' type='number' step='0.1' class='form-control' name='qtd_adicional_noturno-{{ linha.id }}' min='1'>
+                            <input placeholder='{{ linha.adicional_noturno }}' type='number' step='0.1' class='form-control' name='qtd_adicional_noturno-{{ linha.id }}' min='0.1' required>
                           </form>
                         </div>
                         <div class="modal-footer">
@@ -149,7 +149,7 @@
                           <p>Insira as faltas atualizadas</p>
                           <input type='hidden' name='tipo' value='faltas'>
                           <input type='hidden' name='linha_id' value='{{ linha.id }}'>
-                          <input placeholder='{{ linha.faltas }}' type='number' class='form-control' name='qtd_faltas-{{ linha.id }}' min='1'>
+                          <input placeholder='{{ linha.faltas }}' type='number' class='form-control' name='qtd_faltas-{{ linha.id }}' min='1' required>
                         </form>
                       </div>
                       <div class="modal-footer">

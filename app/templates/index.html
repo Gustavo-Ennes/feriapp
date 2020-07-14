@@ -62,7 +62,7 @@
 {% endblock %}
 
 {% block js %}
-  {% if relatorios and not lembretes_exibidos %}
+  {% if relatorios and not lembretes_exibidos and user|has_group:'relatorio' %}
     <script>
       $('#modal_lembrete_relatorio').modal({
         keyboard: false
