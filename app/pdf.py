@@ -330,14 +330,15 @@ class PDF:
 
                 if type(value[0]) == LinhaRelatorio:
                     for linha in value:
-                        columns_data.append(linha.trabalhador.nome)
-                        columns_data.append(linha.trabalhador.registro)
-                        columns_data.append(linha.horas_extras)
-                        columns_data.append(linha.adicional_noturno)
-                        columns_data.append(linha.faltas)
-                        columns_data.append('-')
-                        table_data.append(columns_data)
-                        columns_data = []
+                        if linha.horas_extras > 0.0 or linha.adicional_noturno > 0.0 or linha.faltas > 0:
+                            columns_data.append(linha.trabalhador.nome)
+                            columns_data.append(linha.trabalhador.registro)
+                            columns_data.append(linha.horas_extras)
+                            columns_data.append(linha.adicional_noturno)
+                            columns_data.append(linha.faltas)
+                            columns_data.append('-')
+                            table_data.append(columns_data)
+                            columns_data = []
 
                 else:
                     for obj in value:
