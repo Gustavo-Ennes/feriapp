@@ -604,7 +604,7 @@ def soma_justificativas(request):
 
     elif request.method == 'POST':
         trabalhadores = Trabalhador.objects.all()
-        linhas = []
+
 
         for trabalhador in trabalhadores:
             string = str(trabalhador.id) + "horas"
@@ -622,7 +622,16 @@ def soma_justificativas(request):
                 relatorio.linhas.add(linha)
                 if relatorio.estado == 'vazio':
                     relatorio.estado = 'justificativas'
+
                 relatorio.save()
+
+        for setor in Setor.objects.all():
+            string = "num_oficio-" + str(setor.id)
+            if string in request.POST:
+                relatorio = Relatorio.vigentes.em_aberto().get(setor=setor)
+                if relatorio:
+                    relatorio.num_oficio = request.POST[string]
+                    relatorio.save()
 
         messages.success(request, "Soma das justificativas concluída")
         return redirect('index')
@@ -640,6 +649,10 @@ def soma_horas(request):
             return redirect('soma_justificativas')
 
         for relatorio in relatorios_deste_mes:
+            string = 'num_oficio-' + str(relatorio.setor.id)
+            if string in request.POST:
+                relatorio.num_oficio = request.POST[string]
+                relatorio.save()
             if relatorio.estado == "vazio":
                 messages.warning(request,
                                  "Algum relatório deste mês não possui as somas das justificativas ainda. Some as justificativas")
@@ -991,23 +1004,16 @@ def busca_relatorio(request, setor, mes=datetime.now().month, ano=datetime.now()
 @permission_required('app.add_relatorio')
 def relatorio_edicao(request, relatorio_id):
     if request.method == 'GET':
-        relatorio = None
         data = datetime.now()
-        relatorios = []
-
-        # try:
         relatorio = Relatorio.objects.get(id=relatorio_id)
         relatorios = Relatorio.vigentes.all()
-
-        # except Exception as e:
-        # messages.error(request, "Relatório id=%d: %s" % (relatorio_id, e))
-        # return redirect('relatorios')
 
         context = {
             'relatorio': relatorio,
             'relatorios': relatorios.exclude(id=relatorio_id),
             'todos_relatorios': relatorios
         }
+
         return render(request, 'relatorio_edicao.html', context)
 
 
@@ -1016,22 +1022,34 @@ def relatorio_edicao(request, relatorio_id):
 def modifica_relatorio(request):
     if request.method == 'POST':
         tipo = request.POST['tipo']
-        linha_id = int(request.POST['linha_id'])
+        linha_id = None
         linha = None
 
-        try:
-            linha = LinhaRelatorio.objects.get(id=linha_id)
-        except:
-            messages.error(request, "Não existe tal linha no banco de dados")
-            return redirect('relatorios')
+        if 'linha_id' in request.POST:
+            linha_id = int(request.POST['linha_id'])
 
-        relatorio = Relatorio.vigentes.em_aberto().filter(Q(linhas__trabalhador=linha.trabalhador))
-        if relatorio:
-            if relatorio[0].estado == 'oficial':
-                messages.warning(request, "Os relatórios deste mês já foram finalizados e não podem ser editados")
+            try:
+                linha = LinhaRelatorio.objects.get(id=linha_id)
+            except:
+                messages.error(request, "Não existe tal linha no banco de dados")
                 return redirect('relatorios')
 
-        if tipo == 'horas_extras':
+            relatorio = Relatorio.vigentes.em_aberto().filter(Q(linhas__trabalhador=linha.trabalhador))
+            if relatorio:
+                if relatorio[0].estado == 'oficial':
+                    messages.warning(request, "Os relatórios deste mês já foram finalizados e não podem ser editados")
+                    return redirect('relatorios')
+
+        if tipo == 'num_oficio':
+            relatorio_id = int(request.POST['relatorio_id'])
+            relatorio = Relatorio.vigentes.all().get(id=relatorio_id)
+            num_oficio = request.POST['num_oficio']
+            relatorio.num_oficio = num_oficio
+            relatorio.save()
+            messages.success(request, "Você trocou o número de ofício do relatório #%d para %s" % (relatorio_id, num_oficio))
+            return redirect('relatorio_edicao', relatorio_id=relatorio.id)
+
+        elif tipo == 'horas_extras':
 
             if linha:
                 horas = float(request.POST['qtd_horas_extras-%s' % str(linha_id)])

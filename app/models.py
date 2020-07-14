@@ -38,6 +38,7 @@ class Trabalhador(models.Model):
 
     nome = models.CharField(max_length=100, unique=True)
     matricula = models.CharField(unique=True, max_length=15)
+    registro = models.CharField(max_length=15)
     funcao = models.CharField(max_length=50)
     setor = models.ForeignKey(Setor, on_delete=models.SET_NULL, null=True)
     data_admissao = models.DateTimeField()
@@ -275,7 +276,7 @@ class Relatorio(models.Model):
     setor = models.ForeignKey(Setor, on_delete=models.SET_NULL, null=True)
     linhas = models.ManyToManyField(LinhaRelatorio, blank=True)
     estado = models.CharField(max_length=100, default="vazio")
-    num_oficio = models.IntegerField(validators=[MinValueValidator(0)])
+    num_oficio = models.CharField(max_length=10)
     mes = models.IntegerField(
         default=mes_anterior(),
         validators=[

@@ -1,0 +1,36 @@
+
+<button class="btn btn-sm btn-transparent mb-1"  data-toggle="modal" data-target="#modalEditarNumOficio">
+    <p class="text-primary">Num. Ofício: {{ relatorio.num_oficio }} - modificar</p>
+</button>
+
+<div class="modal fade" id="modalEditarNumOficio" tabindex="-1" role="dialog" aria-labelledby="modalEditarNumOficioLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEditarNumOficioLabel">Editar Número de Ofício</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+
+        <form action="{% url 'modifica_relatorio' %}" method="POST" enctype="multipart/form-data" class="text-left">
+            {% csrf_token %}
+            <div class="modal-body">
+
+                <p>Insira o novo número de indentificação do ofício para o relatório de {{relatorio.mes}}\{{relatorio.ano}}, do(a) {{relatorio.setor.nome}}</p>
+                <input name="num_oficio" value="{{ relatorio.num_oficio }}" class="form-control my-4 text-success">
+                <input type="hidden" name="tipo" value="num_oficio">
+                <input type="hidden" name="relatorio_id" value="{{relatorio.id}}"
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type='submit'>Atualizar Relatório</button>
+            </div>
+        </form>
+
+
+      </div>
+    </div>
+</div>

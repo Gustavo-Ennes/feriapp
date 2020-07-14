@@ -3,29 +3,44 @@
       <div class="card-header">
         <div class="row justify-content-">
           <div class='col-12 text-center'>
-            <h5 class="card-title"> {{ setor.nome }} </h5>
+              <div class="card-title">
+                <h3>
+                    {{ setor.nome|upper }}
+                </h3>
+              </div>
           </div>
         </div>
       </div>
       <div class="card-body bg-none">
+        <div class="row justify-content-center align-items-center">
+              {% for trabalhador in trabalhadores %}
+                  {% if trabalhador.setor == setor %}
 
-        <div class='row justify-content-center'>
-          {% for trabalhador in trabalhadores %}
-              {% if trabalhador.setor == setor %}
+                      <div class="col-12 col-lg-3">
 
-                  <div class="col-12 col-lg-3">
+                        <label for="{{ trabalhador.id }}id" class="form-control-label">{{ trabalhador.nome }}:</label>
+                        <input id='{{ trabalhador.id }}id' value='0.0' step='0.1' min='0' class='form-control mb-2' name="{{ trabalhador.id }}horas" type="number" placeholder="Horas justificadas por {{ trabalhador.nome }}">
 
-                    <label for="{{ trabalhador.id }}id" class="form-control-label">{{ trabalhador.nome }}:</label>
-                    <input id='{{ trabalhador.id }}id' value='0.0' step='0.1' min='0' class='form-control mb-2' name="{{ trabalhador.id }}horas" type="number" placeholder="Horas justificadas por {{ trabalhador.nome }}">
+                      </div>
+                  {% endif %}
+              {% endfor %}
 
-                  </div>
-              {% endif %}
-          {% endfor %}
-                  
         </div>
 
                   
 
       </div>
+        <div class="card-footer">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 col-lg-4 col-lg-offset-4">
+                    <div class="my-2 text-center">
+                        <strong class="text-success text-center">Insira o número do ofício do relatório do(a) {{ setor.nome }}:</strong><br>
+                        <input id='input_num_oficio' name="num_oficio-{{ setor.id }}" width=0 class="form-control text-center" required >
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>

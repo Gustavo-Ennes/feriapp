@@ -157,3 +157,7 @@ def mes_escrito(num):
 def has_group(user, group_name):
     return user.groups.filter(name=group_name).exists()
 
+@register.filter
+def num_oficio_do_setor(setor):
+    return Relatorio.vigentes.em_aberto().get(setor=setor).num_oficio
+

@@ -303,7 +303,7 @@ class PDF:
                     columns_data.append("Fruido em")
                 elif type(value[0]) == Trabalhador:
                     columns_data.append("Nome")
-                    columns_data.append("Registro")
+                    columns_data.append("Matrícula")
                     columns_data.append("Secretaria")
                     columns_data.append("Função")
 
@@ -313,7 +313,7 @@ class PDF:
 
                 elif type(value[0]) == LinhaRelatorio:
                     columns_data.append(('Servidor'))
-                    columns_data.append(('Matrícula'))
+                    columns_data.append(('Registro'))
                     columns_data.append(('Horas Extras'))
                     columns_data.append(('Adc. Noturno'))
                     columns_data.append(('Faltas'))
@@ -331,7 +331,7 @@ class PDF:
                 if type(value[0]) == LinhaRelatorio:
                     for linha in value:
                         columns_data.append(linha.trabalhador.nome)
-                        columns_data.append(linha.trabalhador.matricula)
+                        columns_data.append(linha.trabalhador.registro)
                         columns_data.append(linha.horas_extras)
                         columns_data.append(linha.adicional_noturno)
                         columns_data.append(linha.faltas)
@@ -761,14 +761,14 @@ class PDF:
         c.save()
 
     @staticmethod
-    def create_relatorio_pdf(relatorio, oficio_num, mes_relatorio, mes_escrito_relatorio, ano_relatorio, secretaria,
-                             dia,
-                             mes_escrito, ano, copia=False):
+    def create_relatorio_pdf(relatorio, copia=False):
+
+        data = datetime.now()
         doc = PDF.get_sdt()
         flowables = []
         style_linha = ParagraphStyle(name='linha', bold=True, fontSize=12, leftIndent=15 * mm, spaceAfter=mm)
         style_copia = ParagraphStyle(name='copia', bold=True, fontSize=11, alignment=TA_RIGHT, spaceBefore=10 * mm)
-        style_data = ParagraphStyle(name='data', alignment=TA_RIGHT, fontsize=12)
+        style_data = ParagraphStyle(name='data', alignment=TA_RIGHT, fontSize=12, rightIndent=15*mm, spaceAfter=10*mm)
 
         if copia:
             flowables.append(
@@ -782,7 +782,7 @@ class PDF:
 
         flowables.append(
             Paragraph(
-                "Ofício:<b>%s</b>" % oficio_num,
+                "Ofício:<b>%s</b>" % relatorio.num_oficio,
                 style=style_linha,
             )
         )
@@ -797,13 +797,13 @@ class PDF:
         )
         flowables.append(
             Paragraph(
-                "Ref.: <b>Relatório Mensal de Horas Extras ~ %s/%d</b>" % (mes_escrito_relatorio, ano_relatorio),
+                "Ref.: <b>Relatório Mensal de Horas Extras ~ %s/%d</b>" % (RandomStuff.mes_escrito(relatorio.mes), relatorio.ano),
                 style=style_linha
             )
         )
         flowables.append(
             Paragraph(
-                "Secretaria: <b>%s</b>" % (secretaria),
+                "Secretaria: <b>%s</b>" % relatorio.setor.nome,
                 style=style_linha
             )
         )
@@ -817,6 +817,9 @@ class PDF:
         table_data, label = PDF.get_table_data('relatorio', relatorio.linhas.all())
 
         flowables = PDF.build_table(table_data, None, flowables, space_after=15 * mm)
+
+        flowables.append(Paragraph("Ilha Solteira, %d de %s de %s" % (data.day, RandomStuff.mes_escrito(data.month), data.year), style=style_data))
+
         flowables = PDF.assinatura_de("<b>Rodrigo Rodrigues Dias</b>", flowables,
                                       legenda="Diretor do Departamento de Transporte")
         flowables = PDF.assinatura_de("<b>Assinatura do(a) Secretário(a)</b>", flowables,
@@ -1055,17 +1058,8 @@ class PDFFactory(PDF):
 
     @staticmethod
     def get_relatorio_pdf(relatorio: Relatorio, copia=False):
-        hoje = datetime.now().date()
         PDFFactory.create_relatorio_pdf(
             relatorio,
-            relatorio.num_oficio,
-            relatorio.mes,
-            RandomStuff.mes_escrito(relatorio.mes),
-            relatorio.ano,
-            relatorio.setor.nome,
-            hoje.day,
-            RandomStuff.mes_escrito(hoje.month),
-            hoje.year,
             copia=copia
         )
 

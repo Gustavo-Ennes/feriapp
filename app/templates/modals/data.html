@@ -11,24 +11,24 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-      	</div>
+        </div>
 
 
-  			<form action="{% url 'editar_data' %}" method="POST" enctype="multipart/form-data" class="text-left">
-     		{% csrf_token %}
-  	     	<div class="modal-body">
+            <form action="{% url 'editar_data' %}" method="POST" enctype="multipart/form-data" class="text-left">
+            {% csrf_token %}
+            <div class="modal-body">
 
             <label for='inputData'>Insira uma data</label>
             <input type="text" name='data' class="form-control datepicker" id="inputData" autocomplete="off" />
             <input type='hidden' name='tipo' value={{tipo}} />
             <input type='hidden' name='id' value={{folga.id}} />
 
-        	</div>
-        	<div class="modal-footer">
-  	        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-  	        <button class="btn btn-success" type='submit'>Marcar</button>
-  	     	</div>
-    		</form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <button class="btn btn-success" type='submit'>Marcar</button>
+            </div>
+            </form>
 
 
       </div>
