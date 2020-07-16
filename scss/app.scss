@@ -116,6 +116,26 @@ body {
   }
 }
 
+.dropdown-menu{
+    border: 1px solid #main_darker !important;
+    background-color: $main !important;
+
+    .dropdown-item{
+        color: rgba(255,255,255,0.6);
+
+        &:hover{
+            color: rgba(255,255,255,0.8);
+            text-shadow:1px 1px 1px $secondary_darker !important;
+            background-color:$secondary !important;
+            color: $main !important;
+        }
+    }
+
+    .dropdown-divider{
+        color: $secondary_darker !important;
+    }
+}
+
 .toast{
 
   color:#dde !important;

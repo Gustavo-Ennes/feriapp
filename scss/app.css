@@ -38,15 +38,23 @@ body { background-color: #EDF6FF; }
 
 .table td, .table td strong { color: #21548A !important; }
 
+.dropdown-menu { border: 1px solid #main_darker !important; background-color: #488DD6 !important; }
+
+.dropdown-menu .dropdown-item { color: rgba(255, 255, 255, 0.6); }
+
+.dropdown-menu .dropdown-item:hover { color: rgba(255, 255, 255, 0.8); text-shadow: 1px 1px 1px #7D8A28 !important; background-color: #C2D633 !important; color: #488DD6 !important; }
+
+.dropdown-menu .dropdown-divider { color: #7D8A28 !important; }
+
 .toast { color: #dde !important; }
 
 .toast .toast-header { background-color: #488DD6 !important; font-family: "Noto Serif", serif !important; }
 
 .toast .toast-body { background-color: #21548A !important; font-family: "Roboto Slab", serif !important; }
 
-.form-check-input { border: 1px solid #7D8A28 !important; }
+.form-check-input { border: 1px solid #488DD6 !important; }
 
-.form-control { border: 1px solid #21548A !important; }
+.form-control { border: 1px solid main !important; }
 
 .logo-font { color: #C2D633 !important; text-shadow: 1px 1px 1px #7D8A28 !important; font-family: 'Codystar', cursive; }
 

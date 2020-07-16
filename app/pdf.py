@@ -10,7 +10,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
-from reportlab.platypus import Paragraph, Table, TableStyle, SimpleDocTemplate
+from reportlab.platypus import Paragraph, Table, TableStyle, SimpleDocTemplate, Image
 
 from feriapp.settings import PROJECT_ROOT, BASE_DIR
 from .models import Relatorio, Abono, LicencaPremio, Ferias, Trabalhador, Setor, LinhaRelatorio
@@ -284,6 +284,10 @@ class PDF:
     def papel_timbrado(canvas, doc):
         PDF.draw_footer(canvas)
         PDF.draw_header(canvas)
+
+    @staticmethod
+    def header_duplo(canvas, doc):
+        PDF.draw_header(canvas, double_page=True)
 
     @staticmethod
     def create_abonos_pdf(obj):
@@ -889,15 +893,24 @@ class PDF:
         doc.build(flowables, onFirstPage=PDF.papel_timbrado, onLaterPages=PDF.papel_timbrado)
 
     @staticmethod
-    def draw_header(canvas):
+    def draw_header(canvas, double_page=None):
         canvas.saveState()
         canvas.drawInlineImage(
             os.path.join(BASE_DIR, 'tests/header.jpeg'),
             0,
-            275 * mm,
+            280 * mm,
             205 * mm,
-            25 * mm
+            15 * mm
         )
+        if double_page:
+            canvas.drawInlineImage(
+                os.path.join(BASE_DIR, 'tests/header.jpeg'),
+                0,
+                135 * mm,
+                205 * mm,
+                15 * mm
+            )
+
         canvas.restoreState()
 
     @staticmethod
@@ -906,9 +919,9 @@ class PDF:
         canvas.drawInlineImage(
             os.path.join(BASE_DIR, 'tests/footer.jpeg'),
             0,
-            1 * mm,
-            217 * mm,
-            25 * mm
+            5 * mm,
+            210 * mm,
+            15 * mm
         )
         canvas.restoreState()
 
@@ -984,8 +997,6 @@ class PDF:
             ('FONTSIZE', (0, 1), (-1, -1), 11),
             ('TOPPADDING', (0, 0), (-1, -1), 1),
             ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
-            ('RIGHTPADDING', (0, 0), (-1, -1), 1),
-            ('LEFTPADDING', (0, 0), (-1, -1), 1),
         ]
 
         if lines_qtt > 15:
@@ -1035,9 +1046,11 @@ class PDF:
     def create_atestado_trabalho(obj):
         doc = PDF.get_sdt()
 
-        style = ParagraphStyle(name='titulo', alignment=TA_JUSTIFY, fontSize=15, spaceAfter=5 * mm, )
+        style_titulo = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=25, spaceAfter=45 * mm)
+        style_linha = ParagraphStyle(name='linha', alignment=TA_JUSTIFY, fontSize=15, spaceAfter=25 * mm, leading=10*mm, spaceShrinkage=0.2, firstLineIndent=10*mm, rightIndent=10*mm, leftIndent=10*mm)
+        style_data = ParagraphStyle(name='data', alignment=TA_RIGHT, fontSize=15, spaceAfter=85*mm, rightIndent=10*mm)
         flowables = []
-        flowables.append(Paragraph('<h1> ATESTADO DE TRABALHO</h1>', style))
+        flowables.append(Paragraph('<h1> ATESTADO DE TRABALHO</h1>', style_titulo))
 
         flowables.append(PDF.get_flowable_line())
 
@@ -1045,7 +1058,7 @@ class PDF:
             Paragraph(
                 "Declaramos para os devidos fins que o(a) Sr.(a) %s, %s, inscrito(a) no CPF sob o nº %s, no RG nº %s, "
                 "e portador da CTPS nº %s - Série %s, é funcionário(a) desta empresa, na função de %s, laborando das "
-                "7:30 ás 12:00 e das 13:30 ás 17:00, de segunda á sexta-feira " % (
+                "7:30 ás 12:00 e das 13:30 ás 17:00, de segunda á sexta-feira." % (
                     obj['trabalhador'].nome,
                     obj['trabalhador'].funcao,
                     obj['cpf'],
@@ -1054,20 +1067,163 @@ class PDF:
                     obj['ctps_serie'],
                     obj['trabalhador'].funcao,
                 ),
-                style=style
+                style=style_linha
             )
         )
         data = datetime.now()
         flowables.append(
             Paragraph(
                 "Ilha Solteira, %d de %s de %d." % (data.day, RandomStuff.mes_escrito(data.month), data.year),
-                style=style
+                style=style_data
             )
         )
 
         flowables = PDF.assinatura_de("Sebastião Arosti",flowables, legenda="Chefe do Departamento de Transporte")
 
         doc.build(flowables, onFirstPage=PDF.papel_timbrado, onLaterPages=PDF.papel_timbrado)
+
+
+    @staticmethod
+    def create_sexta_parte_pdf(obj):
+        doc = PDF.get_sdt()
+
+        style_titulo = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=25, spaceAfter=45 * mm)
+        style_linha = ParagraphStyle(name='linha', alignment=TA_JUSTIFY, fontSize=15, spaceAfter=25 * mm, leading=10*mm, spaceShrinkage=0.2, firstLineIndent=10*mm, rightIndent=10*mm, leftIndent=10*mm)
+        style_data = ParagraphStyle(name='data', alignment=TA_RIGHT, fontSize=15, spaceAfter=85*mm, rightIndent=10*mm)
+        flowables = []
+        flowables.append(Paragraph('<h1>REQUERIMENTO SEXTA PARTE</h1>', style_titulo))
+
+        flowables.append(
+            Paragraph(
+                "Eu, %s, RG: %s, CPF: %s, Matrícula: %s, servidor efetivo(a) no cargo de "
+                "%s, venho mui respeitosamente solicitar a Vossa Senhoria, conceder-me Adicional "
+                " Sexta Parte, benefício previsto no Art. 92 da Lei Municipal Complementar 001/93, " 
+                "de 1 de fevereiro de 1993, visto ter atingido 20(vinte) anos de serviços prestados ao "
+                "município, desde %s." % (
+                    obj['trabalhador'].nome,
+                    obj['rg'],
+                    obj['cpf'],
+                    obj['trabalhador'].matricula,
+                    obj['trabalhador'].funcao,
+                    obj['trabalhador'].data_admissao.strftime("%d/%m/%Y"),
+                ),
+                style=style_linha
+            )
+        )
+        data = datetime.now()
+        flowables.append(
+            Paragraph(
+                "Ilha Solteira, %d de %s de %d." % (data.day, RandomStuff.mes_escrito(data.month), data.year),
+                style=style_data
+            )
+        )
+
+        flowables = PDF.assinatura_de("%s" % obj['trabalhador'].nome, flowables, legenda="%s" % obj['trabalhador'].funcao)
+
+        doc.build(flowables, onFirstPage=PDF.papel_timbrado, onLaterPages=PDF.papel_timbrado)
+
+    @staticmethod
+    def create_materiais_block(flowables):
+        style_linha = ParagraphStyle(name='linha', alignment=TA_JUSTIFY, fontSize=12, spaceAfter=2 * mm)
+        style_titulo = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=25, spaceAfter=10*mm)
+        flowables.append(
+            Paragraph(
+                "<b>REQUISIÇÃO DE MATERIAIS</b>",
+                style_titulo
+            )
+        )
+
+        flowables.append(
+            Paragraph(
+                "SETOR REQUISITANTE:" + "_" * 62,
+                style_linha
+            )
+        )
+
+        flowables.append(
+            Paragraph(
+                "APLICAÇÃO DE MATERIAIS:" + "_" * 59,
+                style_linha
+            )
+        )
+
+        table_data = [
+            ['CÓDIGO', "QUANT.", "UN.", "ESPECIFICAÇÃO", "OBS."],
+            [' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' '],
+        ]
+        table_style = PDF.get_table_style(len(table_data))
+        table_style.add('BOTTOMPADDING', (0, 0), (-1, -1), 4)
+        table_style.add('TOPPADDING', (0, 0), (-1, -1), 4)
+
+        flowables.append(
+            Table(
+                table_data,
+                style=table_style,
+                colWidths=[35 * mm, 15 * mm, 10 * mm, 95 * mm, 40 * mm],
+                spaceAfter=5*mm
+
+            )
+        )
+        table_data = [
+            ["________/________/________", "________/________/________", "________/________/________"]
+        ]
+        flowables.append(
+            Table(
+                table_data,
+                style=TableStyle(
+                    [
+                        ('ALIGN', (0, 0), (-1, -1), "CENTER"),
+                        ('FONTSIZE', (0, 0), (-1, 0), 11.5),
+                    ],
+                ),
+                colWidths=[A4[0] / 3, A4[0] / 3, A4[0] / 3],
+                spaceAfter=5*mm,
+            )
+        )
+        table_data = [
+            ["______________________", "______________________", "______________________"],
+            ['REQUISITANTE', 'APROVAÇÃO DO SETOR', 'ALMOXARIFADO'],
+            ['(AUTORIZADO)', '(RESPONSÁVEL)', '(ATENDIDO)']
+        ]
+        flowables.append(
+            Table(
+                table_data,
+                style=TableStyle(
+                    [
+                        ('ALIGN', (0, 0), (-1, -1), "CENTER"),
+                        ('FONTSIZE', (0, 0), (-1, -1), 10),
+                        ('FONTSIZE', (0, 2), (-1, -1), 7),
+                    ],
+                ),
+                colWidths=[A4[0] / 3, A4[0] / 3, A4[0] / 3],
+                spaceAfter=27 * mm,
+            )
+        )
+
+
+    @staticmethod
+    def create_materiais_pdf():
+        doc = SimpleDocTemplate(
+            PDF.PDF_PATH,
+            pagesize=A4,
+            rightMargin=10,
+            leftMargin=10,
+            topMargin=15 * mm,
+            bottomMargin=5 * mm,
+
+        )
+        flowables = []
+
+        PDF.create_materiais_block(flowables)
+        PDF.create_materiais_block(flowables)
+
+        doc.build(flowables, onFirstPage=PDF.header_duplo, onLaterPages=PDF.header_duplo)
 
 
 class PDFFactory(PDF):
@@ -1151,6 +1307,15 @@ class PDFFactory(PDF):
     def get_relacao_abono_pdf(obj):
         if obj:
             PDFFactory.create_relacao_abono_pdf(obj)
+
+    @staticmethod
+    def get_sexta_parte_pdf(obj):
+        if obj:
+            PDFFactory.create_sexta_parte_pdf(obj)
+
+    @staticmethod
+    def get_materiais_pdf():
+        PDFFactory.create_materiais_pdf()
 
 
 '''

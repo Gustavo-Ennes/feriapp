@@ -36,5 +36,6 @@ urlpatterns = [
     path('divide-linha/', views.divide_linha, name='divide_linha'),
     path('finalizar_relatorios/', views.finalizar_relatorios, name='finalizar_relatorios'),
     path('atestado/', views.atestado, name='atestado'),
+    path('sexta-parte/', views.sexta_parte, name='sexta_parte'),
 
 ]

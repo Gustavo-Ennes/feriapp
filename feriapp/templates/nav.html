@@ -13,14 +13,19 @@
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'ferias' %}">Férias</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'licenca_premio' %}">Licenças-prêmio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'abono' %}">Abonos</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Requisições
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'abono' %}">Abono</a>
+            <a class="dropdown-item" href="{% url 'ferias' %}">Férias</a>
+            <a class="dropdown-item" href="{% url 'licenca_premio' %}">Licenças-Prêmio</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'sexta_parte' %}">Sexta-Parte</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'pdf' 'materiais' 0  %}">Materiais</a>
+          </div>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'setor' %}">Setores</a>
@@ -34,6 +39,14 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'relatorios' %}">Relatórios</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Diversos
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+              <a class="dropdown-item" href="{% url 'atestado'  %}">Atestado de Trabalho</a>
+            </div>
           </li>
         {% endif %}
       </ul>

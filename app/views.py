@@ -749,8 +749,18 @@ def pdf(request, tipo, obj_id):
         return redirect("index")
 
     if request.method == "POST":
+        if tipo =='sexta_parte':
+            obj = {
+                'trabalhador': Trabalhador.objects.get(id=int(request.POST['trabalhador'])),
+                'rg': request.POST['rg'],
+                'cpf': request.POST['cpf'],
+            }
+            # se o trabalhador não tem 20 anos de trampo
+            if obj['trabalhador'].data_admissao > datetime.now() - timedelta(years=20):
+                messages.warning(request, "O trabalhador informado não possui 20 anos de serviços prestados")
+                return redirect('index')
 
-        if tipo =='atestado':
+        elif tipo =='atestado':
             obj = {
                 'trabalhador': Trabalhador.objects.get(id=int(request.POST['trabalhador'])),
                 'rg': request.POST['rg'],
@@ -961,8 +971,16 @@ def pdf(request, tipo, obj_id):
             messages.error(request, "%s: %s" % (model_name, e))
             return redirect('index')
 
+    # obj vazio aqui
+    if tipo == 'materiais':
+        obj = 'any'
+
     if obj:
-        if tipo == 'atestado':
+        if tipo == 'materiais':
+            PDFFactory.get_materiais_pdf()
+        if tipo == 'sexta_parte':
+            PDFFactory.get_sexta_parte_pdf(obj)
+        elif tipo == 'atestado':
             PDFFactory.get_atestado_trabalho(obj)
         elif tipo == 'relacao_abono':
             PDFFactory.get_relacao_abono_pdf(obj)
@@ -1119,6 +1137,14 @@ def atestado(request):
         return render(request, 'atestado.html', context)
 
 
+
+@login_required(login_url='/entrar/')
+def sexta_parte(request):
+    if request.method == "GET":
+        context = {
+            'trabalhadores': Trabalhador.objects.all(),
+        }
+        return render(request, 'sexta_parte.html', context)
 
 
 def gera_relatorio_em_branco(setor, num_oficio):

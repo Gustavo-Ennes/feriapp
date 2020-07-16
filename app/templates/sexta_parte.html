@@ -15,16 +15,12 @@
 {% block conteudo %}
   <div class="row justify-content-center align-items-center">
     <div class='col-12'>
-      <form action="{% url 'pdf' 'atestado' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
+      <form action="{% url 'pdf' 'sexta_parte' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
           {% csrf_token %}
           <label for="rg">RG:</label>
           <input id='rg' name="rg" class="form-control my-2" placeholder="ex.: 34123222x">
           <label for="cpf">CPF:</label>
           <input id='cpf' name="cpf" class="form-control my-2" placeholder="ex.: 44333322144">
-          <label for="ctps">CTPS:</label>
-          <input id='ctps' name="ctps" class="form-control my-2" placeholder="ex.: 1021234431">
-          <label for="ctps_serie">Série CTPS:</label>
-          <input id='ctps_serie' name="ctps_serie" class="form-control my-2" placeholder="ex.: 0040">
             <h1 class="col-12 text-center text-primary mt-4">Selecione o servidor:</h1>
           <select id="trabalhador" name="trabalhador" class="custom-select mb-2">
               {% for t in trabalhadores %}
