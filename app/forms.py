@@ -84,3 +84,4 @@ class AutorizacaoForm(forms.Form):
     trabalhador = MyModelChoiceField(queryset=Trabalhador.objects.all(), widget=forms.Select(attrs={
         'name': 'trabalhador_id',
     }))
+

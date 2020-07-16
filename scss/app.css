@@ -44,11 +44,23 @@ body { background-color: #EDF6FF; }
 
 .toast .toast-body { background-color: #21548A !important; font-family: "Roboto Slab", serif !important; }
 
+.form-check-input { border: 1px solid #7D8A28 !important; }
+
+.form-control { border: 1px solid #21548A !important; }
+
+.logo-font { color: #C2D633 !important; text-shadow: 1px 1px 1px #7D8A28 !important; font-family: 'Codystar', cursive; }
+
+.logo-font:hover { color: #7D8A28 !important; text-shadow: 1px 1px 1px #DAE2EA !important; }
+
 nav.navbar { background-color: #488DD6 !important; box-shadow: 1px 0px 1px 1px #21548A !important; }
 
 nav .navbar-brand { color: #C2D633 !important; text-shadow: 1px 1px 1px #7D8A28 !important; font-family: 'Codystar', cursive; }
 
+nav .navbar-brand:hover { color: #EDF6FF !important; text-shadow: 1px 1px 1px #DAE2EA !important; }
+
 nav .nav-link { color: #EDF6FF !important; }
+
+nav .nav-link:hover { color: #C2D633 !important; text-shadow: 1px 1px 1px #7D8A28 !important; font-family: 'Codystar', cursive; }
 
 nav .nav-tabs { padding: 5px; border-bottom: 2px solid #7D8A28; }
 
@@ -66,7 +78,7 @@ nav .nav-tabs .nav-item.active { background-color: #21548A; box-shadow: 1px 1px 
 
 .fas, .far { font-size: 14px !important; }
 
-.big-fas { font-size: 2em !important; }
+.big-fas { font-size: 1.2em !important; }
 
 .btn { margin: 2px; }
 
@@ -77,6 +89,8 @@ nav .nav-tabs .nav-item.active { background-color: #21548A; box-shadow: 1px 1px 
 .btn-link { color: #21548A !important; }
 
 .btn-success { background-color: #C2D633 !important; box-shadow: 1px 1px 2px 1px #7D8A28 !important; color: #21548A !important; font-family: "Noto Serif", serif !important; }
+
+.btn-success:hover { background-color: #C2D633 !important; color: #488DD6 !important; }
 
 .btn-big { height: 180px; }
 

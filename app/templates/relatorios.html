@@ -86,11 +86,15 @@
     </div>
 
   {% else %}
-    <div class="row justify-content-center align-items-center">
-      <div class="col-12 text-center">
-        <a class="btn btn-lg btn-success text-center" href="{% url 'soma_horas' %}" {% if not user|has_group:'relatorio' %}disabled{% endif %}>Começar a somar as justificativas</a>
+      <div class="row justify-content-center align-items-center">
+        <div class="col-12 text-center">
+          {% if qtd_trabalhadores > 0 %}
+            <a class="btn btn-lg btn-success text-center" href="{% url 'soma_horas' %}" {% if not user|has_group:'relatorio' %}disabled{% endif %}>Começar a somar as justificativas</a>
+          {% else %}
+            <h5 class="text-success">Primeiramente, cadastre setores, e então trabalhadores</h5>
+          {% endif %}
+        </div>
       </div>
-    </div>
 
   {% endif %}
 

@@ -13,7 +13,7 @@
       </div>
       <div class="col-3">
         <div class="m-2">
-        <a href="{% url 'pdf' 'relatorio' relatorio.id %}" class='btn btn-sm btn-block btn-primary'>Ver</a></div>
+        <a href="{% url 'pdf' 'relatorio' relatorio.id %}" class='btn btn-sm btn-block btn-primary {% if not relatorio.is_valid %}disabled{% endif %}'>Ver</a></div>
       </div>
       <div class="col-12">
         {% include 'modals/num_oficio.html' %}

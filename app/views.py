@@ -149,7 +149,6 @@ def trabalhador(request):
                 'abonos_indeferidos': Abono.indeferidos.all().filter(Q(trabalhador=trabalhador)),
                 'TrabalhadorForm': TrabalhadorFormSemAdmissao(),
             }
-            print(context)
             return render(request, 'trabalhador.html', context)
 
 
@@ -717,11 +716,11 @@ def soma_horas(request):
 def relatorios(request):
     data = timezone.now()
     data = data.replace(day=1)
-    print(data)
     context = {
         'relatorios_em_aberto': Relatorio.vigentes.em_aberto(),
         'relatorios_finalizados': Relatorio.vigentes.finalizados(),
-        'relatorios_finalizados_antigos': Relatorio.objects.filter(Q(estado='oficial') & Q(criado_em__lt=data))
+        'relatorios_finalizados_antigos': Relatorio.objects.filter(Q(estado='oficial') & Q(criado_em__lt=data)),
+        'qtd_trabalhadores' : Trabalhador.objects.count(),
     }
     return render(request, 'relatorios.html', context)
 
@@ -749,9 +748,18 @@ def pdf(request, tipo, obj_id):
         messages.error(request, "Pdf indisponível")
         return redirect("index")
 
-    print(tipo)
     if request.method == "POST":
-        if tipo == "justificativa":
+
+        if tipo =='atestado':
+            obj = {
+                'trabalhador': Trabalhador.objects.get(id=int(request.POST['trabalhador'])),
+                'rg': request.POST['rg'],
+                'cpf': request.POST['cpf'],
+                'ctps': request.POST['ctps'],
+                'ctps_serie': request.POST['ctps_serie']
+            }
+
+        elif tipo == "justificativa":
 
             try:
                 obj = Trabalhador.objects.get(id=int(request.POST['trabalhador']))
@@ -954,9 +962,11 @@ def pdf(request, tipo, obj_id):
             return redirect('index')
 
     if obj:
-        if tipo == 'relacao_abono':
+        if tipo == 'atestado':
+            PDFFactory.get_atestado_trabalho(obj)
+        elif tipo == 'relacao_abono':
             PDFFactory.get_relacao_abono_pdf(obj)
-        if tipo == 'relatorio':
+        elif tipo == 'relatorio':
             PDFFactory.get_relatorio_pdf(obj, copia=False)
         elif tipo == 'relatorio-copia':
             PDFFactory.get_relatorio_pdf(obj, copia=True)
@@ -1100,6 +1110,17 @@ def modifica_relatorio(request):
         return redirect('relatorio_edicao', relatorio[0].id) if relatorio.count() else redirect('relatorios')
 
 
+@login_required(login_url='/entrar/')
+def atestado(request):
+    if request.method == 'GET':
+        context = {
+            'trabalhadores': Trabalhador.objects.all(),
+        }
+        return render(request, 'atestado.html', context)
+
+
+
+
 def gera_relatorio_em_branco(setor, num_oficio):
     return Relatorio.objects.create(setor=setor, num_oficio=num_oficio)
 
@@ -1118,7 +1139,6 @@ def proximas_folgas():
 
     folgas = sorted(folgas, key=lambda obj: obj.data_inicio if "data_inicio" in dir(obj) else obj.data)
 
-    print('folgar', folgas)
 
     return folgas
 
@@ -1135,9 +1155,7 @@ def proximos_retornos():
     abonos = Abono.objects.filter(Q(deferido=True) & Q(data=hoje))
     folgas = list(chain(abonos, folgas))
 
-    print('antes do sort', folgas)
     folgas = sorted(folgas, key=lambda obj: obj.data_inicio if "data_inicio" in dir(obj) else obj.data)
-    print('retornos', folgas)
 
     return folgas
 
@@ -1151,9 +1169,7 @@ def em_andamento():
     abonos = Abono.objects.filter(Q(deferido=True) & Q(data=hoje))
     folgas = list(chain(abonos, folgas))
 
-    print('antes do sort', folgas)
     folgas = sorted(folgas, key=lambda obj: obj.data_inicio if "data_inicio" in dir(obj) else obj.data)
-    print('retornos', folgas)
 
     return folgas
 

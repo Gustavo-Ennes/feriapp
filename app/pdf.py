@@ -1,5 +1,6 @@
 import os
-from datetime import datetime
+import random
+from datetime import datetime, timedelta
 
 from django.db.models.query import QuerySet
 from reportlab.graphics.shapes import Drawing, Line
@@ -16,7 +17,41 @@ from .models import Relatorio, Abono, LicencaPremio, Ferias, Trabalhador, Setor,
 
 
 class RandomStuff:
-    '''
+
+    @staticmethod
+    def random_linhas_relatorio(relatorio: Relatorio):
+        for l in relatorio.linhas.all():
+            if l.horas_extras == 0:
+                l.horas_extras = random.randint(1, 44)
+                l.adicional_noturno = random.randint(1, 44)
+                l.save()
+        relatorio.save()
+
+
+    @staticmethod
+    def random_new_workers(how_many):
+        name_length = random.randint(2, 5)
+        trabalhadores = []
+        list = RandomStuff.random_worker_list(how_many, name_lenght=5)
+        for d in list:
+            trabalhadores.append(
+                Trabalhador.objects.create(
+                    nome=d[0],
+                    matricula=d[1],
+                    registro=d[2],
+                    funcao=d[3],
+                    setor=Setor.objects.get(id=1),
+                    data_admissao=RandomStuff.get_random_date(datetime(1993, 1, 1), datetime.now()),
+                    situacao = 'ativo'
+                )
+            )
+        for t in trabalhadores:
+            print("Criado: #%s - %s" % (t.id, t.nome))
+
+        return trabalhadores
+
+
+
     @staticmethod
     def random_worker_list(how_many, name_lenght=2):
         workers_list = []
@@ -32,13 +67,20 @@ class RandomStuff:
         for name in names:
             random_role = random.randint(0, len(roles) - 1)
             random_matricula = str(random.randint(8000, 19999))
+            random_registro = str(random.randint(8000, 19999))
             random_date = str(random.randint(1, 28)) + "/" + str(random.randint(1, 12)) + "/" + str(
                 random.randint(1993, 2020))
-            worker = [name, random_matricula, roles[random_role], random_date, 'ativo']
+            worker = [name, random_matricula, random_registro, roles[random_role], random_date, 'ativo']
             workers_list.append(worker)
 
         return workers_list
-    '''
+
+    @staticmethod
+    def get_random_date(start_date, end_date):
+        diff = start_date - end_date if start_date > end_date else end_date - start_date
+        random_days = random.randint(1, diff.days)
+        return start_date + timedelta(days=random_days)
+
 
     @staticmethod
     def mes_escrito(num):
@@ -66,6 +108,21 @@ class RandomStuff:
             return 'novembro'
         if num == 12:
             return 'dezembro'
+
+    @staticmethod
+    def get_names(how_many, name_lenght=3):
+        nomes = []
+        with open(os.path.join(BASE_DIR, 'tests/name_list.txt')) as file:
+            lines = file.readlines()
+            for _ in range(how_many):
+                name_lenght = random.randint(2, name_lenght)
+                nome = ''
+                for __ in range(name_lenght):
+                    line_number = random.randint(1, len(lines) - 1)
+                    nome += lines[line_number].strip('\n\0 ') + " "
+                nomes.append(nome.strip())
+
+        return nomes
 
 
 class PDF:
@@ -277,8 +334,9 @@ class PDF:
 
     @staticmethod
     def get_table_data(key, value):
+        print("value == ", type(value), 'Count == ', value.count(), 'value[0] == ', value[0])
         if type(value) is QuerySet:
-            if value.count():
+            if value.count() > 0:
                 text = ''
                 columns_data = []
                 table_data = []
@@ -768,10 +826,10 @@ class PDF:
         data = datetime.now()
         doc = PDF.get_sdt()
         flowables = []
-        style_primeira_linha = ParagraphStyle(name='linha', bold=True, fontSize=12, leftIndent=15 * mm, spaceAfter=2*mm, spaceBefore=10*mm)
+        style_primeira_linha = ParagraphStyle(name='linha', bold=True, fontSize=12, leftIndent=15 * mm, spaceAfter=2*mm, spaceBefore=5*mm)
         style_linha = ParagraphStyle(name='linha', bold=True, fontSize=12, leftIndent=15 * mm, spaceAfter=2*mm)
         style_copia = ParagraphStyle(name='copia', bold=True, fontSize=11, alignment=TA_RIGHT, spaceBefore=10 * mm)
-        style_data = ParagraphStyle(name='data', alignment=TA_RIGHT, fontSize=12, rightIndent=15*mm, spaceAfter=20*mm)
+        style_data = ParagraphStyle(name='data', alignment=TA_RIGHT, fontSize=12, rightIndent=15*mm, spaceAfter=15*mm)
 
         if copia:
             flowables.append(
@@ -820,7 +878,7 @@ class PDF:
         table_data, label = PDF.get_table_data('relatorio', relatorio.linhas.all())
         space_after = 5*mm if len(table_data) > 20 else None
         space_before = 5*mm if len(table_data) > 20 else None
-        flowables = PDF.build_table(table_data, None, flowables, space_after=space_after, space_before=space_before)
+        flowables = PDF.build_table(table_data, None, flowables)
 
         flowables.append(Paragraph("Ilha Solteira, %d de %s de %s" % (data.day, RandomStuff.mes_escrito(data.month), data.year), style=style_data))
 
@@ -903,8 +961,7 @@ class PDF:
 
         if tipo != 'justificativa':
             if tipo == 'trabalhador_historico':
-                col_widts = [X_SPACE / len(data[0]) for _ in data[0]]
-                t = Table(data, style=PDF.get_table_style(len(data)), colWidths=col_widts)
+                t = Table(data, style=PDF.get_table_style(len(data)))
             else:
                 t = Table(data, style=PDF.get_table_style(lines_qtt))
             t.wrap(200 * mm, 10 * mm * lines_qtt)
@@ -925,53 +982,17 @@ class PDF:
             ('ALIGN', (0, 0), (-1, -1), "CENTER"),
             ('FONTSIZE', (0, 0), (-1, 0), 11.5),
             ('FONTSIZE', (0, 1), (-1, -1), 11),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 2),
-            ('TOPPADDING', (0, 0), (-1, 0), 2),
+            ('TOPPADDING', (0, 0), (-1, -1), 1),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 1),
+            ('LEFTPADDING', (0, 0), (-1, -1), 1),
         ]
 
-        if lines_qtt > 20:
-            table_style.append(('FONTSIZE', (0, 0), (-1, 0), 9.5))
-            table_style.append(('FONTSIZE', (0, 1), (-1, -1), 9))
+        if lines_qtt > 15:
+            table_style.append(('FONTSIZE', (0, 0), (-1, 0), 10))
+            table_style.append(('FONTSIZE', (0, 0), (-1, -1), 9.5))
 
         return TableStyle(table_style)
-
-    @staticmethod
-    def adjust_name_length(nome):
-        # enquanto o nome não tiver o tamanho de 25 caracteres eu vou encurta-lo
-        nomes = []
-        nome = nome.strip()
-        while len(nome) > 25:
-            # divido nomes entre espaços
-            nomes = [w for w in nome.split(' ')]
-            index = len(nomes) - 1
-            # pode ser que o nome é muito grande e o loop já reduziu o último ou penúltimo nome
-            # então eu volto do final vendo que nomes não contem algum ponto
-            while '.' in nomes[index] and index > 0:
-                index -= 1
-            # separo uma variável que conterá o nomes transformado e o índice dele na lista
-            nome_a_transformar = nomes[index]
-            # transformo
-            try:
-                nome_a_transformar = nome_a_transformar[0:1] + '.'
-            except Exception as e:
-                print('_' * 60)
-                print("Erro: %s ", str(e))
-                print('_' * 60)
-                print("nomes -- ", nomes)
-                print("index -- ", index)
-                print("nome_a_tranformar -- ", index)
-                print('_' * 60)
-                return ''
-            # atribuo
-            nomes.insert(index, nome_a_transformar)
-
-            # construo a palavra novamente
-            nome = ''
-            for n in nomes:
-                nome += n + " "
-
-            nome.strip(' ')
-        return nome
 
     @staticmethod
     def assinatura_de(quem, flowables, legenda=None, sub_legenda=None):
@@ -1010,8 +1031,51 @@ class PDF:
                 )
         return flowables
 
+    @staticmethod
+    def create_atestado_trabalho(obj):
+        doc = PDF.get_sdt()
+
+        style = ParagraphStyle(name='titulo', alignment=TA_JUSTIFY, fontSize=15, spaceAfter=5 * mm, )
+        flowables = []
+        flowables.append(Paragraph('<h1> ATESTADO DE TRABALHO</h1>', style))
+
+        flowables.append(PDF.get_flowable_line())
+
+        flowables.append(
+            Paragraph(
+                "Declaramos para os devidos fins que o(a) Sr.(a) %s, %s, inscrito(a) no CPF sob o nº %s, no RG nº %s, "
+                "e portador da CTPS nº %s - Série %s, é funcionário(a) desta empresa, na função de %s, laborando das "
+                "7:30 ás 12:00 e das 13:30 ás 17:00, de segunda á sexta-feira " % (
+                    obj['trabalhador'].nome,
+                    obj['trabalhador'].funcao,
+                    obj['cpf'],
+                    obj['rg'],
+                    obj['ctps'],
+                    obj['ctps_serie'],
+                    obj['trabalhador'].funcao,
+                ),
+                style=style
+            )
+        )
+        data = datetime.now()
+        flowables.append(
+            Paragraph(
+                "Ilha Solteira, %d de %s de %d." % (data.day, RandomStuff.mes_escrito(data.month), data.year),
+                style=style
+            )
+        )
+
+        flowables = PDF.assinatura_de("Sebastião Arosti",flowables, legenda="Chefe do Departamento de Transporte")
+
+        doc.build(flowables, onFirstPage=PDF.papel_timbrado, onLaterPages=PDF.papel_timbrado)
+
 
 class PDFFactory(PDF):
+
+    @staticmethod
+    def get_atestado_trabalho(obj: dict):
+        if obj:
+            PDFFactory.create_atestado_trabalho(obj)
 
     @staticmethod
     def get_setores_pdf(obj: dict):

@@ -131,6 +131,24 @@ body {
   }
 }
 
+.form-check-input{
+    border:1px solid $main !important;
+}
+
+.form-control{
+    border:1px solid main !important;
+}
+
+.logo-font{
+    color: $secondary !important;
+    text-shadow: 1px 1px 1px $secondary_darker !important;
+    font-family: 'Codystar', cursive;
+    &:hover{
+        color: $secondary_darker !important;
+        text-shadow: 1px 1px 1px $shadow !important;
+    }
+}
+
 nav{
   &.navbar{
     background-color: $main !important;
@@ -141,10 +159,20 @@ nav{
     color: $secondary !important;
     text-shadow: 1px 1px 1px $secondary_darker !important;
     font-family: 'Codystar', cursive;
+    &:hover{
+        color: $background !important;
+        text-shadow: 1px 1px 1px $shadow !important;
+    }
   }
 
   .nav-link{
     color:$background !important;
+    &:hover{
+        color: $secondary !important;
+        text-shadow: 1px 1px 1px $secondary_darker !important;
+        font-family: 'Codystar', cursive;
+
+    }
   }
 
   .nav-tabs{
@@ -221,6 +249,11 @@ nav{
   box-shadow: 1px 1px 2px 1px $secondary_darker !important;
   color: $main_darker !important;
   font-family: $title_font !important;
+
+  &:hover{
+    background-color: $secondary !important;
+    color: $main !important;
+  }
 
 }
 

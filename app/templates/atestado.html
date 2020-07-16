@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load filtros %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+  <div class="header-gradient">
+    <div class="row justify-content-center align-items-center">
+      <div class="col">
+        <h4 class="text-primary ml-4">ATESTADO DE TRABALHO</h4>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block conteudo %}
+  <div class="row justify-content-center align-items-center">
+    <div class='col-12'>
+      <form action="{% url 'pdf' 'atestado' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
+          {% csrf_token %}
+          <label for="rg">RG</label>
+          <input id='rg' name="rg" class="form-control" placeholder="ex.: 34123222x">
+          <label for="cpf">CPF</label>
+          <input id='cpf' name="cpf" class="form-control" placeholder="ex.: 44333322144">
+          <label for="ctps">CTPS</label>
+          <input id='ctps' name="ctps" class="form-control" placeholder="ex.: 1021234431">
+          <label for="ctps_serie">CTPS: série</label>
+          <input id='ctps_serie' name="ctps_serie" class="form-control" placeholder="ex.: 0040">
+            <h1 class="col-12 text-center text-primary">Selecione o servidor:</h1>
+          <select id="trabalhador" name="trabalhador" class="custom-select">
+              {% for t in trabalhadores %}
+                <option value="{{ t.id }}">{{ t.nome }} - {{ t.matricula }}</option>
+              {% endfor %}
+          </select>
+
+          <button class="btn btn-success btn-lg btn-block" type='submit'>Imprimir</button>
+  		</form>
+    </div>
+  </div>
+{% endblock %}

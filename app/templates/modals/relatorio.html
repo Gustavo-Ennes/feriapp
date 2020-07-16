@@ -32,10 +32,10 @@
       </div>
       <div class="modal-body">
         <form action='{% url "pdf" "relatorio" relatorio.id %}' method='get'>
-          <button class="btn btn-success btn-sm btn-block my-1" type='submit'>Ver Original</button>
+          <button class="btn btn-success btn-sm btn-block my-1" type='submit' {% if not relatorio.is_valid %}disabled{% endif %}>Ver Original</button>
         </form>
         <form action='{% url "pdf" "relatorio-copia" relatorio.id %}' method='get'>
-          <button class="btn btn-success btn-sm btn-block my-2" type='submit'>Ver Cópia</button>
+          <button class="btn btn-success btn-sm btn-block my-2" type='submit' {% if not relatorio.is_valid %}disabled{% endif %}>Ver Cópia</button>
         </form>
         {% if relatorio.estado != 'oficial' %}
           <form action='{% url "relatorio_edicao" relatorio.id %}' method='GET'>

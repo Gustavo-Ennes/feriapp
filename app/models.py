@@ -289,6 +289,9 @@ class Relatorio(models.Model):
     modificado_em = models.DateTimeField(auto_now=True)
     vigentes = Vigente()
 
+    def is_valid(self):
+        return bool([linha for linha in self.linhas.all() if linha.horas_extras > 0 or linha.adicional_noturno > 0 or linha.faltas > 0])
+
     class Meta:
         verbose_name = "Relatório"
         verbose_name_plural = "Relatórios"

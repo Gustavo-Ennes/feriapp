@@ -34,6 +34,7 @@ urlpatterns = [
     path('modifica-relatorio/', views.modifica_relatorio, name='modifica_relatorio'),
     path('pdf/<str:tipo>/<int:obj_id>/', views.pdf, name='pdf'),
     path('divide-linha/', views.divide_linha, name='divide_linha'),
-    path('finalizar_relatorios/', views.finalizar_relatorios, name='finalizar_relatorios')
+    path('finalizar_relatorios/', views.finalizar_relatorios, name='finalizar_relatorios'),
+    path('atestado/', views.atestado, name='atestado'),
 
 ]
