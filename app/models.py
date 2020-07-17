@@ -285,6 +285,7 @@ class Relatorio(models.Model):
         ]
     )
     ano = models.IntegerField(default=ano_padrao(), validators=[MaxValueValidator(datetime.now().year)])
+    data_fechamento = models.DateField(blank=True)
     criado_em = models.DateTimeField(auto_now_add=True)
     modificado_em = models.DateTimeField(auto_now=True)
     vigentes = Vigente()
