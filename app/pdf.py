@@ -827,13 +827,12 @@ class PDF:
     @staticmethod
     def create_relatorio_pdf(relatorio, copia=False):
 
-        data = datetime.now()
         doc = PDF.get_sdt()
         flowables = []
         style_primeira_linha = ParagraphStyle(name='linha', bold=True, fontSize=12, leftIndent=15 * mm, spaceAfter=2*mm, spaceBefore=5*mm)
         style_linha = ParagraphStyle(name='linha', bold=True, fontSize=12, leftIndent=15 * mm, spaceAfter=2*mm)
         style_copia = ParagraphStyle(name='copia', bold=True, fontSize=11, alignment=TA_RIGHT, spaceBefore=10 * mm)
-        style_data = ParagraphStyle(name='data', alignment=TA_RIGHT, fontSize=12, rightIndent=15*mm, spaceAfter=15*mm)
+        style_data = ParagraphStyle(name='data', alignment=TA_RIGHT, fontSize=12, rightIndent=15*mm, spaceAfter=20*mm)
 
         if copia:
             flowables.append(
@@ -880,9 +879,8 @@ class PDF:
         )
 
         table_data, label = PDF.get_table_data('relatorio', relatorio.linhas.all())
-        space_after = 5*mm if len(table_data) > 20 else None
-        space_before = 5*mm if len(table_data) > 20 else None
         flowables = PDF.build_table(table_data, None, flowables)
+        data = relatorio.data_fechamento if relatorio.data_fechamento else datetime.now()
 
         flowables.append(Paragraph("Ilha Solteira, %d de %s de %s" % (data.day, RandomStuff.mes_escrito(data.month), data.year), style=style_data))
 
@@ -1011,8 +1009,8 @@ class PDF:
         style = ParagraphStyle(name='assinatura', alignment=TA_CENTER, fontsize=12,
                                spaceAfter=mm if legenda else 15 * mm)
         style_leg = ParagraphStyle(name='assinatura', alignment=TA_CENTER, fontsize=10,
-                                   spaceAfter=mm if sub_legenda else 5 * mm)
-        style_sub_leg = ParagraphStyle(name='assinatura', alignment=TA_CENTER, fontsize=9, spaceAfter=10 * mm)
+                                   spaceAfter=mm if sub_legenda else 15 * mm)
+        style_sub_leg = ParagraphStyle(name='assinatura', alignment=TA_CENTER, fontsize=9, spaceAfter=15 * mm)
         traco_texto = "____________________________________"
         flowables.append(
             Paragraph(

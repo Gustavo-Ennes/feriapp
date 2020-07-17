@@ -34,7 +34,16 @@ class AbonoForm(forms.ModelForm):
     class Meta:
         model = Abono
         fields = "__all__"
-        widgets = {'data': forms.TextInput(attrs={'id':'abono_datepicker', 'class': 'datepicker', 'autocomplete': 'off'})}
+        widgets = {
+            'data': forms.TextInput(
+                attrs={
+                    'id':'abono_datepicker',
+                    'class': 'datepicker',
+                    'autocomplete': 'off',
+                    'data-mask': '12/22/1978',
+                }
+            )
+        }
         field_classes = {
             'trabalhador': MyModelChoiceField,
         }
@@ -44,7 +53,12 @@ class TrabalhadorForm(forms.ModelForm):
     class Meta:
         model = Trabalhador
         fields = '__all__'
-        widgets = {'data_admissao': forms.TextInput(attrs={'class': 'datepicker2', 'autocomplete': 'off'})}
+        widgets = {
+            'data_admissao': forms.TextInput(attrs={
+                'class': 'datepicker2',
+                'autocomplete': 'off',
+            }),
+        }
         field_classes = {
             'setor': MyModelChoiceField,
         }

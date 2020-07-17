@@ -6,7 +6,7 @@
   <div class="header-gradient">
     <div class="row justify-content-center align-items-center">
       <div class="col">
-        <h4 class="text-primary ml-4">ATESTADO DE TRABALHO</h4>
+        <h4 class="text-primary ml-4">REQUERIMENTO SEXTA PARTE</h4>
       </div>
     </div>
   </div>
@@ -18,9 +18,9 @@
       <form action="{% url 'pdf' 'sexta_parte' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
           {% csrf_token %}
           <label for="rg">RG:</label>
-          <input id='rg' name="rg" class="form-control my-2" placeholder="ex.: 34123222x">
+          <input id='rg' name="rg" class="form-control my-2 rg">
           <label for="cpf">CPF:</label>
-          <input id='cpf' name="cpf" class="form-control my-2" placeholder="ex.: 44333322144">
+          <input id='cpf' name="cpf" class="form-control my-2 cpf" placeholder="ex.: 44333322144">
             <h1 class="col-12 text-center text-primary mt-4">Selecione o servidor:</h1>
           <select id="trabalhador" name="trabalhador" class="custom-select mb-2">
               {% for t in trabalhadores %}

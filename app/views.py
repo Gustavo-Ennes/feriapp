@@ -731,6 +731,7 @@ def finalizar_relatorios(request):
     if request.method == 'POST':
         relatorios = Relatorio.vigentes.em_aberto()
         for r in relatorios:
+            r.data_fechamento = datetime.now().date()
             r.estado = 'oficial'
             r.save()
         messages.success(request, "%d relatórios foram finalizados e é impossível editá-los" % relatorios.count())

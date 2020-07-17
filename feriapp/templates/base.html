@@ -112,6 +112,7 @@
         src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -155,6 +156,82 @@
                 $("#span_nav").addClass('fa-sort-up');
             }
         });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.date').mask('00/00/0000');
+            $('.time').mask('00:00:00');
+            $('.date_time').mask('00/00/0000 00:00:00');
+            $('.cep').mask('00000-000');
+            $('.phone').mask('0000-0000');
+            $('.phone_with_ddd').mask('(00) 0000-0000');
+            $('.phone_us').mask('(000) 000-0000');
+
+            $('.rg').mask('99.000.000-V',{
+                reverse: true,
+                placeholder: "34.123.322-X",
+                translation:{
+                    'V': {
+                        pattern: /[0-9xX]/,
+                        optional: true,
+                    }
+                }
+            });
+            $('.cpf').mask('000.000.000-00', {reverse: true, placeholder:"434.123.234-22"});
+            $('.ctps').mask("00.00000.00-0",{reverse:true, placeholder: "12.12345.12-1"});
+            $('.ctps-serie').mask("000-0", {reverse:true, placeholder: "001-0"});
+            $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
+            $('.money').mask('000.000.000.000.000,00', {reverse: true});
+            $('.money2').mask("#.##0,00", {reverse: true});
+            $('.ip_address').mask('0ZZ.0ZZ.0ZZ.0ZZ', {
+                translation: {
+                  'Z': {
+                    pattern: /[0-9]/, optional: true
+                  }
+                }
+            });
+            $('.ip_address').mask('099.099.099.099');
+            $('.percent').mask('##0,00%', {reverse: true});
+            $('.clear-if-not-match').mask("00/00/0000", {clearIfNotMatch: true});
+            $('.placeholder').mask("00/00/0000", {placeholder: "__/__/____"});
+            $('.fallback').mask("00r00r0000", {
+              translation: {
+                'r': {
+                  pattern: /[\/]/,
+                  fallback: '/'
+                },
+                placeholder: "__/__/____"
+              }
+            });
+            $('.selectonfocus').mask("00/00/0000", {selectOnFocus: true});
+        });
+
+
+        $('.rg').change(function(){
+            if( $('.rg').val().length >= 6 ){
+                val = $('.rg').cleanVal().length;
+                switch(val){
+                    case 6:
+                        $('.rg').mask("0.000.000", {reverse: true});
+                        break;
+                    case 7:
+                        $('.rg').mask("00.000.000", {reverse: true});
+                        break;
+                    case 8:
+                        $('.rg').mask("00.000.000-V", {
+                            reverse: true,
+                            translation: {
+                                'V': {
+                                    pattern: /[0-9]/, optional: true
+                                }
+                            }
+                        });
+                        break;
+
+                }
+            }
+        });
+
     </script>
 
     {% block js %} {% endblock %}

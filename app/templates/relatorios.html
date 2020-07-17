@@ -19,12 +19,7 @@
             </form>
 
           {% else %}
-            <form action="{% url 'finalizar_relatorios' %}" method="POST">
-              {% csrf_token %}
-              <button class="btn btn-sm btn-block btn-primary" type="submit" {% if not user|has_group:'relatorio' %}disabled{% endif %}>
-                Finalizar Relatório(s) em Aberto
-              </button>
-            </form>
+            {% include 'modals/finalizar_relatorio.html' %}
           {% endif %}
         {% endif %}
       </div>
