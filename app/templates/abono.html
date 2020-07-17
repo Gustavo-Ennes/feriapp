@@ -9,10 +9,10 @@
       <div class="col-6">
         <h4 class="text-primary ml-4">ABONOS</h4>
       </div>
-      <div class="col-2">
+      <div class="col">
         {% include "modals/marcar_abono.html" %}
       </div>
-      <div class="col-2">
+      <div class="col">
         {% if request|is_pc %}
           <form method="POST" action="{% url 'pdf' 'abono' 0 %}" class="mr-1">
             {% csrf_token %}
@@ -22,9 +22,11 @@
           </form>
         {% endif %}
       </div>
-      <div class='col-2'>
-        <a href="{% url 'pdf' 'relacao_abono' 0 %}" class="btn btn-success btn-sm btn-block">Relação Mensal</a>
-      </div>
+      {% if user|has_group:'relatorio' %}
+        <div class='col'>
+            <a href="{% url 'pdf' 'relacao_abono' 0 %}" class="btn btn-success btn-sm btn-block">Relação Mensal</a>
+        </div>
+     {% endif %}
     </div>
   </div>
 

@@ -917,11 +917,21 @@ def pdf(request, tipo, obj_id):
 
         try:
             if tipo == 'relacao_abono':
-                primeiro_dia_do_mes = hoje.replace(day=1)
-                obj = Abono.objects.filter(Q(deferido=True) & Q(data__gte=primeiro_dia_do_mes) & Q(data__lte=hoje))
+
+                if verifica_grupo(request.user, 'relatorio'):
+                    primeiro_dia_do_mes = hoje.replace(day=1)
+                    obj = Abono.objects.filter(Q(deferido=True) & Q(data__gte=primeiro_dia_do_mes) & Q(data__lte=hoje))
+                else:
+                    messages.error(request, "Permissão negada")
+                    return redirect('abono')
+
             if tipo == 'relatorio':
-                obj = Relatorio.objects.get(id=int(obj_id))
-                model_name = "Relatório"
+                if verifica_grupo(request.user, 'relatorio'):
+                    obj = Relatorio.objects.get(id=int(obj_id))
+                    model_name = "Relatório"
+                else:
+                    messages.error(request, "Permissão negada")
+                    return redirect('relatorios')
             if tipo == 'relatorio-copia':
                 obj = Relatorio.objects.get(id=int(obj_id))
                 model_name = "Relatório"
@@ -1230,3 +1240,7 @@ def mes_escrito(num):
         return 'novembro'
     if num == 12:
         return 'dezembro'
+
+
+def verifica_grupo(user, group_name):
+    return bool(user.groups.filter(Q(name=group_name)))

@@ -31,9 +31,11 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action='{% url "pdf" "relatorio" relatorio.id %}' method='get'>
-          <button class="btn btn-success btn-sm btn-block my-1" type='submit' {% if not relatorio.is_valid %}disabled{% endif %}>Ver Original</button>
-        </form>
+        {% if user|has_group:'relatorio' %}
+          <form action='{% url "pdf" "relatorio" relatorio.id %}' method='get'>
+            <button class="btn btn-success btn-sm btn-block my-1" type='submit' {% if not relatorio.is_valid %}disabled{% endif %}>Ver Original</button>
+          </form>
+        {% endif %}
         <form action='{% url "pdf" "relatorio-copia" relatorio.id %}' method='get'>
           <button class="btn btn-success btn-sm btn-block my-2" type='submit' {% if not relatorio.is_valid %}disabled{% endif %}>Ver Cópia</button>
         </form>
