@@ -985,7 +985,7 @@ def pdf(request, tipo, obj_id):
         elif tipo == 'abono':
             hoje = datetime.now().date()
             obj = {
-                'abonos_futuros': Abono.objects.filter(Q(deferido=True) & Q(data__gte=hoje)),
+                'abonos_futuros': Abono.objects.filter(Q(deferido=True) & Q(data__gt=hoje)),
                 'abonos_em_andamento': Abono.em_andamento.all(),
                 'abonos_fruidos': Abono.fruidos.all(),
                 'abonos_indeferidos': Abono.indeferidos.all(),
@@ -993,7 +993,7 @@ def pdf(request, tipo, obj_id):
         elif tipo == 'ferias':
             hoje = datetime.now().date()
             obj = {
-                'ferias_futuras': Ferias.objects.filter(Q(tipo='f') & Q(deferida=True) & Q(data_inicio__gte=hoje)),
+                'ferias_futuras': Ferias.objects.filter(Q(tipo='f') & Q(deferida=True) & Q(data_inicio__gt=hoje)),
                 'ferias_em_andamento': Ferias.em_andamento.all(),
                 'ferias_fruidas': Ferias.fruidas.all(),
                 'ferias_indeferidas': Ferias.indeferidas.all(),
@@ -1001,7 +1001,7 @@ def pdf(request, tipo, obj_id):
         elif tipo == 'licenca':
             hoje = datetime.now().date()
             obj = {
-                'licencas_futuras': LicencaPremio.objects.filter(Q(deferida=True) & Q(data_inicio__gte=hoje)),
+                'licencas_futuras': LicencaPremio.objects.filter(Q(deferida=True) & Q(data_inicio__gt=hoje)),
                 'licencas_em_andamento': LicencaPremio.em_andamento.all(),
                 'licencas_fruidas': LicencaPremio.fruidas.all(),
                 'licencas_indeferidas': LicencaPremio.indeferidas.all(),
