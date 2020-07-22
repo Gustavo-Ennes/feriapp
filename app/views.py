@@ -814,14 +814,45 @@ def pdf(request, tipo, obj_id):
         return redirect("index")
 
     if request.method == "POST":
+
         if tipo == 'sexta_parte':
+            t = Trabalhador.objects.get(id=int(request.POST['trabalhador']))
+            text = "O(s) campo(s)"
+            erro = False
+            if t.rg:
+                if t.rg != request.POST['rg']:
+                    text += "->RG\n "
+                    erro = True
+            if t.cpf:
+                if t.cpf != request.POST['cpf']:
+                    text += "->CPF\n"
+                    erro = True
+
+            if erro:
+                messages.error(request, text + " não são iguais aos do cadastro do servidor, Confira os documentos.")
+                return redirect("index")
+
+            text = "O(s) campo(s):\n"
+            salvar = False
+            if not t.rg:
+                text += "->RG\n"
+                t.rg = request.POST['rg']
+                salvar=True
+            if not t.cpf:
+                text += "->CPF\n"
+                t.cpf = request.POST['cpf']
+                salvar=True
+
+            if salvar:
+                t.save()
+
             obj = {
-                'trabalhador': Trabalhador.objects.get(id=int(request.POST['trabalhador'])),
-                'rg': request.POST['rg'],
-                'cpf': request.POST['cpf'],
+                'trabalhador': t,
+                'rg': t.rg,
+                'cpf': t.cpf,
             }
             # se o trabalhador não tem 20 anos de trampo
-            if obj['trabalhador'].data_admissao > timezone.now() - timedelta(days=20*365):
+            if t.data_admissao > timezone.now() - timedelta(days=20*365):
                 messages.warning(request, "O trabalhador informado não possui 20 anos de serviços prestados")
                 return redirect('index')
 
