@@ -58,6 +58,22 @@ class TrabalhadorForm(forms.ModelForm):
                 'class': 'datepicker2',
                 'autocomplete': 'off',
             }),
+            'rg': forms.TextInput(attrs={
+                'class': 'rg',
+                'autocomplete': 'off',
+            }),
+            'cpf': forms.TextInput(attrs={
+                'class': 'cpf',
+                'autocomplete': 'off',
+            }),
+            'ctps': forms.TextInput(attrs={
+                'class': 'ctps',
+                'autocomplete': 'off',
+            }),
+            'ctps_serie': forms.TextInput(attrs={
+                'class': 'ctps_serie',
+                'autocomplete': 'off',
+            }),
         }
         field_classes = {
             'setor': MyModelChoiceField,
@@ -99,3 +115,40 @@ class AutorizacaoForm(forms.Form):
         'name': 'trabalhador_id',
     }))
 
+
+class AtestadoForm(forms.Form):
+    trabalhador = MyModelChoiceField(queryset=Trabalhador.objects.all(), widget=forms.Select(attrs={
+        'name': 'trabalhador_id',
+    }))
+    rg = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'rg',
+            }
+        )
+    )
+    cpf = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'cpf',
+            }
+        )
+    )
+    ctps = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'ctps',
+            }
+        )
+    )
+    ctps_serie = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'ctps-serie',
+            }
+        )
+    )

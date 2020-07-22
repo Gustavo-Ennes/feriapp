@@ -2,7 +2,9 @@
 {% load staticfiles %}
 {% load sass_tags %}
 {% load filtros %}
-<!doctype html>
+
+<!DOCTYPE html>
+
 <html lang="pt-BR">
   	<head>
 
@@ -136,7 +138,14 @@
 
     <script>
         $( function(){
-        $( ".datepicker" ).datepicker({minDate: 0});
+        $( ".datepicker" ).datepicker(
+            {
+                minDate: 0,
+                beforeShowDay: function(date){
+                    return [date.getDay() != 6 && date.getDay() != 0,""]
+                }
+            }
+        );
         $( ".datepicker" ).datepicker( "option", "dateFormat", "dd/mm/yy" );
         $( ".datepicker" ).datepicker( "option", "showAnim", 'slideDown' );
 

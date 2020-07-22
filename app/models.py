@@ -37,6 +37,8 @@ class Trabalhador(models.Model):
     )
 
     nome = models.CharField(max_length=100, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='usuario',
+                             editable=False)
     matricula = models.CharField(unique=True, max_length=15)
     registro = models.CharField(unique=True, max_length=15)
     funcao = models.CharField(max_length=50)
@@ -45,11 +47,20 @@ class Trabalhador(models.Model):
     criado_em = models.DateTimeField(auto_now_add=True)
     modificado_em = models.DateTimeField(auto_now=True)
     situacao = models.CharField(max_length=100, choices=OPCOES)
+    rg = models.CharField(max_length=20, blank=True, null=True)
+    ctps = models.CharField(max_length=20, blank=True, null=True)
+    cpf = models.CharField(max_length=20, blank=True, null=True)
+    ctps_serie = models.CharField(max_length=20, blank=True, null=True)
     criado_por = models.ForeignKey(User, on_delete=models.SET_NULL, editable=False, null=True, blank=True)
 
     def __str__(self):
         return '%s : %s - %s - desde %s' % (
-        self.nome, self.funcao, self.setor.nome, self.data_admissao.strftime("%d/%m/%Y"))
+            self.nome, self.funcao, self.setor.nome, self.data_admissao.strftime("%d/%m/%Y"))
+
+    def save(self, *args, **kwargs):
+        if not self.user:
+            self.user = User.objects.create_user(self.matricula, password=self.matricula)
+        super(Trabalhador, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = 'Trabalhadores'
@@ -217,6 +228,9 @@ class LinhaRelatorio(models.Model):
     criado_em = models.DateTimeField(auto_now_add=True)
     modificado_em = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return "%s(%.1f, %.1f, %d)" % (self.trabalhador.nome, self.horas_extras, self.adicional_noturno, self.faltas)
+
     class Meta:
         ordering = ['trabalhador__nome']
         verbose_name = "Linha de Relatório"
@@ -232,7 +246,8 @@ class LinhaRelatorio(models.Model):
                     relatorio_fonte.save()
                     relatorio_alvo.save()
                 except Exception as e:
-                    print(request, "Erro: %s", e)
+                    print("Erro: %s", e)
+
 
 
 def mes_anterior():
@@ -285,25 +300,22 @@ class Relatorio(models.Model):
         ]
     )
     ano = models.IntegerField(default=ano_padrao(), validators=[MaxValueValidator(datetime.now().year)])
-    data_fechamento = models.DateField(blank=True)
+    data_fechamento = models.DateField(blank=True, null=True)
     criado_em = models.DateTimeField(auto_now_add=True)
     modificado_em = models.DateTimeField(auto_now=True)
     vigentes = Vigente()
 
     def is_valid(self):
-        return bool([linha for linha in self.linhas.all() if linha.horas_extras > 0 or linha.adicional_noturno > 0 or linha.faltas > 0])
+        return bool([linha for linha in self.linhas.all() if
+                     linha.horas_extras > 0 or linha.adicional_noturno > 0 or linha.faltas > 0])
+
+    def __str__(self):
+        return "%s - %d/%d" % (self.setor.nome, self.mes, self.ano)
 
     class Meta:
         verbose_name = "Relatório"
         verbose_name_plural = "Relatórios"
         ordering = ['-criado_em', 'setor__nome']
-
-
-# todo: manobras entre relatórios, linhas de um para outro conforme necessário
-# todo: template pdf, semelhante ao modelo passado pelo rh
-# todo: módulo que atribui um número de ofício ao relatorio atual
-# pegando o número de ofício num arquivo de caminho à nomear
-# e perguntando o número, caso o caminho falhe
 
 
 def valida_ferias(ferias):
@@ -312,12 +324,12 @@ def valida_ferias(ferias):
     inicio = ferias.data_inicio
 
     f = Ferias.objects.filter(Q(trabalhador=trabalhador) & (
-                Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | Q(
-            data_termino__range=(ferias.data_inicio, ferias.data_termino))) & Q(data_termino__gt=hoje) & Q(
+            Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | Q(
+        data_termino__range=(ferias.data_inicio, ferias.data_termino))) & Q(data_termino__gt=hoje) & Q(
         deferida=True) & Q(tipo='f'))
     l = LicencaPremio.objects.filter(Q(trabalhador=trabalhador) & (
-                Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | Q(
-            data_termino__range=(ferias.data_inicio, ferias.data_termino))) & Q(deferida=True))
+            Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | Q(
+        data_termino__range=(ferias.data_inicio, ferias.data_termino))) & Q(deferida=True))
     a = Abono.objects.filter(
         Q(trabalhador=trabalhador) & Q(data__range=(ferias.data_inicio, ferias.data_termino)) & Q(deferido=True))
 
@@ -329,10 +341,10 @@ def valida_ferias(ferias):
     if l or f or a or inicio < hoje or inicio.weekday() in [5, 6]:
         if len(f):
             ferias.observacoes = "férias, de %s à %s, convergem com a data marcada" % (
-            f[0].data_inicio.strftime("%d/%m/%Y"), f[0].data_termino.strftime("%d/%m/%Y"))
+                f[0].data_inicio.strftime("%d/%m/%Y"), f[0].data_termino.strftime("%d/%m/%Y"))
         elif len(l):
             ferias.observacoes = "licença-prêmio de %s à %s, convergem com a data marcada" % (
-            l[0].data_inicio.strftime("%d/%m/%Y"), l[0].data_termino.strftime("%d/%m/%Y"))
+                l[0].data_inicio.strftime("%d/%m/%Y"), l[0].data_termino.strftime("%d/%m/%Y"))
         elif len(a):
             ferias.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
         elif inicio < hoje:
@@ -368,10 +380,10 @@ def valida_abono(abono):
                                                                                                                       6]:
         if len(f):
             abono.observacoes = "férias, de %s à %s, convergem com a data marcada" % (
-            f[0].data_inicio.strftime("%d/%m/%Y"), f[0].data_termino.strftime("%d/%m/%Y"))
+                f[0].data_inicio.strftime("%d/%m/%Y"), f[0].data_termino.strftime("%d/%m/%Y"))
         elif len(l):
             abono.observacoes = "licença-prêmio de %s à %s, convergem com a data marcada" % (
-            l[0].data_inicio.strftime("%d/%m/%Y"), l[0].data_termino.strftime("%d/%m/%Y"))
+                l[0].data_inicio.strftime("%d/%m/%Y"), l[0].data_termino.strftime("%d/%m/%Y"))
         elif len(a):
             abono.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
         elif data < hoje:

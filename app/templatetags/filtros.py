@@ -161,3 +161,20 @@ def has_group(user, group_name):
 def num_oficio_do_setor(setor):
     return Relatorio.vigentes.em_aberto().get(setor=setor).num_oficio
 
+@register.filter
+def trabalhador_por_usuario(usuario):
+    try:
+        return Trabalhador.objects.get(Q(user=usuario))
+    except Exception as e:
+        print("Trabalhador não encontrado:", e)
+        return None
+
+@register.filter
+def trabalhador_por_id(id):
+    if id:
+        try:
+            return Trabalhador.ojects.get(id=int(id))
+        except Exception as e:
+            print(e)
+
+

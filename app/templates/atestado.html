@@ -15,25 +15,14 @@
 {% block conteudo %}
   <div class="row justify-content-center align-items-center">
     <div class='col-12'>
-      <form action="{% url 'pdf' 'atestado' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
+      <form action="{% url 'pdf' 'atestado' 0 %}" method="POST" enctype="multipart/form-data" class="text-left my-4">
           {% csrf_token %}
-          <label for="rg">RG:</label>
-          <input id='rg' name="rg" class="form-control my-2 rg">
-          <label for="cpf">CPF:</label>
-          <input id='cpf' name="cpf" class="form-control my-2 cpf">
-          <label for="ctps">CTPS:</label>
-          <input id='ctps' name="ctps" class="form-control my-2 ctps">
-          <label for="ctps_serie">Série CTPS:</label>
-          <input id='ctps_serie' name="ctps_serie" class="form-control my-2 ctps-serie">
-            <h1 class="col-12 text-center text-primary mt-4">Selecione o servidor:</h1>
-          <select id="trabalhador" name="trabalhador" class="custom-select mb-2">
-              {% for t in trabalhadores %}
-                <option value="{{ t.id }}">{{ t.nome }} - {{ t.matricula }}</option>
-              {% endfor %}
-          </select>
 
-          <button class="btn btn-success btn-lg btn-block" type='submit'>Imprimir</button>
+          {{ AtestadoForm|crispy }}
+
+          <button class="btn btn-success btn-lg btn-block mt-3" type='submit'>Imprimir</button>
   		</form>
     </div>
   </div>
 {% endblock %}
+

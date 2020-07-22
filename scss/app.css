@@ -54,7 +54,9 @@ body { background-color: #EDF6FF; }
 
 .form-check-input { border: 1px solid #488DD6 !important; }
 
-.form-control { border: 1px solid main !important; }
+.requiredField { font-family: "Noto Serif", serif !important; color: #488DD6 !important; text-shadow: 1px 1px 2px #21548A !important; font-size: 0.9rem !important; }
+
+.form-control { border: 1px solid main !important; color: #21548A !important; }
 
 .logo-font { color: #C2D633 !important; text-shadow: 1px 1px 1px #7D8A28 !important; font-family: 'Codystar', cursive; }
 

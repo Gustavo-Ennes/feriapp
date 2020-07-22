@@ -23,9 +23,15 @@
           <input id='cpf' name="cpf" class="form-control my-2 cpf" placeholder="ex.: 44333322144">
             <h1 class="col-12 text-center text-primary mt-4">Selecione o servidor:</h1>
           <select id="trabalhador" name="trabalhador" class="custom-select mb-2">
-              {% for t in trabalhadores %}
-                <option value="{{ t.id }}">{{ t.nome }} - {{ t.matricula }}</option>
-              {% endfor %}
+              {% if user|has_group:'relatorio' or user|has_group:'ferias' %}
+                  {% for t in trabalhadores %}
+                    <option value="{{ t.id }}">{{ t.nome }} - {{ t.matricula }}</option>
+                  {% endfor %}
+              {% else %}
+                {% with t=user|trabalhador_por_usuario %}
+                    <option value="{{ t.id }}">{{ t.nome|upper }}</option>
+                {% endwith %}
+              {% endif %}
           </select>
 
           <button class="btn btn-success btn-lg btn-block" type='submit'>Imprimir</button>

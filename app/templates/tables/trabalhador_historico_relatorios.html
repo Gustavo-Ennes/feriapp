@@ -1,0 +1,35 @@
+{% load filtros %}
+{% load user_agents %}
+
+    <table class="table table-sm table-striped text-center">
+  <thead>
+    <tr>
+      <th scope="col"><small>Ref.</small></th>
+      <th scope="col"><small>H.E.</small></th>
+      <th scope="col"><small>A.N.</small></th>
+      <th scope="col"><small>Faltas</small></th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for referencia,horas_dict in horas_por_mes.items %}
+      {% if 'horas_extras' or 'adicional_noturno' or 'faltas' in horas_dict %}
+          <tr>
+            <td>
+                <small>{{ referencia }}</small>
+            </td>
+            <td>
+                <small>{% if 'horas_extras' in horas_dict %}{{horas_dict.horas_extras}}{%else%}0{% endif %}</small>
+            </td>
+            <td>
+                <small>{% if 'adicional_noturno' in horas_dict %}{{horas_dict.adicional_noturno}}{%else%}0{% endif %}</small>
+            </td>
+            <td>
+                <small>{% if 'faltas' in horas_dict %}{{horas_dict.faltas}}{%else%}0{% endif %}</small>
+            </td>
+          </tr>
+        {% endif %}
+    {% endfor %}
+
+  </tbody>
+</table>

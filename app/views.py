@@ -13,32 +13,42 @@ from .tasks import *
 
 lembretes_exibidos = False
 
-
 @login_required(login_url='/entrar/')
 def index(request):
-    context = {
-        'FeriasForm': FeriasForm(),
-        'LicencaPremioForm': LicencaPremioForm(),
-        'AbonoForm': AbonoForm(),
-        'TrabalhadorForm': TrabalhadorForm(),
-        'SetorForm': SetorForm(),
-        'trabalhadores': Trabalhador.objects.all(),
-        'index': True,
-        'proximas_folgas': proximas_folgas(),
-        'proximos_retornos': proximos_retornos(),
-        'em_andamento': em_andamento(),
-        'AutorizacaoForm': AutorizacaoForm(),
-        'lembretes_exibidos': lembretes_exibidos,
-        'relatorios': Relatorio.vigentes.em_aberto()
+    if not request.user.groups.filter(Q(name='ferias') | Q(name='relatorio')):
+        try:
+            trabalhador = Trabalhador.objects.get(Q(user=request.user))
+            return redirect('trabalhador', trabalhador_id=trabalhador.id)
+        except Exception as e:
+            print(e)
+            messages.error(request, "O trabalhador não possui usuário para acesso ao site")
+            return redirect('sair')
+    else:
+        context = {
+            'FeriasForm': FeriasForm(),
+            'LicencaPremioForm': LicencaPremioForm(),
+            'AbonoForm': AbonoForm(),
+            'TrabalhadorForm': TrabalhadorForm(),
+            'SetorForm': SetorForm(),
+            'trabalhadores': Trabalhador.objects.all(),
+            'index': True,
+            'proximas_folgas': proximas_folgas(),
+            'proximos_retornos': proximos_retornos(),
+            'em_andamento': em_andamento(),
+            'AutorizacaoForm': AutorizacaoForm(),
+            'lembretes_exibidos': lembretes_exibidos,
+            'relatorios': Relatorio.vigentes.em_aberto()
 
-    }
+        }
 
-    atualiza_situacoes_trabalhadores()
+        atualiza_situacoes_trabalhadores()
+        #atualiza_user_trabalhadores()
 
-    return render(request, 'index.html', context)
+        return render(request, 'index.html', context)
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_relatorio')
 def divide_linha(request):
     if request.method == "POST":
         relatorios = []
@@ -70,13 +80,14 @@ def divide_linha(request):
                 )
 
         messages.success(request, "Você dividiu uma linha do relatório do(a) %s entre %d relatórios." % (
-        relatorio.setor.nome, len(d)))
+            relatorio.setor.nome, len(d)))
 
         linha.delete()
     return redirect('relatorios')
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def ferias(request):
     hoje = timezone.now().date()
     context = {
@@ -91,6 +102,7 @@ def ferias(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def licenca_premio(request):
     hoje = timezone.now().date()
     context = {
@@ -105,6 +117,7 @@ def licenca_premio(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def abono(request):
     hoje = timezone.now().date()
     context = {
@@ -120,39 +133,73 @@ def abono(request):
 
 
 @login_required(login_url='/entrar/')
-def trabalhador(request):
-    if request.method == "POST":
+def trabalhador(request, trabalhador_id=None):
+    trabalhador = None
+    usuario_e_trabalhador = bool(Trabalhador.objects.filter(Q(user=request.user)))
+    if usuario_e_trabalhador:
+        trabalhador_a_acessar = None
+        if 'trabalhador' in request.POST:
+            trabalhador_a_acessar = Trabalhador.objects.get(id=int(request.POST['trabalhador']))
+        elif trabalhador_id:
+            trabalhador_a_acessar = Trabalhador.objects.get(id=trabalhador_id)
+        trabalhador = Trabalhador.objects.get(Q(user=request.user))
+        if trabalhador is not trabalhador_a_acessar:
+            messages.info(request, "Só é permitido ao trabalhador acessar seus próprios dados.")
+
+    elif request.method == "GET":
+        if trabalhador_id:
+            trabalhador = Trabalhador.objects.get(id=int(trabalhador_id))
+
+    elif request.method == "POST":
         id = int(request.POST['trabalhador'])
-        hoje = timezone.now().date()
-        try:
-            trabalhador = Trabalhador.objects.get(id=id);
-        except:
-            messages.error(request, "Trabalhador não encontrado.")
-            return redirect('index')
-        finally:
-            context = {
-                'trabalhador': trabalhador,
-                'ferias_em_andamento': Ferias.em_andamento.all().filter(Q(trabalhador=trabalhador)),
-                'ferias_futuras': Ferias.objects.filter(
-                    Q(trabalhador=trabalhador) & Q(deferida=True) & Q(tipo='f') & Q(data_inicio__gt=hoje)),
-                'ferias_fruidas': Ferias.fruidas.all().filter(Q(trabalhador=trabalhador)),
-                'ferias_indeferidas': Ferias.indeferidas.all().filter(Q(trabalhador=trabalhador)),
-                'licencas_em_andamento': LicencaPremio.em_andamento.all().filter(Q(trabalhador=trabalhador)),
-                'licencas_futuras': LicencaPremio.objects.filter(
-                    Q(trabalhador=trabalhador) & Q(deferida=True) & Q(data_inicio__gt=hoje)),
-                'licencas_fruidas': LicencaPremio.fruidas.all().filter(Q(trabalhador=trabalhador)),
-                'licencas_indeferidas': LicencaPremio.indeferidas.all().filter(Q(trabalhador=trabalhador)),
-                'abonos_em_andamento': Abono.em_andamento.all().filter(Q(trabalhador=trabalhador)),
-                'abonos_futuros': Abono.objects.filter(
-                    Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__gt=hoje)),
-                'abonos_fruidos': Abono.fruidos.all().filter(Q(trabalhador=trabalhador)),
-                'abonos_indeferidos': Abono.indeferidos.all().filter(Q(trabalhador=trabalhador)),
-                'TrabalhadorForm': TrabalhadorFormSemAdmissao(),
-            }
-            return render(request, 'trabalhador.html', context)
+        trabalhador = Trabalhador.objects.get(id=id)
+
+    hoje = timezone.now().date()
+    horas_por_mes = {}
+    try:
+        relatorios = Relatorio.objects.filter(Q(linhas__trabalhador=trabalhador))
+        for r in relatorios:
+            linha = r.linhas.get(Q(trabalhador=trabalhador))
+            horas = {}
+            if linha:
+                if linha.horas_extras:
+                    horas['horas_extras'] = linha.horas_extras
+                if linha.adicional_noturno:
+                    horas['adicional_noturno'] = linha.adicional_noturno
+                if linha.faltas:
+                    horas['faltas'] = linha.faltas
+            k = str(r.mes) + '/' + str(r.ano)
+            horas_por_mes[k] = horas
+    except Exception as e:
+        print(e)
+        messages.error(request, "Trabalhador não encontrado.")
+        return redirect('index')
+    finally:
+        context = {
+            'trabalhador': trabalhador,
+            'ferias_em_andamento': Ferias.em_andamento.all().filter(Q(trabalhador=trabalhador)),
+            'ferias_futuras': Ferias.objects.filter(
+                Q(trabalhador=trabalhador) & Q(deferida=True) & Q(tipo='f') & Q(data_inicio__gt=hoje)),
+            'ferias_fruidas': Ferias.fruidas.all().filter(Q(trabalhador=trabalhador)),
+            'ferias_indeferidas': Ferias.indeferidas.all().filter(Q(trabalhador=trabalhador)),
+            'licencas_em_andamento': LicencaPremio.em_andamento.all().filter(Q(trabalhador=trabalhador)),
+            'licencas_futuras': LicencaPremio.objects.filter(
+                Q(trabalhador=trabalhador) & Q(deferida=True) & Q(data_inicio__gt=hoje)),
+            'licencas_fruidas': LicencaPremio.fruidas.all().filter(Q(trabalhador=trabalhador)),
+            'licencas_indeferidas': LicencaPremio.indeferidas.all().filter(Q(trabalhador=trabalhador)),
+            'abonos_em_andamento': Abono.em_andamento.all().filter(Q(trabalhador=trabalhador)),
+            'abonos_futuros': Abono.objects.filter(
+                Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__gt=hoje)),
+            'abonos_fruidos': Abono.fruidos.all().filter(Q(trabalhador=trabalhador)),
+            'abonos_indeferidos': Abono.indeferidos.all().filter(Q(trabalhador=trabalhador)),
+            'TrabalhadorForm': TrabalhadorFormSemAdmissao(),
+            'horas_por_mes': horas_por_mes,
+        }
+        return render(request, 'trabalhador.html', context)
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def setor(request):
     context = {
         'setores': Setor.objects.all(),
@@ -163,6 +210,7 @@ def setor(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def setor_espec(request):
     if request.method == "POST":
         setor = None
@@ -180,6 +228,7 @@ def setor_espec(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def marcar_ferias(request):
     if request.method == "POST":
         pdf = None
@@ -216,9 +265,11 @@ def marcar_ferias(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def marcar_licenca(request):
     if request.method == "POST":
         form = LicencaPremioForm(request.POST)
+        obj = None
         if form.is_valid():
             hoje = timezone.now().date()
             obj = form.save()
@@ -238,6 +289,7 @@ def marcar_licenca(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def marcar_abono(request):
     if request.method == "POST":
         form = AbonoForm(request.POST)
@@ -261,6 +313,7 @@ def marcar_abono(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def novo_setor(request):
     if request.method == "POST":
         form = SetorForm(request.POST)
@@ -276,6 +329,7 @@ def novo_setor(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def novo_trabalhador(request):
     if request.method == "POST":
         form = TrabalhadorForm(request.POST)
@@ -299,6 +353,7 @@ def novo_trabalhador(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def trabalhadores(request):
     trabalhadores = Trabalhador.objects.all()
     context = {
@@ -391,6 +446,7 @@ def pesquisa(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def editar_data(request):
     if request.method == "POST":
         verbose_name = ""
@@ -457,6 +513,7 @@ def editar_data(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def editar_trabalhador(request):
     if request.method == "POST":
         trabalhador = Trabalhador.objects.get(id=int(request.POST['id']))
@@ -467,6 +524,7 @@ def editar_trabalhador(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def editar_setor(request):
     if request.method == "POST":
         setor = Setor.objects.get(id=int(request.POST['id']))
@@ -486,6 +544,7 @@ def excluir_setor(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def excluir_trabalhador(request):
     if request.method == "POST":
         trabalhador = Trabalhador.objects.get(id=int(request.POST['trabalhador_id']))
@@ -495,6 +554,7 @@ def excluir_trabalhador(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def indeferir(request):
     if request.method == "POST":
         obj = None
@@ -604,11 +664,10 @@ def soma_justificativas(request):
     elif request.method == 'POST':
         trabalhadores = Trabalhador.objects.all()
 
-
         for trabalhador in trabalhadores:
             string = str(trabalhador.id) + "horas"
             # busco por relatórios desse mês
-            relatorio = busca_relatorio(request, trabalhador.setor)
+            relatorio = busca_relatorio(trabalhador.setor)
             if not relatorio:
                 # se não há eu gero
                 relatorio = gera_relatorio_em_branco(trabalhador.setor, 1)
@@ -634,6 +693,10 @@ def soma_justificativas(request):
 
         messages.success(request, "Soma das justificativas concluída")
         return redirect('index')
+
+
+def busca_relatorio(setor):
+    return Relatorio.vigentes.em_aberto().get(Q(setor=setor))
 
 
 @login_required(login_url='/entrar/')
@@ -676,7 +739,7 @@ def soma_horas(request):
             trabalhadores = Trabalhador.objects.all()
             for trabalhador in trabalhadores:
                 # achar a linha do relatório desse mês correspondente ao trabalhador
-                relatorio = busca_relatorio(request, trabalhador.setor)
+                relatorio = busca_relatorio(trabalhador.setor)
                 horas_extras_str = request.POST[str(trabalhador.id) + 'horas']
                 horas_extras = float(horas_extras_str.replace(',', '.'))
                 adc_noturno_str = request.POST[str(trabalhador.id) + 'adc_noturno']
@@ -713,6 +776,7 @@ def soma_horas(request):
 
 
 @login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
 def relatorios(request):
     data = timezone.now()
     data = data.replace(day=1)
@@ -720,7 +784,7 @@ def relatorios(request):
         'relatorios_em_aberto': Relatorio.vigentes.em_aberto(),
         'relatorios_finalizados': Relatorio.vigentes.finalizados(),
         'relatorios_finalizados_antigos': Relatorio.objects.filter(Q(estado='oficial') & Q(criado_em__lt=data)),
-        'qtd_trabalhadores' : Trabalhador.objects.count(),
+        'qtd_trabalhadores': Trabalhador.objects.count(),
     }
     return render(request, 'relatorios.html', context)
 
@@ -750,20 +814,70 @@ def pdf(request, tipo, obj_id):
         return redirect("index")
 
     if request.method == "POST":
-        if tipo =='sexta_parte':
+        if tipo == 'sexta_parte':
             obj = {
                 'trabalhador': Trabalhador.objects.get(id=int(request.POST['trabalhador'])),
                 'rg': request.POST['rg'],
                 'cpf': request.POST['cpf'],
             }
             # se o trabalhador não tem 20 anos de trampo
-            if obj['trabalhador'].data_admissao > datetime.now() - timedelta(years=20):
+            if obj['trabalhador'].data_admissao > timezone.now() - timedelta(days=20*365):
                 messages.warning(request, "O trabalhador informado não possui 20 anos de serviços prestados")
                 return redirect('index')
 
-        elif tipo =='atestado':
+        elif tipo == 'atestado':
+            t = Trabalhador.objects.get(id=int(request.POST['trabalhador']))
+            text = 'O(s) campo(s):\n '
+            erro = False
+
+            if t.rg:
+                if t.rg != request.POST['rg']:
+                    text += "->RG\n "
+                    erro = True
+            if t.cpf:
+                if t.cpf != request.POST['cpf']:
+                    text += "->CPF\n"
+                    erro = True
+            if t.ctps:
+                if t.ctps != request.POST['ctps']:
+                    text += "->CTPS\n"
+                    erro = True
+            if t.ctps_serie:
+                if t.ctps_serie != request.POST['ctps_serie']:
+                    text += "->Série da CTPS\n"
+                    erro = True
+
+            if erro:
+                text += "não são iguais aos que constam no cadastro do trabalhador. Verifique a documentação."
+                messages.error(request, text)
+                return redirect('index')
+
+
+            text = "O(s) campo(s):\n"
+            salvar = False
+            if not t.rg:
+                text += "->RG\n"
+                t.rg = request.POST['rg']
+                salvar=True
+            if not t.cpf:
+                text += "->CPF\n"
+                t.cpf = request.POST['cpf']
+                salvar=True
+            if not t.ctps:
+                text += "->CPTS\n"
+                t.ctps = request.POST['ctps']
+                salvar=True
+            if not t.ctps_serie:
+                text += "->Série CTPS\n"
+                t.ctps_serie = request.POST['ctps_serie']
+                salvar=True
+
+            if salvar:
+                t.save()
+                messages.info(request, text + " foram incluídos nos registros do trabalhador")
+
             obj = {
-                'trabalhador': Trabalhador.objects.get(id=int(request.POST['trabalhador'])),
+                'trabalhador': t,
                 'rg': request.POST['rg'],
                 'cpf': request.POST['cpf'],
                 'ctps': request.POST['ctps'],
@@ -1030,16 +1144,6 @@ def pdf(request, tipo, obj_id):
 
 
 @login_required(login_url='/entrar/')
-def busca_relatorio(request, setor, mes=datetime.now().month, ano=datetime.now().year):
-    try:
-        return Relatorio.objects.get(Q(setor=setor) & Q(criado_em__month=mes) & Q(criado_em__year=ano))
-    except:
-        messages.info(request, "Não há relatório do mês %d de %d, do setor %s. Um relatório em branco foi gerado " % (
-            mes, ano, setor.nome))
-        return None
-
-
-@login_required(login_url='/entrar/')
 @permission_required('app.add_relatorio')
 def relatorio_edicao(request, relatorio_id):
     if request.method == 'GET':
@@ -1059,6 +1163,7 @@ def relatorio_edicao(request, relatorio_id):
 @login_required(login_url='/entrar/')
 @permission_required('app.add_relatorio')
 def modifica_relatorio(request):
+    relatorio = None
     if request.method == 'POST':
         tipo = request.POST['tipo']
         linha_id = None
@@ -1085,7 +1190,8 @@ def modifica_relatorio(request):
             num_oficio = request.POST['num_oficio']
             relatorio.num_oficio = num_oficio
             relatorio.save()
-            messages.success(request, "Você trocou o número de ofício do relatório #%d para %s" % (relatorio_id, num_oficio))
+            messages.success(request,
+                             "Você trocou o número de ofício do relatório #%d para %s" % (relatorio_id, num_oficio))
             return redirect('relatorio_edicao', relatorio_id=relatorio.id)
 
         elif tipo == 'horas_extras':
@@ -1144,9 +1250,9 @@ def atestado(request):
     if request.method == 'GET':
         context = {
             'trabalhadores': Trabalhador.objects.all(),
+            'AtestadoForm': AtestadoForm(),
         }
         return render(request, 'atestado.html', context)
-
 
 
 @login_required(login_url='/entrar/')
@@ -1156,6 +1262,9 @@ def sexta_parte(request):
             'trabalhadores': Trabalhador.objects.all(),
         }
         return render(request, 'sexta_parte.html', context)
+
+
+###########################################################################################################
 
 
 def gera_relatorio_em_branco(setor, num_oficio):
@@ -1175,7 +1284,6 @@ def proximas_folgas():
     folgas = list(chain(abonos, folgas))
 
     folgas = sorted(folgas, key=lambda obj: obj.data_inicio if "data_inicio" in dir(obj) else obj.data)
-
 
     return folgas
 

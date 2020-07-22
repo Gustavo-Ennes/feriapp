@@ -338,7 +338,6 @@ class PDF:
 
     @staticmethod
     def get_table_data(key, value):
-        print("value == ", type(value), 'Count == ', value.count(), 'value[0] == ', value[0])
         if type(value) is QuerySet:
             if value.count() > 0:
                 text = ''
@@ -917,7 +916,7 @@ class PDF:
         canvas.drawInlineImage(
             os.path.join(BASE_DIR, 'tests/footer.jpeg'),
             0,
-            5 * mm,
+            7 * mm,
             210 * mm,
             15 * mm
         )

@@ -35,161 +35,172 @@
 {% block conteudo %}
 
   <div class="row">
-    <div class="col-12 col-lg-3">
+    <div class="col-12 col-lg-2">
+      <div class="m-2">
 
-      <small for="funcao">Função:</small>
-      <br>
-      <p id="funcao"> {{ trabalhador.funcao|title }} - {{ trabalhador.setor.nome }} </p>
+        <small for="funcao">Função:</small>
+        <br>
+        <p id="funcao"> {{ trabalhador.funcao|title }} - {{ trabalhador.setor.nome }} </p>
 
-      <small for="matricula">Matrícula:</small>
-      <br>
-      <p id="matricula"> {{ trabalhador.matricula }} </p>
+        <small for="matricula">Matrícula:</small>
+        <br>
+        <p id="matricula"> {{ trabalhador.matricula }} </p>
 
-      <small for="admissao">Função:</small>
-      <br>
-      <p id="admissao"> {{ trabalhador.data_admissao|date:"d/m/Y" }} </p>
+        <small for="admissao">Função:</small>
+        <br>
+        <p id="admissao"> {{ trabalhador.data_admissao|date:"d/m/Y" }} </p>
 
-    </div>
-    <div class="col-12 col-lg-9">
+        {% if horas_por_mes %}
 
+          <p class="text-primary text-center mt-3 mb-1">Histórico H.E.</p>
+          {% include 'tables/trabalhador_historico_relatorios.html' %}
 
-  {% if ferias_futuras or ferias_fruidas or ferias_indeferidas or ferias_em_andamento %}
-    <div class="col-12 my-2">
-      <div class="card">
-        <div class="card-header">
-          <h3 class='card-title text-center'>Férias</h3>
-        </div>
-        <div class="card-body h-300">
-          {% if ferias_em_andamento %}
-            <h5 class="text-center text-primary">em andamento</h5>
-            {% with ferias=ferias_em_andamento tipo='ferias' arquivada=True %}
-              <div class="my-2">
-                {% include 'tables/ferias.html' %}
-              </div>
-            {% endwith %}
-          {% endif %}
-          {% if ferias_futuras %}
-            <h5 class="text-center text-primary">futuras</h5>
-            {% with ferias=ferias_futuras tipo='ferias' %}
-              <div class="my-2">
-                {% include 'tables/ferias.html' %}
-              </div>
-            {% endwith %}
-          {% endif %}
-          {% with arquivada=True %}
-            {% if ferias_fruidas %}
-              {% with ferias=ferias_fruidas %}
-                <h5 class="text-center text-primary">fruídas</h5>
-                <div class="my-2">
-                  {% include 'tables/ferias.html' %}
-                </div>
-              {% endwith %}
-              {% endif %}
-            {% if ferias_indeferidas %}
-              {% with ferias=ferias_indeferidas %}
-                <h5 class="text-center text-primary">indeferidas</h5>
-                <div class="my-2">
-                  {% include 'tables/ferias.html' %}
-                </div>
-              {% endwith %}
-            {% endif %}
-          {% endwith %}
-        </div>
+        {% endif %}
       </div>
-    </div>
-  {% endif %}
 
-  {% if licencas_futuras or licencas_fruidas or licencas_indeferidas or licencas_em_andamento%}
-    <div class="col-12 my-2">
-      <div class="card">
-        <div class="card-header">
-          <h3 class='card-title text-center'>Licenças-prêmio</h3>
-        </div>
-        <div class="card-body h-300">
-          {% if licencas_em_andamento %}
-            <h5 class="text-center text-primary">em andamento</h5>
-            {% with licencas=licencas_em_andamento tipo='licenca' arquivada=True %}
-              <div class="my-2">
-                {% include 'tables/licenca.html' %}
-              </div>
-            {% endwith %}
-          {% endif %}
-          {% if licencas_futuras %}
-            <h3 class="text-center text-primary">futuras</h3>
-            {% with licencas=licencas_futuras tipo='licenca' %}
-              <div class="my-2">
-                {% include 'tables/licenca.html' %}
-              </div>
-            {% endwith %}
-          {% endif %}
-          {% with arquivada=True %}
-            {% if licencas_fruidas %}
-              {% with licencas=licencas_fruidas %}
-                <h5 class="text-center text-primary">fruídas</h5>
-                <div class="my-2">
-                  {% include 'tables/licenca.html' %}
-                </div>
-              {% endwith %}
-            {% endif %}
-            {% if licencas_indeferidas %}
-              {% with licencas=licencas_indeferidas %}
-                <h5 class="text-center text-primary">indeferidas</h5>
-                <div class="my-2">
-                  {% include 'tables/licenca.html' %}
-                </div>
-              {% endwith %}
-            {% endif %}
-          {% endwith %}
-        </div>
-      </div>
     </div>
-  {% endif %}
+    <div class="col-12 col-lg-10">
+      <div class="m-2">
 
-  {% if abonos_futuros or abonos_fruidos or abonos_indeferidos or abonos_em_andamento %}
-    <div class="col-12 my-2">
-      <div class="card">
-        <div class="card-header">
-          <h3 class='card-title text-center'>Abonos</h3>
-        </div>
-        <div class="card-body h-300">
-          {% if abonos_em_andamento %}
-            <h5 class="text-center text-primary">em andamento</h5>
-            {% with abonos=abonos_em_andamento tipo='abono' arquivado=True %}
-              <div class="my-2">
-                {% include 'tables/abono.html' %}
+        {% if ferias_futuras or ferias_fruidas or ferias_indeferidas or ferias_em_andamento %}
+          <div class="col-12 my-2">
+            <div class="card">
+              <div class="card-header">
+                <h3 class='card-title text-center'>Férias</h3>
               </div>
-            {% endwith %}
-          {% endif %}
-          {% if abonos_futuros %}
-            <h5 class="text-center text-primary">futuros</h5>
-            {% with abonos=abonos_futuros tipo='abono' %}
-              <div class="my-2">
-                {% include 'tables/abono.html' %}
+              <div class="card-body h-300">
+                {% if ferias_em_andamento %}
+                  <h5 class="text-center text-primary">em andamento</h5>
+                  {% with ferias=ferias_em_andamento tipo='ferias' arquivada=True %}
+                    <div class="my-2">
+                      {% include 'tables/ferias.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% if ferias_futuras %}
+                  <h5 class="text-center text-primary">futuras</h5>
+                  {% with ferias=ferias_futuras tipo='ferias' %}
+                    <div class="my-2">
+                      {% include 'tables/ferias.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% with arquivada=True %}
+                  {% if ferias_fruidas %}
+                    {% with ferias=ferias_fruidas %}
+                      <h5 class="text-center text-primary">fruídas</h5>
+                      <div class="my-2">
+                        {% include 'tables/ferias.html' %}
+                      </div>
+                    {% endwith %}
+                    {% endif %}
+                  {% if ferias_indeferidas %}
+                    {% with ferias=ferias_indeferidas %}
+                      <h5 class="text-center text-primary">indeferidas</h5>
+                      <div class="my-2">
+                        {% include 'tables/ferias.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                {% endwith %}
               </div>
-            {% endwith %}
-          {% endif %}
-          {% with arquivado=True %}
-            {% if abonos_fruidos %}
-              {% with abonos=abonos_fruidos %}
-                <h5 class="text-center text-primary">fruídos</h5>
-                <div class="my-2">
-                  {% include 'tables/abono.html' %}
-                </div>
-              {% endwith %}
-            {% endif %}
-            {% if abonos_indeferidos %}
-              {% with abonos=abonos_indeferidos %}
-                <h5 class="text-center text-primary">indeferidos</h5>
-                <div class="my-2">
-                  {% include 'tables/abono.html' %}
-                </div>
-              {% endwith %}
-            {% endif %}
-          {% endwith %}
-        </div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if licencas_futuras or licencas_fruidas or licencas_indeferidas or licencas_em_andamento%}
+          <div class="col-12 my-2">
+            <div class="card">
+              <div class="card-header">
+                <h3 class='card-title text-center'>Licenças-prêmio</h3>
+              </div>
+              <div class="card-body h-300">
+                {% if licencas_em_andamento %}
+                  <h5 class="text-center text-primary">em andamento</h5>
+                  {% with licencas=licencas_em_andamento tipo='licenca' arquivada=True %}
+                    <div class="my-2">
+                      {% include 'tables/licenca.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% if licencas_futuras %}
+                  <h3 class="text-center text-primary">futuras</h3>
+                  {% with licencas=licencas_futuras tipo='licenca' %}
+                    <div class="my-2">
+                      {% include 'tables/licenca.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% with arquivada=True %}
+                  {% if licencas_fruidas %}
+                    {% with licencas=licencas_fruidas %}
+                      <h5 class="text-center text-primary">fruídas</h5>
+                      <div class="my-2">
+                        {% include 'tables/licenca.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                  {% if licencas_indeferidas %}
+                    {% with licencas=licencas_indeferidas %}
+                      <h5 class="text-center text-primary">indeferidas</h5>
+                      <div class="my-2">
+                        {% include 'tables/licenca.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if abonos_futuros or abonos_fruidos or abonos_indeferidos or abonos_em_andamento %}
+          <div class="col-12 my-2">
+            <div class="card">
+              <div class="card-header">
+                <h3 class='card-title text-center'>Abonos</h3>
+              </div>
+              <div class="card-body h-300">
+                {% if abonos_em_andamento %}
+                  <h5 class="text-center text-primary">em andamento</h5>
+                  {% with abonos=abonos_em_andamento tipo='abono' arquivado=True %}
+                    <div class="my-2">
+                      {% include 'tables/abono.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% if abonos_futuros %}
+                  <h5 class="text-center text-primary">futuros</h5>
+                  {% with abonos=abonos_futuros tipo='abono' %}
+                    <div class="my-2">
+                      {% include 'tables/abono.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% with arquivado=True %}
+                  {% if abonos_fruidos %}
+                    {% with abonos=abonos_fruidos %}
+                      <h5 class="text-center text-primary">fruídos</h5>
+                      <div class="my-2">
+                        {% include 'tables/abono.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                  {% if abonos_indeferidos %}
+                    {% with abonos=abonos_indeferidos %}
+                      <h5 class="text-center text-primary">indeferidos</h5>
+                      <div class="my-2">
+                        {% include 'tables/abono.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
       </div>
-    </div>
-  {% endif %}
 
     </div>
 
