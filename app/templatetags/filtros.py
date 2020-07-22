@@ -173,8 +173,25 @@ def trabalhador_por_usuario(usuario):
 def trabalhador_por_id(id):
     if id:
         try:
-            return Trabalhador.ojects.get(id=int(id))
+            return Trabalhador.objects.get(id=int(id))
         except Exception as e:
             print(e)
+
+@register.filter
+def atestado_com_trabalhador(trabalhador):
+    f =  AtestadoForm()
+    f.fields['trabalhador'].queryset = Trabalhador.objects.filter(Q(id=trabalhador.id))
+    f.fields['trabalhador'].empty_label = None
+    return f
+
+@register.filter
+def referencia(linhaRelatorio):
+    try:
+        r = Relatorio.objects.get(Q(linha=linhaRelatorio))
+    except Exception as e:
+        print(e)
+    return "{r.mes}/{r.ano}" if r else None
+
+
 
 

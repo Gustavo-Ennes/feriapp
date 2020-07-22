@@ -12,8 +12,8 @@
     </tr>
   </thead>
   <tbody>
-    {% for referencia,horas_dict in horas_por_mes.items %}
-      {% if 'horas_extras' or 'adicional_noturno' or 'faltas' in horas_dict %}
+    {% for referencia, horas_dict in horas_por_mes.items %}
+      {% if horas_dict.items %}
           <tr>
             <td>
                 <small>{{ referencia }}</small>

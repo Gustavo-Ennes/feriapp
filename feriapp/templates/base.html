@@ -71,7 +71,15 @@
 
                     <small class="col-6">
 
-                        <i class="text-primary float-left ml-2">{{ user.username|title }}</i>
+                        <i class="text-primary float-left ml-2">
+                            {% if user|has_group:'relatorio' or user|has_group:'ferias' %}
+                                {{ user.username|title }}
+                            {% else %}
+                                {% with t=user|trabalhador_por_usuario %}
+                                    {{ t.nome }}
+                                {% endwith %}
+                            {% endif %}
+                        </i>
 
                     </small>
 

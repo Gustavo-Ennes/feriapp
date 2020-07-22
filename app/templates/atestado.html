@@ -17,8 +17,15 @@
     <div class='col-12'>
       <form action="{% url 'pdf' 'atestado' 0 %}" method="POST" enctype="multipart/form-data" class="text-left my-4">
           {% csrf_token %}
-
-          {{ AtestadoForm|crispy }}
+            {% if user|has_group:'relatorio' or user|has_group:'ferias' %}
+                {{ AtestadoForm|crispy }}
+            {% else %}
+                {% with trabalhador=user|trabalhador_por_usuario %}
+                    {% with form=trabalhador|atestado_com_trabalhador %}
+                        {{ form|crispy }}
+                    {% endwith %}
+                {% endwith %}
+            {% endif %}
 
           <button class="btn btn-success btn-lg btn-block mt-3" type='submit'>Imprimir</button>
   		</form>

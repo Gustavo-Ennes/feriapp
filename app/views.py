@@ -161,12 +161,12 @@ def trabalhador(request, trabalhador_id=None):
         for r in relatorios:
             linha = r.linhas.get(Q(trabalhador=trabalhador))
             horas = {}
-            if linha:
-                if linha.horas_extras:
+            if linha.horas_extras > 0 or linha.adicional_noturno > 0 or linha.faltas > 0:
+                if linha.horas_extras > 0:
                     horas['horas_extras'] = linha.horas_extras
-                if linha.adicional_noturno:
+                if linha.adicional_noturno > 0:
                     horas['adicional_noturno'] = linha.adicional_noturno
-                if linha.faltas:
+                if linha.faltas > 0:
                     horas['faltas'] = linha.faltas
             k = str(r.mes) + '/' + str(r.ano)
             horas_por_mes[k] = horas
@@ -174,7 +174,15 @@ def trabalhador(request, trabalhador_id=None):
         print(e)
         messages.error(request, "Trabalhador não encontrado.")
         return redirect('index')
+
     finally:
+        # se o trabalhador tem horas
+        tem_horas = False
+        for ref, horas in horas_por_mes.items():
+            if horas:
+                tem_horas = True
+                break
+
         context = {
             'trabalhador': trabalhador,
             'ferias_em_andamento': Ferias.em_andamento.all().filter(Q(trabalhador=trabalhador)),
@@ -194,6 +202,7 @@ def trabalhador(request, trabalhador_id=None):
             'abonos_indeferidos': Abono.indeferidos.all().filter(Q(trabalhador=trabalhador)),
             'TrabalhadorForm': TrabalhadorFormSemAdmissao(),
             'horas_por_mes': horas_por_mes,
+            'tem_horas': tem_horas,
         }
         return render(request, 'trabalhador.html', context)
 
@@ -249,7 +258,7 @@ def marcar_ferias(request):
             hoje = timezone.now().date()
             if obj and obj.deferida and obj.data_inicio >= hoje:
                 messages.success(request, 'Você marcou férias para o servidor %s de %s à %s.' % (
-                    obj.trabalhador.nome, obj.data_inicio.strftime("%d/%d/%Y"), obj.data_termino.strftime("%d/%d/%Y")))
+                    obj.trabalhador.nome, obj.data_inicio.strftime("%d/%m/%Y"), obj.data_termino.strftime("%d/%d/%Y")))
                 PDFFactory.get_ferias_pdf(obj)
                 pdf = open(temp_pdf, 'rb')
                 return FileResponse(pdf, filename=temp_pdf)
@@ -277,7 +286,7 @@ def marcar_licenca(request):
             obj.save()
             if obj and obj.deferida and obj.data_inicio >= hoje:
                 messages.success(request, 'Você marcou licença-prêmio para o servidor %s de %s à %s.' % (
-                    obj.trabalhador.nome, obj.data_inicio.strftime("%d/%d/%Y"), obj.data_termino.strftime("%d/%d/%Y")))
+                    obj.trabalhador.nome, obj.data_inicio.strftime("%d/%m/%Y"), obj.data_termino.strftime("%d/%d/%Y")))
             else:
                 messages.error(request,
                                "O trabalhador não pode tirar licença-prêmio nessa data por %s." % obj.observacoes)
@@ -301,7 +310,7 @@ def marcar_abono(request):
             if obj and obj.deferido:
                 if obj.data >= hoje:
                     messages.success(request, 'Você marcou um abono para o servidor %s em %s.' % (
-                        obj.trabalhador.nome, obj.data.strftime("%d/%d/%Y")))
+                        obj.trabalhador.nome, obj.data.strftime("%d/%m/%Y")))
                 else:
                     messages.warning(request, "Atenção: abono com %s" % obj.observacoes)
             else:
@@ -1112,6 +1121,7 @@ def pdf(request, tipo, obj_id):
                         Q(trabalhador=trabalhador) & Q(deferida=True) & Q(data_inicio__gt=hoje)),
                     'licencas_fruidas': LicencaPremio.fruidas.all().filter(Q(trabalhador=trabalhador)),
                     'licencas_indeferidas': LicencaPremio.indeferidas.all().filter(Q(trabalhador=trabalhador)),
+                    'horas': LinhaRelatorio.objects.filter(Q(trabalhador=trabalhador)),
                     'trabalhador': trabalhador,
                 }
             if tipo == 'setor_historico':

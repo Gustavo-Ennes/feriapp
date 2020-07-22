@@ -373,13 +373,20 @@ class PDF:
                     columns_data.append("Nome")
                     columns_data.append("Qtd. servidores")
 
-                elif type(value[0]) == LinhaRelatorio:
+                elif type(value[0]) == LinhaRelatorio and not key == 'horas':
                     columns_data.append(('Servidor'))
                     columns_data.append(('Registro'))
                     columns_data.append(('Horas Extras'))
                     columns_data.append(('Adc. Noturno'))
                     columns_data.append(('Faltas'))
                     columns_data.append(('Faltas: datas'))
+
+                elif type(value[0]) == LinhaRelatorio and key == 'horas':
+                    columns_data.append(('Ref.'))
+                    columns_data.append(('Horas Extras'))
+                    columns_data.append(('Adc. Noturno'))
+                    columns_data.append(('Faltas'))
+
 
                 else:
                     columns_data.append("Servidor")
@@ -390,7 +397,7 @@ class PDF:
                 table_data.append(columns_data)
                 columns_data = []
 
-                if type(value[0]) == LinhaRelatorio:
+                if type(value[0]) == LinhaRelatorio and not key == 'horas':
                     for linha in value:
                         if linha.horas_extras > 0.0 or linha.adicional_noturno > 0.0 or linha.faltas > 0:
                             columns_data.append(linha.trabalhador.nome)
@@ -401,6 +408,15 @@ class PDF:
                             columns_data.append('-')
                             table_data.append(columns_data)
                             columns_data = []
+
+                elif key == 'horas':
+                    for linha in value:
+                        if linha.horas_extras > 0.0 or linha.adicional_noturno > 0.0 or linha.faltas > 0:
+                            r = Relatorio.objects.get(linhas=linha)
+                            columns_data.append("%d/%d" % (r.mes, r.ano))
+                            columns_data.append(linha.horas_extras)
+                            columns_data.append(linha.adicional_noturno)
+                            columns_data.append(linha.faltas)
 
                 else:
                     for obj in value:

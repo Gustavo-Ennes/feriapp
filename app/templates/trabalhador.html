@@ -46,11 +46,15 @@
         <br>
         <p id="matricula"> {{ trabalhador.matricula }} </p>
 
-        <small for="admissao">Função:</small>
+        <small for="admissao">Adimissão:</small>
         <br>
         <p id="admissao"> {{ trabalhador.data_admissao|date:"d/m/Y" }} </p>
 
-        {% if horas_por_mes %}
+        <small for="funcao">Função:</small>
+        <br>
+        <p id="funcao"> {{ trabalhador.funcao }} </p>
+
+        {% if tem_horas %}
 
           <p class="text-primary text-center mt-3 mb-1">Histórico H.E.</p>
           {% include 'tables/trabalhador_historico_relatorios.html' %}

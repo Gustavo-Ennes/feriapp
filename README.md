@@ -1,49 +1,34 @@
-# Heroku Django Starter Template
+# FERIAPP
 
-An utterly fantastic project starter template for Django 2.0.
+Sistema escrito em Python~Django que visa automatizar a rotina de seu autor, Agente Administrativo na Prefeitura Municipal de Ilha Solteira e  estudante de Sistemas de Informação pela UFMS/CPTL.
 
-## Features
+## O que ele faz
 
-- Production-ready configuration for Static Files, Database Settings, Gunicorn, etc.
-- Enhancements to Django's static file serving functionality via WhiteNoise.
-- Latest Python 3.6 runtime environment.
+- Cadastro de trabalhadores e secretarias
 
-## How to Use
+- Formulários:
+    1. Abonada
+    2. Férias
+    3. Licença-Prêmio
+    4. Justificativas de horas extras
+    5. Atestado de Trabalho
+    6. Sexta-Parte*
+    
+- Automação de Relatórios de H.E.:
+    1. Transferência entre Relatórios
+    2. Divisão entre Relatórios
+    
+- Geração de PDF's:
+    1. Pdf gerado automaticamente após agendamento de qualquer tipo de requerimento: folgas(férias, abonadas, etc), justificativas, relatório de H.E, atestado, etc.
+    2. Botão de geração de pdf em todas as páginas listas ou tabelas
+    3. Pesquisa detalhada
+    
+- Monitor de folgas: te lembra quem folgará nos próximos dias, quem está folgando agora, e quem logo retornará ao trabalho e quando.
+    
+- Lembretes: ao logar, caso lembretes precisem ser exibidos, eles são jogados na tela em um modal, garatindo que o usuário visualize o conteúdo do lembrete.
+    
+## Quer ver funcionando?
+ - Acesse feriapp.herokuapp.com
+ - Usuário: test
+ - Senha: test
 
-To use this project, follow these steps:
-
-1. Create your working environment.
-2. Install Django (`$ pipenv install django`)
-3. Create a new project using this template
-
-## Creating Your Project
-
-Using this template to create a new Django app is easy::
-
-    $ django-admin.py startproject --template=https://github.com/heroku/heroku-django-template/archive/master.zip --name=Procfile helloworld
-
-(If this doesn't work on windows, replace `django-admin.py` with `django-admin`)
-
-You can replace ``helloworld`` with your desired project name.
-
-## Deployment to Heroku
-
-    $ git init
-    $ git add -A
-    $ git commit -m "Initial commit"
-
-    $ heroku create
-    $ git push heroku master
-
-    $ heroku run python manage.py migrate
-
-See also, a [ready-made application](https://github.com/heroku/python-getting-started), ready to deploy.
-
-
-## License: MIT
-
-## Further Reading
-
-- [Gunicorn](https://warehouse.python.org/project/gunicorn/)
-- [WhiteNoise](https://warehouse.python.org/project/whitenoise/)
-- [dj-database-url](https://warehouse.python.org/project/dj-database-url/)
