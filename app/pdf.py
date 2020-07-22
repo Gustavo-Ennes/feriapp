@@ -200,7 +200,7 @@ class PDF:
         flowables = []
         style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=15, spaceAfter=5 * mm)
 
-        flowables.append(Paragraph('<h1> S E T O R E S </h1>', style))
+        flowables.append(Paragraph('<h1>S E C R E T A R I A S</h1>', style))
         flowables.append(
             PDF.get_flowable_line()
         )

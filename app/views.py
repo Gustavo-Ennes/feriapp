@@ -217,7 +217,7 @@ def setor_espec(request):
         try:
             setor = Setor.objects.get(id=int(request.POST['setor']))
         except:
-            messages.error(request, "Não foi possível localizar tal setor.")
+            messages.error(request, "Não foi possível localizar tal secretaria.")
             return redirect('index')
         finally:
             context = {
