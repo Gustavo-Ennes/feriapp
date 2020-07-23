@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from django.db.models.query import QuerySet
 from reportlab.graphics.shapes import Drawing, Line
 from reportlab.lib import colors
+from reportlab.lib.colors import Color
 from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER, TA_RIGHT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -169,28 +170,39 @@ class PDF:
         elif obj['tipo'] == 'proibicao':
             img_path = os.path.join(BASE_DIR, 'scss/proibicao.png')
 
+        color = None
         if obj['orientacao'] == 'p':
             w = 70
             h = w
-            font_size_titulo = 35
-            font_size_conteudo = 30
+            font_size_titulo = 40
+            font_size_conteudo = 25
             font_size_observacoes = 20
             space_before = 10
+            if obj['tipo'] == 'info':
+                color = Color(0, 0, 150, 1)
+            elif obj['tipo'] == 'alerta':
+                color = Color(150, 150, 0, 1)
+            elif obj['tipo'] == 'urgencia':
+                color = Color(100, 0, 0, 1)
+            else:
+                color = Color(150, 0, 0, 1)
+
         else:
             w = 50
             h = w
-            font_size_titulo = 25
-            font_size_conteudo = 20
+            font_size_titulo = 30
+            font_size_conteudo = 15
             font_size_observacoes = 15
             space_before = 32*mm
 
-        style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=font_size_titulo, bold=True, spaceBefore=space_before,  spaceAfter=10*mm)
+        style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=font_size_titulo, color=color, bold=True, spaceBefore=space_before,  spaceAfter=10*mm)
         style_c = ParagraphStyle(name='conteudo', alignment=TA_JUSTIFY, leading=15*mm, fontSize=font_size_conteudo, spaceBefore=40*mm, spaceAfter=15 * mm,)
         style_r = ParagraphStyle(name='right', alignment=TA_RIGHT, leading=8*mm, fontSize=font_size_observacoes, spaceBefore=40*mm, spaceAfter=15 * mm,)
 
         flowables.append(
             Paragraph(
-                '''<img src="%s" width="%d" height="%d" valign="sub"/><h1> - %s - <h1><img src="%s" width="%d" height="%d" valign="sub"/>''' % (img_path, w, h,  obj['titulo'].upper(), img_path, w, h),
+                '''<img src="%s" width="%d" height="%d" valign="sub"/><h1> - %s - <h1><img src="%s" width="%d" 
+                height="%d" valign="sub"/>''' % (img_path, w, h,  obj['titulo'].upper(), img_path, w, h),
                 style
             )
         )
