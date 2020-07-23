@@ -195,7 +195,7 @@ class PDF:
             font_size_observacoes = 15
             space_before = 32*mm
 
-        style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=font_size_titulo, color=color, bold=True, spaceBefore=space_before,  spaceAfter=10*mm)
+        style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=font_size_titulo, textColor=color, bold=True, spaceBefore=space_before,  spaceAfter=10*mm)
         style_c = ParagraphStyle(name='conteudo', alignment=TA_JUSTIFY, leading=15*mm, fontSize=font_size_conteudo, spaceBefore=40*mm, spaceAfter=15 * mm,)
         style_r = ParagraphStyle(name='right', alignment=TA_RIGHT, leading=8*mm, fontSize=font_size_observacoes, spaceBefore=40*mm, spaceAfter=15 * mm,)
 
