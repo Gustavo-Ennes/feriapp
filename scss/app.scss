@@ -155,11 +155,18 @@ body {
     border:1px solid $main !important;
 }
 
-.requiredField{
-    font-family: $title_font !important;
-    color: $main !important;
-    text-shadow: 1px 1px 2px $main_darker !important;
-    font-size:0.9rem !important;
+form{
+    label{
+        font-family: $title_font !important;
+        color: $main_darker !important;
+        font-size:0.8rem !important;
+    }
+    .requiredField{
+        font-family: $title_font !important;
+        color: $main !important;
+        text-shadow: 1px 1px 2px $main_darker !important;
+        font-size:0.9rem !important;
+    }
 }
 
 .form-control{

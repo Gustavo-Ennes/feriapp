@@ -131,10 +131,17 @@ class PDF:
 
     @staticmethod
     # std ==  SimpleDocTemplate
-    def get_sdt():
+    def get_sdt(orientacao='r'):
         return SimpleDocTemplate(
             PDF.PDF_PATH,
             pagesize=A4,
+            rightMargin=10,
+            leftMargin=10,
+            topMargin=20 * mm,
+            bottomMargin=20 * mm,
+        ) if orientacao == 'r' else SimpleDocTemplate(
+            PDF.PDF_PATH,
+            pagesize=(A4[1], A4[0]),
             rightMargin=10,
             leftMargin=10,
             topMargin=20 * mm,
@@ -146,6 +153,68 @@ class PDF:
         d = Drawing(width, 1)
         d.add(Line(start_x, 0, width, 0))
         return
+
+
+    @staticmethod
+    def create_aviso_pdf(obj):
+        doc = PDF.get_sdt(orientacao=obj['orientacao'])
+        flowables = []
+        img_path = ''
+        if obj['tipo'] == 'alerta':
+            img_path = os.path.join(BASE_DIR, 'scss/alerta.png')
+        elif obj['tipo'] == 'info':
+            img_path = os.path.join(BASE_DIR, 'scss/info.png')
+        elif obj['tipo'] == 'urgencia':
+            img_path = os.path.join(BASE_DIR, 'scss/urgencia.png')
+        elif obj['tipo'] == 'proibicao':
+            img_path = os.path.join(BASE_DIR, 'scss/proibicao.png')
+
+        if obj['orientacao'] == 'p':
+            w = 70
+            h = w
+            font_size_titulo = 35
+            font_size_conteudo = 30
+            font_size_observacoes = 20
+            space_before = 10
+        else:
+            w = 50
+            h = w
+            font_size_titulo = 25
+            font_size_conteudo = 20
+            font_size_observacoes = 15
+            space_before = 32*mm
+
+        style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=font_size_titulo, bold=True, spaceBefore=space_before,  spaceAfter=10*mm)
+        style_c = ParagraphStyle(name='conteudo', alignment=TA_JUSTIFY, leading=15*mm, fontSize=font_size_conteudo, spaceBefore=40*mm, spaceAfter=15 * mm,)
+        style_r = ParagraphStyle(name='right', alignment=TA_RIGHT, leading=8*mm, fontSize=font_size_observacoes, spaceBefore=40*mm, spaceAfter=15 * mm,)
+
+        flowables.append(
+            Paragraph(
+                '''<img src="%s" width="%d" height="%d" valign="sub"/><h1> - %s - <h1><img src="%s" width="%d" height="%d" valign="sub"/>''' % (img_path, w, h,  obj['titulo'].upper(), img_path, w, h),
+                style
+            )
+        )
+
+        flowables.append(
+            Paragraph(
+             "%s" % obj['conteudo'],
+                style_c
+            )
+        )
+        if obj['observacoes']:
+            flowables.append(
+                Paragraph(
+                    "%s" % obj['observacoes'],
+                    style_r
+                )
+            )
+
+        doc.build(flowables,
+                  onFirstPage=PDF.papel_timbrado if obj['orientacao'] == 'r' else PDF.papel_timbrado_paisagem,
+                  onLaterPages=PDF.papel_timbrado if obj['orientacao']  == 'r' else PDF.papel_timbrado_paisagem
+        )
+
+
 
     @staticmethod
     def create_relacao_abono_pdf(obj):
@@ -286,6 +355,11 @@ class PDF:
         PDF.draw_header(canvas)
 
     @staticmethod
+    def papel_timbrado_paisagem(canvas, doc):
+        PDF.draw_header_landscape(canvas)
+        PDF.draw_footer_landscape(canvas)
+
+    @staticmethod
     def header_duplo(canvas, doc):
         PDF.draw_header(canvas, double_page=True)
 
@@ -417,6 +491,8 @@ class PDF:
                             columns_data.append(linha.horas_extras)
                             columns_data.append(linha.adicional_noturno)
                             columns_data.append(linha.faltas)
+                            table_data.append(columns_data)
+                            columns_data = []
 
                 else:
                     for obj in value:
@@ -495,7 +571,8 @@ class PDF:
         for key, value in dados.items():
             table_data, label = PDF.get_table_data(key, value)
             if table_data:
-                flowables = PDF.build_table(table_data, label, flowables)
+                if len(table_data) > 1:
+                    flowables = PDF.build_table(table_data, label, flowables)
 
         flowables.append(PDF.get_flowable_line())
 
@@ -908,23 +985,46 @@ class PDF:
     @staticmethod
     def draw_header(canvas, double_page=None):
         canvas.saveState()
+        x, y, w, h = [0, 280*mm, 205*mm, 15*mm]
+
         canvas.drawInlineImage(
             os.path.join(BASE_DIR, 'tests/header.jpeg'),
-            0,
-            280 * mm,
-            205 * mm,
-            15 * mm
+            x,
+            y,
+            w,
+            h
         )
         if double_page:
             canvas.drawInlineImage(
                 os.path.join(BASE_DIR, 'tests/header.jpeg'),
-                0,
-                135 * mm,
-                205 * mm,
-                15 * mm
+                x,
+                (y - (10*mm)) / 2,
+                w,
+                h,
             )
 
         canvas.restoreState()
+
+    @staticmethod
+    def draw_header_landscape(canvas, double_page=None):
+        canvas.saveState()
+        x, y, w, h = [0, 188 * mm, 288 * mm, 20 * mm]
+
+        canvas.drawInlineImage(
+            os.path.join(BASE_DIR, 'tests/header.jpeg'),
+            x,
+            y,
+            w,
+            h
+        )
+        if double_page:
+            canvas.drawInlineImage(
+                os.path.join(BASE_DIR, 'tests/header.jpeg'),
+                x,
+                (y - (10 * mm)) / 2,
+                w,
+                h,
+            )
 
     @staticmethod
     def draw_footer(canvas):
@@ -937,6 +1037,19 @@ class PDF:
             15 * mm
         )
         canvas.restoreState()
+
+    @staticmethod
+    def draw_footer_landscape(canvas):
+        canvas.saveState()
+        canvas.drawInlineImage(
+            os.path.join(BASE_DIR, 'tests/footer.jpeg'),
+            5*mm,
+            7 * mm,
+            293 * mm,
+            20 * mm
+        )
+        canvas.restoreState()
+
 
     @staticmethod
     def draw_title(canvas, text, y):
@@ -1329,6 +1442,11 @@ class PDFFactory(PDF):
     @staticmethod
     def get_materiais_pdf():
         PDFFactory.create_materiais_pdf()
+
+    @staticmethod
+    def get_aviso_pdf(obj):
+        if obj:
+            PDFFactory.create_aviso_pdf(obj)
 
 
 '''

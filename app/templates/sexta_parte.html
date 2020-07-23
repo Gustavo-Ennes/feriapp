@@ -14,8 +14,8 @@
 
 {% block conteudo %}
   <div class="row justify-content-center align-items-center">
-    <div class='col-12'>
-      <form action="{% url 'pdf' 'sexta_parte' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
+    <div class='col-12 col-lg-8 col-offset-lg-2'>
+      <form action="{% url 'pdf' 'sexta_parte' 0 %}" method="POST" enctype="multipart/form-data" class="text-left mt-5">
           {% csrf_token %}
           <label for="rg">RG:</label>
           <input id='rg' name="rg" class="form-control my-2 rg">

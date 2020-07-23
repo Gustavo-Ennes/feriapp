@@ -38,5 +38,6 @@ urlpatterns = [
     path('finalizar_relatorios/', views.finalizar_relatorios, name='finalizar_relatorios'),
     path('atestado/', views.atestado, name='atestado'),
     path('sexta-parte/', views.sexta_parte, name='sexta_parte'),
+    path('aviso/', views.aviso, name='aviso'),
 
 ]

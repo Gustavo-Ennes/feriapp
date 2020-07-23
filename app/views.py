@@ -617,7 +617,8 @@ def entrar(request):
                 login(request, user)
                 if not remember_me:
                     request.session.set_expiry(0)
-                messages.success(request, 'Bem-vindo(a), %s' % user.username)
+                name = user.username if user.groups.count() > 0 else Trabalhador.objects.get(Q(matricula=user.username)).nome
+                messages.success(request, 'Bem-vindo(a), %s' % name)
 
                 return redirect("index")
 
@@ -824,7 +825,16 @@ def pdf(request, tipo, obj_id):
 
     if request.method == "POST":
 
-        if tipo == 'sexta_parte':
+        if tipo == 'aviso':
+            obj = {
+                'orientacao': request.POST['orientacao'],
+                'tipo': request.POST['tipo'],
+                'titulo': request.POST['titulo'],
+                'conteudo': request.POST['conteudo'],
+                'observacoes': request.POST['observacoes'],
+            }
+
+        elif tipo == 'sexta_parte':
             t = Trabalhador.objects.get(id=int(request.POST['trabalhador']))
             text = "O(s) campo(s)"
             erro = False
@@ -1142,7 +1152,9 @@ def pdf(request, tipo, obj_id):
         obj = 'any'
 
     if obj:
-        if tipo == 'materiais':
+        if tipo == 'aviso':
+            PDFFactory.get_aviso_pdf(obj)
+        elif tipo == 'materiais':
             PDFFactory.get_materiais_pdf()
         if tipo == 'sexta_parte':
             PDFFactory.get_sexta_parte_pdf(obj)
@@ -1303,6 +1315,14 @@ def sexta_parte(request):
             'trabalhadores': Trabalhador.objects.all(),
         }
         return render(request, 'sexta_parte.html', context)
+
+@login_required(login_url='/entrar/')
+def aviso(request):
+    if request.method == 'GET':
+        context = {
+            'AvisoForm': AvisoForm(),
+        }
+        return render(request, 'aviso.html', context)
 
 
 ###########################################################################################################

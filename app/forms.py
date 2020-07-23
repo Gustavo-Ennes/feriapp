@@ -152,3 +152,21 @@ class AtestadoForm(forms.Form):
             }
         )
     )
+
+
+class AvisoForm(forms.Form):
+    opcoes_tipo = [
+        ['alerta', "Alerta"],
+        ['info', 'Informativo'],
+        ['urgencia', "Urgência"],
+        ['proibicao', "Proibição"],
+    ]
+    opcoes_pagina = [
+        ['r', "Retrato"],
+        ['p', 'Paisagem']
+    ]
+    orientacao = forms.ChoiceField(choices=opcoes_pagina, label='Orientação da página')
+    tipo = forms.ChoiceField(choices=opcoes_tipo)
+    titulo = forms.CharField(max_length=200, label="Título")
+    conteudo = forms.CharField(widget=forms.Textarea(), label="Conteúdo")
+    observacoes = forms.CharField(required=False, widget=forms.Textarea(), label="Observações")
