@@ -183,9 +183,9 @@ class PDF:
             elif obj['tipo'] == 'alerta':
                 color = Color(0.3, 0.3, 0, 0.8)
             elif obj['tipo'] == 'urgencia':
-                color = Color(1, 0, 0, 0.8)
+                color = Color(0.6, 0.2, 0, 0.8)
             else:
-                color = Color(1, 0, 0, 0.8)
+                color = Color(1.00, 0, 0, 0.8)
 
         else:
             w = 50
