@@ -179,13 +179,13 @@ class PDF:
             font_size_observacoes = 20
             space_before = 10
             if obj['tipo'] == 'info':
-                color = Color(0, 0, 150, 1)
+                color = Color(0, 0, 0.7, 0.8)
             elif obj['tipo'] == 'alerta':
-                color = Color(50, 50, 0, 1)
+                color = Color(0.3, 0.3, 0, 0.8)
             elif obj['tipo'] == 'urgencia':
-                color = Color(100, 0, 0, 1)
+                color = Color(1, 0, 0, 0.8)
             else:
-                color = Color(150, 0, 0, 1)
+                color = Color(1, 0, 0, 0.8)
 
         else:
             w = 50
