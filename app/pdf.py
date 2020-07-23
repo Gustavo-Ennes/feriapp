@@ -197,7 +197,7 @@ class PDF:
 
         flowables.append(
             Paragraph(
-             "%s" % obj['conteudo'],
+             "%s" % obj['conteudo'].upper(),
                 style_c
             )
         )
