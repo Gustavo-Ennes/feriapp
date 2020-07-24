@@ -1174,7 +1174,6 @@ def pdf(request, tipo, obj_id):
     # obj vazio aqui
     if tipo == 'materiais':
         obj = 'any'
-    print("\n----------------------->%d\n" % len(obj))
     if obj is not None:
         if tipo == 'aviso':
             PDFFactory.get_aviso_pdf(obj)
