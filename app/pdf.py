@@ -145,7 +145,7 @@ class PDF:
             pagesize=(A4[1], A4[0]),
             rightMargin=10,
             leftMargin=10,
-            topMargin=20 * mm,
+            topMargin=25 * mm,
             bottomMargin=20 * mm,
         )
 
@@ -196,12 +196,12 @@ class PDF:
             space_before = 32*mm
 
         style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=font_size_titulo, textColor=color, bold=True, spaceBefore=space_before,  spaceAfter=10*mm)
-        style_c = ParagraphStyle(name='conteudo', alignment=TA_JUSTIFY, leading=15*mm, fontSize=font_size_conteudo, spaceBefore=40*mm, spaceAfter=15 * mm,)
+        style_c = ParagraphStyle(name='conteudo', alignment=TA_CENTER, leading=15*mm, fontSize=font_size_conteudo, spaceBefore=40*mm, spaceAfter=15 * mm,)
         style_r = ParagraphStyle(name='right', alignment=TA_RIGHT, leading=8*mm, fontSize=font_size_observacoes, spaceBefore=40*mm, spaceAfter=15 * mm,)
 
         flowables.append(
             Paragraph(
-                '''<img src="%s" width="%d" height="%d" valign="sub"/><h1> - %s - <h1><img src="%s" width="%d" 
+                '''<img src="%s" width="%d" height="%d" valign="sub"/><h1> - <u>%s</u> - <h1><img src="%s" width="%d" 
                 height="%d" valign="sub"/>''' % (img_path, w, h,  obj['titulo'].upper(), img_path, w, h),
                 style
             )
@@ -997,7 +997,7 @@ class PDF:
     @staticmethod
     def draw_header(canvas, double_page=None):
         canvas.saveState()
-        x, y, w, h = [0, 280*mm, 205*mm, 15*mm]
+        x, y, w, h = [5*mm, 277*mm, 193*mm, 15*mm]
 
         canvas.drawInlineImage(
             os.path.join(BASE_DIR, 'tests/header.jpeg'),
@@ -1020,7 +1020,7 @@ class PDF:
     @staticmethod
     def draw_header_landscape(canvas, double_page=None):
         canvas.saveState()
-        x, y, w, h = [0, 188 * mm, 288 * mm, 20 * mm]
+        x, y, w, h = [0, 183 * mm, 288 * mm, 20 * mm]
 
         canvas.drawInlineImage(
             os.path.join(BASE_DIR, 'tests/header.jpeg'),
@@ -1043,9 +1043,9 @@ class PDF:
         canvas.saveState()
         canvas.drawInlineImage(
             os.path.join(BASE_DIR, 'tests/footer.jpeg'),
-            0,
+            8*mm,
             7 * mm,
-            210 * mm,
+            193 * mm,
             15 * mm
         )
         canvas.restoreState()
@@ -1057,7 +1057,7 @@ class PDF:
             os.path.join(BASE_DIR, 'tests/footer.jpeg'),
             5*mm,
             7 * mm,
-            293 * mm,
+            288 * mm,
             20 * mm
         )
         canvas.restoreState()
