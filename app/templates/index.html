@@ -51,9 +51,8 @@
           </div>
         </div>
       {% endif %}
-      {% if relatorios %}
-        {% include 'modals/lembrete_relatorio.html' %}
-
+      {% if lembretes  %}
+        {% include 'modals/lembrete_template.html' %}
       {% endif %}
     </div>
   </div>
@@ -62,12 +61,27 @@
 {% endblock %}
 
 {% block js %}
-  {% if relatorios and not lembretes_exibidos and user|has_group:'relatorio' %}
-    <script>
-      $('#modal_lembrete_relatorio').modal({
-        keyboard: false
-      })
-    </script>
-  {% endif %}
+  <script>
+    $(document).ready(function(){
+      {% for lembrete in lembretes %}
+        {% if user|has_group:'relatorio' %}
+          {% if lembrete.is_valid %}
+
+            alert("{{lembrete.url_name|safe|escape}}");
+            $(".modal-url").attr("href", "{{ lembrete.url_name|safe|escape }}");
+
+            $(".modal-body-title").html("{{lembrete.titulo|safe|escape}}");
+            $(".modal-body-text").html("{{lembrete.mensagem|safe|escape}}");
+            $('#modal_lembrete').modal({
+              keyboard: false
+            })
+
+          {% endif %}
+        {% endif %}
+
+      {% endfor %}
+
+    });
+  </script>
 
 {% endblock %}

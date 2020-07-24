@@ -191,7 +191,3 @@ def referencia(linhaRelatorio):
     except Exception as e:
         print(e)
     return "{r.mes}/{r.ano}" if r else None
-
-
-
-

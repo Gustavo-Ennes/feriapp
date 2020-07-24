@@ -8,6 +8,14 @@ verificando se ele está de férias no dia, ou abonando ou de licenças
 '''
 
 
+def atualiza_lembretes():
+    lembretes = Lembrete.objects.all()
+    for l in lembretes:
+        if timezone.now().day <= l.dia and l.mostrado_esse_mes:
+            l.mostrado_esse_mes = False
+            l.save()
+
+
 def atualiza_situacoes_trabalhadores():
     hoje = timezone.now().date()
 
@@ -45,7 +53,6 @@ def atualiza_situacoes_trabalhadores():
                 elif f.data < hoje:
                     f.fruido = True
                     f.save()
-
 
         if atestado:
             trabalhador.situacao = 'atestado'

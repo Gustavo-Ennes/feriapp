@@ -11,7 +11,7 @@
       </div>
       <div class="col-4">
         {% if relatorios_em_aberto %}
-          {% if relatorios_em_aberto.1.estado == 'justificativas' %}
+          {% if relatorios_em_aberto.0.estado == 'justificativas' %}
             <form action="{% url 'soma_horas' %}" method="GET">
               <button class="btn btn-sm btn-block btn-primary" type="submit" {% if not user|has_group:'relatorio' %}disabled{% endif %}>
                 Concluir Relatórios

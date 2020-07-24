@@ -318,6 +318,28 @@ class Relatorio(models.Model):
         ordering = ['-criado_em', 'setor__nome']
 
 
+class Lembrete(models.Model):
+    objects = models.Manager()
+    titulo = models.CharField(max_length=200)
+    mensagem = models.TextField()
+    url_name = models.CharField(max_length=100)
+    dia = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(31)],
+        help_text="Caso não haja tal dia em algum mês(30, 31), o lembrete será exibido no último dia do mês"
+    )
+    mostrado_esse_mes = models.BooleanField(default=False)
+
+    def is_valid(self):
+        is_valid = False
+        if not self.mostrado_esse_mes:
+            if timezone.now().day >= self.dia:
+                is_valid = True
+        return is_valid
+
+    class Meta:
+        ordering = ['dia']
+
+
 def valida_ferias(ferias):
     hoje = timezone.now().date()
     trabalhador = ferias.trabalhador

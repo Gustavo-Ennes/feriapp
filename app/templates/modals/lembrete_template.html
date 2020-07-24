@@ -1,5 +1,5 @@
-
-<div class="modal fade" id="modal_lembrete_relatorio" tabindex="-1" role="dialog" aria-labelledby="labelAutorizacao" aria-hidden="true">
+{% load filtros %}
+<div class="modal fade" id="modal_lembrete" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -10,15 +10,13 @@
     	</div>
 
         <div class="modal-body">
-            <h5>
-                Se não houverem mais mudanças a serem feitas nos {{ relatorios.count }} relatórios em aberto, finalize-os agora
-            </h5>
-            <p>Você deseja finalizá-los agora ou ser relembrado depois?</p>
-
+            <h5 class="modal-body-title"></h5>
+            <p class="modal-body-text"></p>
         </div>
+
         <div class="modal-footer">
             <button class="btn btn-secondary" data-dismiss="modal">Lembrar Depois</button>
-            <a class="btn btn-success" href='{% url "soma_horas" %}'>Finalizar Agora</a>
+            <a class="btn btn-success modal-url" href=''>Deixe me ver</a>
         </div>
 
 

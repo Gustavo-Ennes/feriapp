@@ -37,12 +37,13 @@ def index(request):
             'em_andamento': em_andamento(),
             'AutorizacaoForm': AutorizacaoForm(),
             'lembretes_exibidos': lembretes_exibidos,
-            'relatorios': Relatorio.vigentes.em_aberto()
+            'relatorios': Relatorio.vigentes.em_aberto(),
+            'lembretes': Lembrete.objects.all(),
 
         }
 
         atualiza_situacoes_trabalhadores()
-        #atualiza_user_trabalhadores()
+        atualiza_lembretes()
 
         return render(request, 'index.html', context)
 
@@ -706,7 +707,11 @@ def soma_justificativas(request):
 
 
 def busca_relatorio(setor):
-    return Relatorio.vigentes.em_aberto().get(Q(setor=setor))
+    try:
+        return Relatorio.vigentes.em_aberto().get(Q(setor=setor))
+    except Exception as e:
+        print("> Não há relatórios deste mês ainda, eles serão gerados")
+        return None
 
 
 @login_required(login_url='/entrar/')
@@ -747,6 +752,7 @@ def soma_horas(request):
         elif request.method == "POST":
 
             trabalhadores = Trabalhador.objects.all()
+            [print("\n%s: %s" % (k, v)) for k, v in request.POST.items()]
             for trabalhador in trabalhadores:
                 # achar a linha do relatório desse mês correspondente ao trabalhador
                 relatorio = busca_relatorio(trabalhador.setor)
@@ -804,10 +810,16 @@ def relatorios(request):
 def finalizar_relatorios(request):
     if request.method == 'POST':
         relatorios = Relatorio.vigentes.em_aberto()
+        lembrete = Lembrete.objects.get(id=1)
+
         for r in relatorios:
             r.data_fechamento = datetime.now().date()
             r.estado = 'oficial'
             r.save()
+
+        lembrete.mostrado_esse_mes = True
+        lembrete.save()
+
         messages.success(request, "%d relatórios foram finalizados e é impossível editá-los" % relatorios.count())
         return redirect('relatorios')
 
@@ -1083,8 +1095,20 @@ def pdf(request, tipo, obj_id):
             if tipo == 'relacao_abono':
 
                 if verifica_grupo(request.user, 'relatorio'):
+                    # seto o primeiro dia do mês
                     primeiro_dia_do_mes = hoje.replace(day=1)
-                    obj = Abono.objects.filter(Q(deferido=True) & Q(data__gte=primeiro_dia_do_mes) & Q(data__lte=hoje))
+                    ultimo_dia_do_mes = hoje
+                    # e descubro o último
+                    while ultimo_dia_do_mes.month == hoje.month:
+                        ultimo_dia_do_mes = ultimo_dia_do_mes + timedelta(days=1)
+                    ultimo_dia_do_mes -= timedelta(days=1)
+                    obj = Abono.objects.filter(Q(deferido=True) & Q(data__gte=primeiro_dia_do_mes) & Q(data__lte=ultimo_dia_do_mes))
+
+                    # se obj_id == 1 quer dizer que não quero mais ver esse aviso, então
+                    if obj_id == 1:
+                        l = Lembrete.objects.get(id=2)
+                        l.mostrado_esse_mes = True
+                        l.save()
                 else:
                     messages.error(request, "Permissão negada")
                     return redirect('abono')
@@ -1150,8 +1174,8 @@ def pdf(request, tipo, obj_id):
     # obj vazio aqui
     if tipo == 'materiais':
         obj = 'any'
-
-    if obj:
+    print("\n----------------------->%d\n" % len(obj))
+    if obj is not None:
         if tipo == 'aviso':
             PDFFactory.get_aviso_pdf(obj)
         elif tipo == 'materiais':
@@ -1161,7 +1185,15 @@ def pdf(request, tipo, obj_id):
         elif tipo == 'atestado':
             PDFFactory.get_atestado_trabalho(obj)
         elif tipo == 'relacao_abono':
-            PDFFactory.get_relacao_abono_pdf(obj)
+            if obj:
+                PDFFactory.get_relacao_abono_pdf(obj)
+                l = Lembrete.objects.get(id=2)
+                if not l.mostrado_esse_mes:
+                    l.mostrado_esse_mes = True
+                    l.save()
+            else:
+                messages.warning(request, "Não há abonos para listar")
+                return redirect('abono')
         elif tipo == 'relatorio':
             PDFFactory.get_relatorio_pdf(obj, copia=False)
         elif tipo == 'relatorio-copia':
