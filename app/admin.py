@@ -30,6 +30,10 @@ class LinhaRelatorioAdmin(admin.ModelAdmin):
     pass
 
 
+class LembreteAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(Trabalhador, TrabalhadorAdmin)
 admin.site.register(Ferias, FeriasAdmin)
 admin.site.register(LicencaPremio, LicencaPremioAdmin)
@@ -37,3 +41,4 @@ admin.site.register(Abono, AbonoAdmin)
 admin.site.register(Setor, SetorAdmin)
 admin.site.register(Relatorio, RelatorioAdmin)
 admin.site.register(LinhaRelatorio, LinhaRelatorioAdmin)
+admin.site.register(Lembrete, LembreteAdmin)
