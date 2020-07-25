@@ -175,25 +175,27 @@ class PDF:
             w = 70
             h = w
             font_size_titulo = 40
-            font_size_conteudo = 25
+            font_size_conteudo = 30
             font_size_observacoes = 20
             space_before = 10
-            if obj['tipo'] == 'info':
-                color = Color(0, 0, 0.7, 0.8)
-            elif obj['tipo'] == 'alerta':
-                color = Color(0.3, 0.3, 0, 0.8)
-            elif obj['tipo'] == 'urgencia':
-                color = Color(0.6, 0.2, 0, 0.8)
-            else:
-                color = Color(1.00, 0, 0, 0.8)
 
         else:
             w = 50
             h = w
             font_size_titulo = 30
-            font_size_conteudo = 15
+            font_size_conteudo = 20
             font_size_observacoes = 15
             space_before = 32*mm
+
+
+        if obj['tipo'] == 'info':
+            color = Color(0, 0, 0.7, 0.8)
+        elif obj['tipo'] == 'alerta':
+            color = Color(0.3, 0.3, 0, 0.8)
+        elif obj['tipo'] == 'urgencia':
+            color = Color(0.6, 0.2, 0, 0.8)
+        else:
+            color = Color(1.00, 0, 0, 0.8)
 
         style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=font_size_titulo, textColor=color, bold=True, spaceBefore=space_before,  spaceAfter=10*mm)
         style_c = ParagraphStyle(name='conteudo', alignment=TA_CENTER, leading=15*mm, fontSize=font_size_conteudo, spaceBefore=40*mm, spaceAfter=15 * mm,)
@@ -223,7 +225,7 @@ class PDF:
 
         doc.build(flowables,
                   onFirstPage=PDF.papel_timbrado if obj['orientacao'] == 'r' else PDF.papel_timbrado_paisagem,
-                  onLaterPages=PDF.papel_timbrado if obj['orientacao']  == 'r' else PDF.papel_timbrado_paisagem
+                  onLaterPages=PDF.papel_timbrado if obj['orientacao'] == 'r' else PDF.papel_timbrado_paisagem
         )
 
 
@@ -1037,6 +1039,7 @@ class PDF:
                 w,
                 h,
             )
+        canvas.restoreState()
 
     @staticmethod
     def draw_footer(canvas):
