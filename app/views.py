@@ -13,8 +13,18 @@ from .tasks import *
 
 lembretes_exibidos = False
 
+
+def verifica_conf():
+    try:
+        Conf.objects.get(id=1)
+    except:
+        Conf.objects.create()
+
+
 @login_required(login_url='/entrar/')
 def index(request):
+    verifica_conf()
+
     if not request.user.groups.filter(Q(name='ferias') | Q(name='relatorio')):
         try:
             trabalhador = Trabalhador.objects.get(Q(user=request.user))
@@ -39,6 +49,8 @@ def index(request):
             'lembretes_exibidos': lembretes_exibidos,
             'relatorios': Relatorio.vigentes.em_aberto(),
             'lembretes': Lembrete.objects.all(),
+            'data': datetime.now().date(),
+            'conf': Conf.objects.get(id=1)
 
         }
 
@@ -85,6 +97,22 @@ def divide_linha(request):
 
         linha.delete()
     return redirect('relatorios')
+
+
+@login_required(login_url='/entrar/')
+@permission_required('app.add_ferias')
+def conf(request):
+    if request.method == "GET":
+        context = {
+            'ConfForm': ConfForm(instance=Conf.objects.get(id=1)),
+        }
+        return render(request, 'conf.html', context)
+    elif request.method == 'POST':
+        conf = ConfForm(request.POST, instance=Conf.objects.get(id=1))
+        if conf.is_valid():
+            conf.save()
+            messages.success(request, "Você atualizou as suas configurações.")
+            return redirect('index')
 
 
 @login_required(login_url='/entrar/')
@@ -618,7 +646,8 @@ def entrar(request):
                 login(request, user)
                 if not remember_me:
                     request.session.set_expiry(0)
-                name = user.username if user.groups.count() > 0 else Trabalhador.objects.get(Q(matricula=user.username)).nome
+                name = user.username if user.groups.count() > 0 else Trabalhador.objects.get(
+                    Q(matricula=user.username)).nome
                 messages.success(request, 'Bem-vindo(a), %s' % name)
 
                 return redirect("index")
@@ -774,8 +803,10 @@ def soma_horas(request):
                         faltas=faltas
                     )
 
+                conf = Conf.objects.get(id=1)
+
                 linha.horas_extras = horas_extras
-                linha.adicional_noturno = adc_noturno
+                linha.adicional_noturno = adc_noturno if not conf.calculo_de_adicional else adc_noturno * conf.ADC_CONST
                 linha.faltas = faltas
                 linha.save()
                 relatorio.save()
@@ -824,6 +855,16 @@ def finalizar_relatorios(request):
         return redirect('relatorios')
 
 
+def imprime_sem_previa(pdf):
+    import platform
+    if platform.system() == 'Linux':
+        stream = os.popen('lpstat -p -d')
+        if stream:
+            printer_name = stream.read().split(": ")[1]
+            os.system('lpr -P %s %s' % (printer_name, os.path.join(PROJECT_ROOT, 'temp/pdf.pdf')))
+
+
+
 @login_required(login_url='/entrar/')
 def pdf(request, tipo, obj_id):
     temp_pdf = None
@@ -868,11 +909,11 @@ def pdf(request, tipo, obj_id):
             if not t.rg:
                 text += "->RG\n"
                 t.rg = request.POST['rg']
-                salvar=True
+                salvar = True
             if not t.cpf:
                 text += "->CPF\n"
                 t.cpf = request.POST['cpf']
-                salvar=True
+                salvar = True
 
             if salvar:
                 t.save()
@@ -883,7 +924,7 @@ def pdf(request, tipo, obj_id):
                 'cpf': t.cpf,
             }
             # se o trabalhador não tem 20 anos de trampo
-            if t.data_admissao > timezone.now() - timedelta(days=20*365):
+            if t.data_admissao > timezone.now() - timedelta(days=20 * 365):
                 messages.warning(request, "O trabalhador informado não possui 20 anos de serviços prestados")
                 return redirect('index')
 
@@ -914,25 +955,24 @@ def pdf(request, tipo, obj_id):
                 messages.error(request, text)
                 return redirect('index')
 
-
             text = "O(s) campo(s):\n"
             salvar = False
             if not t.rg:
                 text += "->RG\n"
                 t.rg = request.POST['rg']
-                salvar=True
+                salvar = True
             if not t.cpf:
                 text += "->CPF\n"
                 t.cpf = request.POST['cpf']
-                salvar=True
+                salvar = True
             if not t.ctps:
                 text += "->CPTS\n"
                 t.ctps = request.POST['ctps']
-                salvar=True
+                salvar = True
             if not t.ctps_serie:
                 text += "->Série CTPS\n"
                 t.ctps_serie = request.POST['ctps_serie']
-                salvar=True
+                salvar = True
 
             if salvar:
                 t.save()
@@ -1102,7 +1142,8 @@ def pdf(request, tipo, obj_id):
                     while ultimo_dia_do_mes.month == hoje.month:
                         ultimo_dia_do_mes = ultimo_dia_do_mes + timedelta(days=1)
                     ultimo_dia_do_mes -= timedelta(days=1)
-                    obj = Abono.objects.filter(Q(deferido=True) & Q(data__gte=primeiro_dia_do_mes) & Q(data__lte=ultimo_dia_do_mes))
+                    obj = Abono.objects.filter(
+                        Q(deferido=True) & Q(data__gte=primeiro_dia_do_mes) & Q(data__lte=ultimo_dia_do_mes))
 
                     # se obj_id == 1 quer dizer que não quero mais ver esse aviso, então
                     if obj_id == 1:
@@ -1223,7 +1264,6 @@ def pdf(request, tipo, obj_id):
             PDFFactory.get_trabalhadores_pdf(obj)
 
         pdf = open(temp_pdf, 'rb')
-
         return FileResponse(pdf, filename=temp_pdf)
 
 
@@ -1347,6 +1387,7 @@ def sexta_parte(request):
         }
         return render(request, 'sexta_parte.html', context)
 
+
 @login_required(login_url='/entrar/')
 def aviso(request):
     if request.method == 'GET':
@@ -1366,7 +1407,7 @@ def gera_relatorio_em_branco(setor, num_oficio):
 def proximas_folgas():
     hoje = timezone.now().date()
     folgas = []
-    limite_dias = 3
+    limite_dias = 7
 
     # como o  tipo 'f' não foi especificado, e por LicencaPremio ser subclasse de Ferias, os dois tipos serão
     # listados na próxima linha
@@ -1383,7 +1424,7 @@ def proximas_folgas():
 def proximos_retornos():
     hoje = timezone.now().date()
     folgas = []
-    limite_dias = 3
+    limite_dias = 7
 
     # como o  tipo 'f' não foi especificado, e por LicencaPremio ser subclasse de Ferias, os dois tipos serão
     # listados na próxima linha

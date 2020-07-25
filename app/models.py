@@ -340,6 +340,34 @@ class Lembrete(models.Model):
         ordering = ['dia']
 
 
+class Conf(models.Model):
+    ADC_CONST = 1.143
+    objects = models.Manager()
+
+    proximas_folgas = models.BooleanField(
+        default=True,
+        help_text='Mostra uma tabela na página principal, representando os trabalhadores que tem as folgas próximas'
+    )
+    em_andamento = models.BooleanField(
+        default=True,
+        help_text='Mostra uma tabela na página principal, representando os trabalhadores que estão de folga no momento'
+    )
+    proximos_retornos = models.BooleanField(
+        default=True,
+        help_text='Mostra uma tabela na página principal, representando os trabalhadores que estão no final de sua '
+                  'folga '
+    )
+    calculo_de_adicional = models.BooleanField(
+        default=False,
+        verbose_name="Cálculo de Adicional Noturno",
+        help_text='Multiplica o total de horas por 1,143, caso marcado'
+    )
+
+
+
+
+
+
 def valida_ferias(ferias):
     hoje = timezone.now().date()
     trabalhador = ferias.trabalhador

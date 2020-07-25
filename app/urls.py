@@ -39,5 +39,6 @@ urlpatterns = [
     path('atestado/', views.atestado, name='atestado'),
     path('sexta-parte/', views.sexta_parte, name='sexta_parte'),
     path('aviso/', views.aviso, name='aviso'),
+    path('conf/', views.conf, name='conf'),
 
 ]

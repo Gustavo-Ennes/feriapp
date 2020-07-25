@@ -125,6 +125,14 @@ def ano_padrao():
     return data.year - 1 if data.month == 1 else data.year
 
 
+@register.simple_tag
+def data():
+    data = datetime.now()
+    s = dia_escrito(data.weekday()) + ", "
+    s += str(data.day) + " de " + mes_escrito(data.month).title() + " de " + str(data.year)
+    return s
+
+
 @register.filter
 def mes_escrito(num):
     if num == 1:
@@ -153,13 +161,33 @@ def mes_escrito(num):
         return 'dezembro'
 
 
+@register.filter
+def dia_escrito(dia):
+    if dia == 0:
+        return "Segunda-Feira"
+    elif dia == 1:
+        return "Terça-Feira"
+    elif dia == 2:
+        return "Quarta-Feira"
+    elif dia == 3:
+        return "Quinta-Feira"
+    elif dia == 4:
+        return "Sexta-Feira"
+    elif dia == 5:
+        return 'Sábado'
+    elif dia == 6:
+        return "Domingo"
+
+
 @register.filter(name='has_group')
 def has_group(user, group_name):
     return user.groups.filter(name=group_name).exists()
 
+
 @register.filter
 def num_oficio_do_setor(setor):
     return Relatorio.vigentes.em_aberto().get(setor=setor).num_oficio
+
 
 @register.filter
 def trabalhador_por_usuario(usuario):
@@ -169,6 +197,7 @@ def trabalhador_por_usuario(usuario):
         print("Trabalhador não encontrado:", e)
         return None
 
+
 @register.filter
 def trabalhador_por_id(id):
     if id:
@@ -177,12 +206,14 @@ def trabalhador_por_id(id):
         except Exception as e:
             print(e)
 
+
 @register.filter
 def atestado_com_trabalhador(trabalhador):
-    f =  AtestadoForm()
+    f = AtestadoForm()
     f.fields['trabalhador'].queryset = Trabalhador.objects.filter(Q(id=trabalhador.id))
     f.fields['trabalhador'].empty_label = None
     return f
+
 
 @register.filter
 def referencia(linhaRelatorio):

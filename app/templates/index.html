@@ -28,22 +28,22 @@
           {% include 'modals/autorizacao_he.html' %}
         </div>
       {% endif %}
-      {% if proximas_folgas or proximos_retornos or em_andamento %}
+      {% if  proximas_folgas and conf.proximas_folgas or proximos_retornos and conf.proximos_retornos or em_andamento and conf.em_andamento %}
         <div class='col-12'>
           <div class="card my-5">
             <div class="card-header">
               <h4 class="card-title text-center">OBSERVAÇÕES</h4>
             </div>
             <div class="card-body">
-              {% if proximas_folgas %}
+              {% if proximas_folgas and conf.proximas_folgas %}
                 <h2 class='text-center text-primary'>Próximas</h2>
                 {% include 'tables/proximas_folgas.html' %}
               {% endif %}
-              {% if proximos_retornos %}
+              {% if proximos_retornos and conf.proximos_retornos %}
                 <h2 class='text-center text-primary'>Retornando</h2>
                 {% include 'tables/proximos_retornos.html' %}
               {% endif %}
-              {% if em_andamento %}
+              {% if em_andamento and conf.em_andamento %}
                 <h2 class='text-center text-primary'>Folgando Hoje</h2>
                 {% include 'tables/em_andamento.html' %}
               {% endif %}

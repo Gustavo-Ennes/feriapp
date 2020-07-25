@@ -96,6 +96,12 @@ class SetorForm(forms.ModelForm):
         fields = "__all__"
 
 
+class ConfForm(forms.ModelForm):
+    class Meta:
+        model = Conf
+        fields = "__all__"
+
+
 class LoginForm(forms.Form):
     usuario = forms.CharField(max_length=200, strip=True, label='', widget=forms.TextInput(attrs={
         'class': 'form-control',

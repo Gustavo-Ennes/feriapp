@@ -83,6 +83,21 @@
           <button class="btn btn-success my-2 my-sm-0" type="submit" >Pesquisar</button>
         </form>
       {% endif %}
+
+      {% if user|has_group:'relatorio' or user|has_group:'ferias' %}
+        <div class="dropleft">
+          <button class="btn btn-link dropdown-toggle nav-link" role="button" id="ddconf" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-cog"></i>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="ddconf">
+            <a class="dropdown-item" href="{% url 'conf' %}">Configurações</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'sair' %}">Sair</a>
+          </div>
+        </div>
+      {% else %}
+          <a class="btn btn-link nav-link" href="{% url 'sair' %}">Sair</a>
+      {% endif %}
     </div>
   </nav>
 {% endif %}
