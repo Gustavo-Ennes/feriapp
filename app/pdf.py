@@ -236,10 +236,12 @@ class PDF:
         data = datetime.now()
 
         flowables = []
-        style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=15, spaceAfter=10 * mm)
+        style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=25, spaceAfter=5*mm)
+        style_c = ParagraphStyle(name='sub_titulo', alignment=TA_CENTER, fontSize=13, spaceAfter=10 * mm)
         style_r = ParagraphStyle(name='right', alignment=TA_RIGHT, fontSize=12, spaceAfter=15*mm)
 
         flowables.append(Paragraph('<h1>RELAÇÃO DE ABONADAS<h1>', style))
+        flowables.append(Paragraph('Setor: Transporte', style=style_c))
         flowables.append(
             PDF.get_flowable_line()
         )

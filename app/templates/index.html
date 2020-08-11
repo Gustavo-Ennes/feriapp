@@ -66,8 +66,6 @@
       {% for lembrete in lembretes %}
         {% if user|has_group:'relatorio' %}
           {% if lembrete.is_valid %}
-
-            alert("{{lembrete.url_name|safe|escape}}");
             $(".modal-url").attr("href", "{{ lembrete.url_name|safe|escape }}");
 
             $(".modal-body-title").html("{{lembrete.titulo|safe|escape}}");
