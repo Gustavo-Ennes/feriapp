@@ -1443,7 +1443,7 @@ def em_andamento():
     folgas = []
 
     # como o  tipo 'f' não foi especificado, e por LicencaPremio ser subclasse de Ferias, os dois tipos serão listados na próxima linha
-    folgas = Ferias.objects.filter(Q(deferida=True) & Q(data_inicio__lte=hoje) & Q(data_termino__gte=hoje))
+    folgas = Ferias.objects.filter(Q(deferida=True) & Q(data_inicio__lte=hoje) & Q(data_termino__gt=hoje))
     abonos = Abono.objects.filter(Q(deferido=True) & Q(data=hoje))
     folgas = list(chain(abonos, folgas))
 
