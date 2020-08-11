@@ -992,7 +992,7 @@ class PDF:
 
         flowables.append(Paragraph("Ilha Solteira, %d de %s de %s" % (data.day, RandomStuff.mes_escrito(data.month), data.year), style=style_data))
 
-        flowables = PDF.assinatura_de("<b>Rodrigo Rodrigues Dias</b>", flowables,
+        flowables = PDF.assinatura_de("<b>Rodrigo Rodrigues da Silva Dias</b>", flowables,
                                       legenda="Diretor do Departamento de Transporte")
         flowables = PDF.assinatura_de("<b>Assinatura do(a) Secretário(a)</b>", flowables,
                                       legenda="Secretaria de %s" % relatorio.setor.nome.title())
