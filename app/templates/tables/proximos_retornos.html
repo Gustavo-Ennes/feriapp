@@ -54,7 +54,7 @@
             {% else %}
               <td>
                 <strong>
-                  {{ folga.data_termino|soma_dias:1 }}
+                  {{ folga.data_termino|soma_dias:1|check_amanha }}
                 </strong>
               </td>
             {% endif %}

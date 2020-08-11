@@ -49,13 +49,13 @@
             {% if folga|verifica_tipo:'abono' %}
               <td>
                 <strong>
-                  {{ folga.data|date:"d/m/Y" }}
+                  {{ folga.data|check_amanha }}
                 </strong>
               </td>
             {% else %}
               <td>
                 <strong>
-                  {{ folga.data_inicio|date:"d/m/Y" }}
+                  {{ folga.data_inicio|check_amanha }}
                 </strong>
               </td>
             {% endif %}
