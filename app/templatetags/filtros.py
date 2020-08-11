@@ -92,7 +92,9 @@ def soma_dias(data, dias):
 @register.filter
 def check_amanha(data):
     print('data:', data, ' ~ amanhã:', datetime.now().date() + timedelta(days=1))
-    if data == datetime.now().date() + timedelta(days=1):
+    if data == datetime.now().date():
+        return "Hoje"
+    elif data == datetime.now().date() + timedelta(days=1):
         return "Amanhã"
     return data.strftime("%d/%m/%Y")
 
