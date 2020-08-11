@@ -491,7 +491,7 @@ class PDF:
                             columns_data.append(linha.trabalhador.nome)
                             columns_data.append(linha.trabalhador.registro)
                             columns_data.append(linha.horas_extras)
-                            columns_data.append("%.2f" % linha.adicional_noturno)
+                            columns_data.append("%.1f" % linha.adicional_noturno)
                             columns_data.append(linha.faltas)
                             columns_data.append('-')
                             table_data.append(columns_data)
