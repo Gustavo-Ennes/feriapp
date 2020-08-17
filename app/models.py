@@ -267,24 +267,24 @@ class Relatorio(models.Model):
         def all(self):
             data = datetime.now()
             return super().get_queryset().filter(
-                Q(criado_em__month=data.month)
-                & Q(criado_em__year=data.year)
+                Q(mes=data.month - 1 if data.month != 1 else 12)
+                & Q(ano=data.year if data.month != 1 else data.year - 1)
                 & (Q(estado='terminado') | Q(estado='oficial'))
             )
 
         def em_aberto(self):
             data = datetime.now()
             return super().get_queryset().filter(
-                Q(criado_em__month=data.month)
-                & Q(criado_em__year=data.year)
+                Q(mes=data.month - 1 if data.month != 1 else 12)
+                & Q(ano=data.year if data.month != 1 else data.year - 1)
                 & (Q(estado='terminado') | Q(estado="justificativas"))
             )
 
         def finalizados(self):
             data = datetime.now()
             return super().get_queryset().filter(
-                Q(criado_em__month=data.month)
-                & Q(criado_em__year=data.year)
+                Q(mes=data.month - 1 if data.month != 1 else 12)
+                & Q(ano=data.year if data.month != 1 else data.year - 1)
                 & Q(estado='oficial')
             )
 

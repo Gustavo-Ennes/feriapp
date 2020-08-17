@@ -19,13 +19,11 @@
         </h4>
       </div>
       <div class="col-2">
-        {% if request|is_pc %}
-          <form method="GET" action="{% url 'pdf' 'trabalhador_historico' trabalhador.id %}" class="mr-1" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
-            <button type='submit' class="btn btn-sm btn-block btn-success" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
-              <i class="far fa-file-pdf text-light"></i>
-            </button>
-          </form>
-        {% endif %}
+        <form method="GET" action="{% url 'pdf' 'trabalhador_historico' trabalhador.id %}" class="mr-1" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
+          <button type='submit' class="btn btn-sm btn-block btn-success" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
+            <i class="far fa-file-pdf text-light"></i>
+          </button>
+        </form>
       </div>
     </div>
   </div>

@@ -290,7 +290,7 @@ def marcar_ferias(request):
                     obj.trabalhador.nome, obj.data_inicio.strftime("%d/%m/%Y"), obj.data_termino.strftime("%d/%d/%Y")))
                 PDFFactory.get_ferias_pdf(obj)
                 pdf = open(temp_pdf, 'rb')
-                return FileResponse(pdf, filename=temp_pdf)
+                return FileResponse(pdf, filename=temp_pdf, as_attachment=request.user_agent.is_mobile)
             else:
                 messages.error(request, "O trabalhador não pode tirar férias nessa data por %s." % obj.observacoes)
 
@@ -681,8 +681,8 @@ def soma_justificativas(request):
     data = datetime.now()
     if request.method == 'GET':
         if not Relatorio.vigentes.finalizados():
-            relatorios_deste_mes = Relatorio.objects.filter(
-                Q(criado_em__year=data.year) & Q(criado_em__month=data.month))
+            relatorios_deste_mes = Relatorio.vigentes.all().filter(
+                Q(ano=data.year) & Q(mes=data.month))
             if not relatorios_deste_mes:
                 context = {
                     'trabalhadores': Trabalhador.objects.all(),
@@ -710,7 +710,7 @@ def soma_justificativas(request):
             relatorio = busca_relatorio(trabalhador.setor)
             if not relatorio:
                 # se não há eu gero
-                relatorio = gera_relatorio_em_branco(trabalhador.setor, 1)
+                relatorio = gera_relatorio_em_branco(trabalhador.setor, request.POST['num_oficio-%d' % trabalhador.setor.id])
 
             if string in request.POST:
                 linha = LinhaRelatorio.objects.create(
@@ -725,12 +725,11 @@ def soma_justificativas(request):
 
         for setor in Setor.objects.all():
             string = "num_oficio-" + str(setor.id)
+            relatorio = None
             if string in request.POST:
                 relatorio = Relatorio.vigentes.em_aberto().get(setor=setor)
-                if relatorio:
-                    relatorio.num_oficio = request.POST[string]
-                    relatorio.save()
-
+                relatorio.num_oficio = request.POST[string]
+                relatorio.save()
         messages.success(request, "Soma das justificativas concluída")
         return redirect('index')
 
@@ -833,6 +832,12 @@ def relatorios(request):
         'relatorios_finalizados_antigos': Relatorio.objects.filter(Q(estado='oficial') & Q(criado_em__lt=data)),
         'qtd_trabalhadores': Trabalhador.objects.count(),
     }
+    print(
+        'Em Aberto: ',
+        context['relatorios_em_aberto'],
+        'Finalizados: ',
+        context['relatorios_finalizados']
+    )
     return render(request, 'relatorios.html', context)
 
 
@@ -862,7 +867,6 @@ def imprime_sem_previa(pdf):
         if stream:
             printer_name = stream.read().split(": ")[1]
             os.system('lpr -P %s %s' % (printer_name, os.path.join(PROJECT_ROOT, 'temp/pdf.pdf')))
-
 
 
 @login_required(login_url='/entrar/')
@@ -1264,14 +1268,13 @@ def pdf(request, tipo, obj_id):
             PDFFactory.get_trabalhadores_pdf(obj)
 
         pdf = open(temp_pdf, 'rb')
-        return FileResponse(pdf, filename=temp_pdf)
+        return FileResponse(pdf, filename=temp_pdf, as_attachment=request.user_agent.is_mobile)
 
 
 @login_required(login_url='/entrar/')
 @permission_required('app.add_relatorio')
 def relatorio_edicao(request, relatorio_id):
     if request.method == 'GET':
-        data = datetime.now()
         relatorio = Relatorio.objects.get(id=relatorio_id)
         relatorios = Relatorio.vigentes.all()
 

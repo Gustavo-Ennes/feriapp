@@ -1,5 +1,5 @@
 {% load filtros %}
-<div class="modal fade" id="modal_lembrete" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modal_lembrete-{{ l.id }}" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -10,13 +10,13 @@
     	</div>
 
         <div class="modal-body">
-            <h5 class="modal-body-title"></h5>
-            <p class="modal-body-text"></p>
+            <h5 class="modal-body-title-{{ l.id }}">{{ l.titulo }}</h5>
+            <p class="modal-body-text-{{ l.id }}">{{ l.mensagem }}</p>
         </div>
 
         <div class="modal-footer">
             <button class="btn btn-secondary" data-dismiss="modal">Lembrar Depois</button>
-            <a class="btn btn-success modal-url" href=''>Deixe me ver</a>
+            <a class="btn btn-success modal-url-{{ l.id }}" href="{{ l.url_name }}">Deixe me ver</a>
         </div>
 
 

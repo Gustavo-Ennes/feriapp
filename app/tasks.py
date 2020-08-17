@@ -9,11 +9,10 @@ verificando se ele está de férias no dia, ou abonando ou de licenças
 
 
 def atualiza_lembretes():
-    lembretes = Lembrete.objects.all()
-    for l in lembretes:
-        if timezone.now().day <= l.dia and l.mostrado_esse_mes:
-            l.mostrado_esse_mes = False
-            l.save()
+    if timezone.now().date().day == 1:
+        for lembrete in Lembrete.objects.all():
+            lembrete.mostrado_esse_mes = False
+            lembrete.save()
 
 
 def atualiza_situacoes_trabalhadores():

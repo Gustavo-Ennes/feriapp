@@ -13,14 +13,12 @@
         {% include 'modals/novo_setor.html' %}
       </div>
       <div class="col-2">
-        {% if request|is_pc %}
-          <form method="POST" action="{% url 'pdf' 'setores' 0 %}" class="mr-1">
-            {% csrf_token %}
-            <button type='submit' class="btn btn-success btn-sm btn-block" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not setores %}disabled{% endif %}>
-              <i class="far fa-file-pdf text-center"></i>
-            </button>
-          </form>
-        {% endif %}
+        <form method="POST" action="{% url 'pdf' 'setores' 0 %}" class="mr-1">
+          {% csrf_token %}
+          <button type='submit' class="btn btn-success btn-sm btn-block" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not setores %}disabled{% endif %}>
+            <i class="far fa-file-pdf text-center"></i>
+          </button>
+        </form>
       </div>
     </div>
   </div>

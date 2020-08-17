@@ -1,35 +1,61 @@
 {% load filtros %}
 {% load user_agents %}
 
+{% if request|is_pc %}
     <table class="table table-sm table-striped text-center">
-  <thead>
-    <tr>
-      <th scope="col"><small>Ref.</small></th>
-      <th scope="col"><small>H.E.</small></th>
-      <th scope="col"><small>A.N.</small></th>
-      <th scope="col"><small>Faltas</small></th>
+        <thead>
+            <tr>
+              <th scope="col"><small>Ref.</small></th>
+              <th scope="col"><small>H.E.</small></th>
+              <th scope="col"><small>A.N.</small></th>
+              <th scope="col"><small>Faltas</small></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for referencia, horas_dict in horas_por_mes.items %}
+                {% if horas_dict.items %}
+                    <td>
+                        <small>{{ referencia }}</small>
+                    </td>
+                    <td>
+                        <small>{% if 'horas_extras' in horas_dict %}{{horas_dict.horas_extras}}{%else%}0{% endif %}</small>
+                    </td>
+                    <td>
+                        <small>{% if 'adicional_noturno' in horas_dict %}{{horas_dict.adicional_noturno}}{%else%}0{% endif %}</small>
+                    </td>
+                    <td>
+                        <small>{% if 'faltas' in horas_dict %}{{horas_dict.faltas}}{%else%}0{% endif %}</small>
+                    </td>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
 
-    </tr>
-  </thead>
-  <tbody>
     {% for referencia, horas_dict in horas_por_mes.items %}
-      {% if horas_dict.items %}
-          <tr>
-            <td>
-                <small>{{ referencia }}</small>
-            </td>
-            <td>
-                <small>{% if 'horas_extras' in horas_dict %}{{horas_dict.horas_extras}}{%else%}0{% endif %}</small>
-            </td>
-            <td>
-                <small>{% if 'adicional_noturno' in horas_dict %}{{horas_dict.adicional_noturno}}{%else%}0{% endif %}</small>
-            </td>
-            <td>
-                <small>{% if 'faltas' in horas_dict %}{{horas_dict.faltas}}{%else%}0{% endif %}</small>
-            </td>
-          </tr>
+        {% if horas_dict.items %}
+            <section class="card">
+                <header class="card-header">
+                    <h3 class="card-title text-center">{{ referencia }}</h3>
+                </header>
+                <article class="card-body">
+                    <span class="row justify-content-center align-items-top text-center">
+                        <h5 class="col-4">H.E.</h5>
+                        <h5 class="col-4">A.N.</h5>
+                        <h5 class="col-4">Faltas</h5>
+                        {% for referencia, horas_dict in horas_por_mes.items %}
+                            {% if horas_dict.items %}
+                                <p class="col-4">{% if 'horas_extras' in horas_dict %}{{horas_dict.horas_extras}}{%else%}0{% endif %}</p>
+                                <p class="col-4">{% if 'adicional_noturno' in horas_dict %}{{horas_dict.adicional_noturno}}{%else%}0{% endif %}</p>
+                                <p class="col-4">{% if 'faltas' in horas_dict %}{{horas_dict.faltas}}{%else%}0{% endif %}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                </article>
+            </section>
         {% endif %}
     {% endfor %}
+{% endif %}
 
-  </tbody>
-</table>
+
+

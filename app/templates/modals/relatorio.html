@@ -6,7 +6,7 @@
       <i class="fas big-fas fa-file-invoice"></i>
     </h1>
     <strong class="text-success text-center m-0">
-        {{ relatorio.criado_em|date:'m' }}/{{ relatorio.criado_em|date:'Y' }}
+        {{ relatorio.mes }}/{{ relatorio.ano}}
     </strong>
   </button>
 {% else %}
@@ -14,7 +14,7 @@
     <small class='text-center text-success'> {{ relatorio.setor.nome|upper }}</small>
       <p><i class="fas big-fas fa-file-invoice"></i></p>
     <small class="text-success text-center m-0">
-        {{ relatorio.criado_em|date:'m' }}/{{ relatorio.criado_em|date:'Y' }}
+      {{ relatorio.mes }}/{{ relatorio.ano}}
     </small>
 
   </button>

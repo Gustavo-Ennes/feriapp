@@ -13,14 +13,12 @@
         {% include "modals/marcar_abono.html" %}
       </div>
       <div class="col">
-        {% if request|is_pc %}
-          <form method="POST" action="{% url 'pdf' 'abono' 0 %}" class="mr-1">
-            {% csrf_token %}
-            <button type='submit' class="btn btn-success btn-sm btn-block" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not futuros and not fruidos and not indeferidos and not em_andamento %}disabled{% endif %}>
-              <i class="far fa-file-pdf"></i>
-            </button>
-          </form>
-        {% endif %}
+        <form method="POST" action="{% url 'pdf' 'abono' 0 %}" class="mr-1">
+          {% csrf_token %}
+          <button type='submit' class="btn btn-success btn-sm btn-block" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not futuros and not fruidos and not indeferidos and not em_andamento %}disabled{% endif %}>
+            <i class="far fa-file-pdf"></i>
+          </button>
+        </form>
       </div>
       {% if user|has_group:'relatorio' %}
         <div class='col'>

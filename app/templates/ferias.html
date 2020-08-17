@@ -13,14 +13,12 @@
         {% include 'modals/marcar_ferias.html' %}
       </div>
       <div class="col-2">
-        {% if request|is_pc %}
-          <form method="POST" action="{% url 'pdf' 'ferias' 0 %}" class="mr-1">
-            {% csrf_token %}
-            <button type='submit' class="btn btn-success btn-sm btn-block" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not futuras and not fruidas and not indeferidas and not em_andamento %}disabled{% endif %}>
-              <i class="far fa-file-pdf"></i>
-            </button>
-          </form>
-        {% endif %}
+        <form method="POST" action="{% url 'pdf' 'ferias' 0 %}" class="mr-1">
+          {% csrf_token %}
+          <button type='submit' class="btn btn-success btn-sm btn-block" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not futuras and not fruidas and not indeferidas and not em_andamento %}disabled{% endif %}>
+            <i class="far fa-file-pdf"></i>
+          </button>
+        </form>
       </div>
     </div>
   </div>

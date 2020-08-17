@@ -19,11 +19,11 @@
         <div class="row justify-content-center">
             <div class='col-6'>
               <label for='mes_input'>Mês</label>
-              <input class="form-control" type='number' name='mes' value='{% mes_anterior %}'>
+              <input class="form-control" id="mes_input" type='number' name='mes' value='{% mes_anterior %}'>
             </div>
             <div class='col-6'>
               <label for='ano_input'>Ano</label>
-              <input class="form-control" type='number' name='ano' value='{% ano_padrao %}'>              
+              <input class="form-control" id="ano_input" type='number' name='ano' value='{% ano_padrao %}'>
 
             </div>
             {% for setor in setores %}

@@ -29,20 +29,24 @@
 {% endblock %}
 
 {% block conteudo %}
-  {% if relatorios_finalizados_antigos %}
 
+  {% if relatorios_finalizados|length == 0 and relatorios_em_aberto|length == 0 %}
     <div class="row justify-content-center align-items-center">
-      {% for relatorio in relatorios_finalizados_antigos %}
-        {% with finalizados=True %}
-          {% include 'modals/relatorio.html' %}
-        {% endwith %}
-      {% endfor %}
+      <div class="col-12 text-center">
+        {% if qtd_trabalhadores > 0 %}
+          <a class="btn btn-lg btn-success text-center mb-5" href="{% url 'soma_horas' %}" {% if not user|has_group:'relatorio' %}disabled{% endif %}>Começar a somar as justificativas</a>
+        {% else %}
+          <h5 class="text-success">Primeiramente, cadastre setores, e então trabalhadores</h5>
+        {% endif %}
+      </div>
     </div>
-
+  {% elif relatorios_finalizados|length > 0 and relatorios_em_aberto|length == 0 %}
+    <small class="text-primary ml-2">Relatório(s) de {{ relatorios_finalizados.0.mes|mes_escrito }} já fechado(s)</small>
+  {% else %}
+      <h5 class="text-success">O(s) relatório(s) deste mês já foram fechados</h5>
   {% endif %}
-
   {% if relatorios_finalizados or relatorios_em_aberto or relatorios_finalizados_antigos %}
-    <div class="m-3 my-4">
+    <div class="m-3 my-5">
       {% if relatorios_finalizados_antigos %}
         <div class="row justify-content-center align-items-center ">
           <div class="{% if not relatorios_finalizados %}col-12{% else %}col-6{% endif %}"><h3 class="text-success text-center">Finalizados Antigos</h3></div>
@@ -80,17 +84,7 @@
       {% endif %}
     </div>
 
-  {% else %}
-      <div class="row justify-content-center align-items-center">
-        <div class="col-12 text-center">
-          {% if qtd_trabalhadores > 0 %}
-            <a class="btn btn-lg btn-success text-center" href="{% url 'soma_horas' %}" {% if not user|has_group:'relatorio' %}disabled{% endif %}>Começar a somar as justificativas</a>
-          {% else %}
-            <h5 class="text-success">Primeiramente, cadastre setores, e então trabalhadores</h5>
-          {% endif %}
-        </div>
-      </div>
+  {% endif  %}
 
-  {% endif %}
 
 {% endblock %}

@@ -23,11 +23,9 @@
       <div class="col-12 col-sm-6 col-lg-4">
         {% include 'modals/novo_trabalhador.html' %}
       </div>
-      {% if request|is_pc %}
-        <div class="col-12 col-sm-6 col-lg-4">
-          {% include 'modals/autorizacao_he.html' %}
-        </div>
-      {% endif %}
+      <div class="col-12 col-sm-6 col-lg-4">
+        {% include 'modals/autorizacao_he.html' %}
+      </div>
       {% if  proximas_folgas and conf.proximas_folgas or proximos_retornos and conf.proximos_retornos or em_andamento and conf.em_andamento %}
         <div class='col-12'>
           <div class="card my-5">
@@ -52,7 +50,9 @@
         </div>
       {% endif %}
       {% if lembretes  %}
-        {% include 'modals/lembrete_template.html' %}
+        {% for l in lembretes %}
+          {% include 'modals/lembrete_template.html' %}
+        {% endfor %}
       {% endif %}
     </div>
   </div>
@@ -63,21 +63,18 @@
 {% block js %}
   <script>
     $(document).ready(function(){
-      {% for lembrete in lembretes %}
-        {% if user|has_group:'relatorio' %}
-          {% if lembrete.is_valid %}
-            $(".modal-url").attr("href", "{{ lembrete.url_name|safe|escape }}");
-
-            $(".modal-body-title").html("{{lembrete.titulo|safe|escape}}");
-            $(".modal-body-text").html("{{lembrete.mensagem|safe|escape}}");
-            $('#modal_lembrete').modal({
-              keyboard: false
+      {% if lembretes  %}
+        $('#modal_lembrete-1').modal({
+          keyboard: false
+        })
+        {% for l in lembretes|slice:'1:' %}
+          .on('hidden.bs.modal', function (e) {
+              $('#modal_lembrete-{{ l.id }}').modal({
+                keyboard: false
+              })
             })
-
-          {% endif %}
-        {% endif %}
-
-      {% endfor %}
+        {% endfor  %};
+      {% endif %}
 
     });
   </script>

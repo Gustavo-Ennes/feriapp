@@ -10,15 +10,13 @@
         <h4 class="text-primary ml-4">PESQUISA: {{query }}</h4>
       </div>
       <div class="col-2">
-        {% if request|is_pc %}
-          <form method="POST" action="{% url 'pdf' 'pesquisa' 0 %}" class="mr-1">
-            {% csrf_token %}
-            <input type='hidden' name='query' value={{query}} />
-            <button type='submit' class="btn btn-sm btn-block btn-success" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not qtd_resultados %}disabled{% endif %}>
-              <i class="far fa-file-pdf text-light"></i>
-            </button>
-          </form>
-        {% endif %}
+        <form method="POST" action="{% url 'pdf' 'pesquisa' 0 %}" class="mr-1">
+          {% csrf_token %}
+          <input type='hidden' name='query' value={{query}} />
+          <button type='submit' class="btn btn-sm btn-block btn-success" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not qtd_resultados %}disabled{% endif %}>
+            <i class="far fa-file-pdf text-light"></i>
+          </button>
+        </form>
       </div>
     </div>
   </div>
