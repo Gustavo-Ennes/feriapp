@@ -48,6 +48,7 @@
   {% if relatorios_finalizados or relatorios_em_aberto or relatorios_finalizados_antigos %}
     <div class="m-3 my-5">
       {% if relatorios_finalizados_antigos %}
+        <br class="my-4">
         <div class="row justify-content-center align-items-center ">
           <div class="col-12">
             <h3 class="text-success text-center">Finalizados Antigos</h3>
@@ -62,6 +63,7 @@
         </div>
       {% endif %}
       {% if relatorios_finalizados %}
+        <br class="my-4">
         <div class="row justify-content-center align-items-center ">
           <div class="col-12">
             <h3 class="text-success text-center">Finalizados {{ relatorios_finalizados.0.mes|mes_escrito }}/{{ relatorios_finalizados.0.ano }}</h3>
@@ -76,6 +78,7 @@
         </div>
       {% endif %}
       {% if relatorios_em_aberto %}
+        <br class="my-4">
         <div class="row justify-content-center align-items-center">
           <div class="col-12">
             <h3 class="text-success text-center">Em Aberto</h3>
@@ -91,6 +94,9 @@
     </div>
 
   {% endif  %}
+  {% if relatorios_em_aberto or relatorios_finalizados or relatorios_finalizados_antigos %}
+    <br class="my-4">
+  {% endif %}
 
 
 {% endblock %}
