@@ -64,15 +64,19 @@
   <script>
     $(document).ready(function(){
       {% if lembretes  %}
-        $('#modal_lembrete-1').modal({
+        let string;
+        string = '#modal_lembrete-'.concat('{{ lembretes.0.id }}');
+        $(string).modal({
           keyboard: false
         })
         {% for l in lembretes|slice:'1:' %}
-          .on('hidden.bs.modal', function (e) {
-              $('#modal_lembrete-{{ l.id }}').modal({
-                keyboard: false
+          {% if l.is_valid %}
+            .on('hidden.bs.modal', function (e) {
+                $('#modal_lembrete-{{ l.id }}').modal({
+                  keyboard: false
+                })
               })
-            })
+          {% endif %}
         {% endfor  %};
       {% endif %}
 

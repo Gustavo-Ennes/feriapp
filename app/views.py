@@ -48,7 +48,7 @@ def index(request):
             'AutorizacaoForm': AutorizacaoForm(),
             'lembretes_exibidos': lembretes_exibidos,
             'relatorios': Relatorio.vigentes.em_aberto(),
-            'lembretes': Lembrete.objects.all(),
+            'lembretes': Lembrete.objects.filter(Q(mostrado_esse_mes=False) & Q(dia__lte=datetime.now().day)),
             'data': datetime.now().date(),
             'conf': Conf.objects.get(id=1)
 
@@ -56,6 +56,7 @@ def index(request):
 
         atualiza_situacoes_trabalhadores()
         atualiza_lembretes()
+        print("lembretes: ", context['lembretes'])
 
         return render(request, 'index.html', context)
 
