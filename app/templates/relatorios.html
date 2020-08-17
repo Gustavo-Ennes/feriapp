@@ -49,7 +49,9 @@
     <div class="m-3 my-5">
       {% if relatorios_finalizados_antigos %}
         <div class="row justify-content-center align-items-center ">
-          <div class="{% if not relatorios_finalizados %}col-12{% else %}col-6{% endif %}"><h3 class="text-success text-center">Finalizados Antigos</h3></div>
+          <div class="col-12">
+            <h3 class="text-success text-center">Finalizados Antigos</h3>
+          </div>
           {% for relatorio in relatorios_finalizados_antigos %}
             {% with finalizados=True %}
 
@@ -61,7 +63,9 @@
       {% endif %}
       {% if relatorios_finalizados %}
         <div class="row justify-content-center align-items-center ">
-          <div class="{% if not relatorios_finalizados_antigos %}col-12{% else %}col-6{% endif %}"><h3 class="text-success text-center">Finalizados {{ relatorios_finalizados.0.mes|mes_escrito }}/{{ relatorios_finalizados.0.ano }}</h3></div>
+          <div class="col-12">
+            <h3 class="text-success text-center">Finalizados {{ relatorios_finalizados.0.mes|mes_escrito }}/{{ relatorios_finalizados.0.ano }}</h3>
+          </div>
           {% for relatorio in relatorios_finalizados %}
             {% with finalizados=True %}
 
@@ -73,12 +77,14 @@
       {% endif %}
       {% if relatorios_em_aberto %}
         <div class="row justify-content-center align-items-center">
-          <div class="col-12"><h3 class="text-success text-center">Em Aberto</h3></div>
-            {% for relatorio in relatorios_em_aberto %}
+          <div class="col-12">
+            <h3 class="text-success text-center">Em Aberto</h3>
+          </div>
+          {% for relatorio in relatorios_em_aberto %}
 
-              {% include 'modals/relatorio.html' %}
+            {% include 'modals/relatorio.html' %}
 
-            {% endfor %}
+          {% endfor %}
           </div>
         </div>
       {% endif %}
