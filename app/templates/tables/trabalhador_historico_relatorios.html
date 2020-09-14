@@ -13,20 +13,22 @@
         </thead>
         <tbody>
             {% for referencia, horas_dict in horas_por_mes.items %}
-                {% if horas_dict.items %}
-                    <td>
-                        <small>{{ referencia }}</small>
-                    </td>
-                    <td>
-                        <small>{% if 'horas_extras' in horas_dict %}{{horas_dict.horas_extras}}{%else%}0{% endif %}</small>
-                    </td>
-                    <td>
-                        <small>{% if 'adicional_noturno' in horas_dict %}{{horas_dict.adicional_noturno}}{%else%}0{% endif %}</small>
-                    </td>
-                    <td>
-                        <small>{% if 'faltas' in horas_dict %}{{horas_dict.faltas}}{%else%}0{% endif %}</small>
-                    </td>
-                {% endif %}
+                <tr>
+                    {% if horas_dict.items %}
+                        <th scope='row'>
+                            <small>{{ referencia }}</small>
+                        </th>
+                        <td>
+                            <small>{% if 'horas_extras' in horas_dict %}{{horas_dict.horas_extras}}{%else%}0{% endif %}</small>
+                        </td>
+                        <td>
+                            <small>{% if 'adicional_noturno' in horas_dict %}{{horas_dict.adicional_noturno}}{%else%}0{% endif %}</small>
+                        </td>
+                        <td>
+                            <small>{% if 'faltas' in horas_dict %}{{horas_dict.faltas}}{%else%}0{% endif %}</small>
+                        </td>
+                    {% endif %}
+                </tr>
             {% endfor %}
         </tbody>
     </table>
