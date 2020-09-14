@@ -28,7 +28,7 @@ body { background-color: #EDF6FF; }
 
 .form-control:focus { background-color: rgba(255, 255, 255, 0.6); }
 
-.table { color: #488DD6 !important; max-height: 600px !important; }
+.table { color: #488DD6 !important; }
 
 .table thead tr { background-color: #488DD6 !important; font-family: "Noto Serif", serif !important; color: #C2D633 !important; }
 
@@ -104,7 +104,7 @@ nav .nav-tabs .nav-item.active { background-color: #21548A; box-shadow: 1px 1px 
 
 .btn-success:hover { background-color: #C2D633 !important; color: #488DD6 !important; }
 
-.btn-big { height: 180px; }
+.btn-big { height: 90px; }
 
 .btn-big:hover { border: 3px solid #C2D633 !important; color: #C2D633 !important; box-shadow: 3px 3px 5px 2px #7D8A28 !important; }
 
@@ -118,6 +118,14 @@ nav .nav-tabs .nav-item.active { background-color: #21548A; box-shadow: 1px 1px 
 
 .btn-warning { background-color: #C2D633 !important; box-shadow: 1px 1px 2px 1px #7D8A28 !important; color: #E3C22D !important; font-family: "Noto Serif", serif !important; border: 1px solid #7D8A28; text-shadow: 0px 1px 0px #secondary_darker; }
 
+.swiper-container { width: 600px; height: 300px; }
+
 small, .nav-link, h4, h5 { font-family: "Roboto Slab", serif !important; }
 
 h1, h2, h3 { font-family: "Noto Serif", serif !important !important; }
+
+.wrapper-label { font-family: "Noto Serif", serif; color: #C2D633; text-align: left; text-shadow: 1px 1px 1px #21548A; margin-top: 30px; margin-bottom: 0; }
+
+.requisicao-wrapper, .novo-wrapper, .outros-wrapper { background-color: rgba(0, 0, 255, 0.05); border-radius: 10px; margin-right: 10px; margin-left: 10px; padding: 15px; }
+
+.divider { height: 2px; border-bottom: 1px solid #main_darker; width: 70%; }

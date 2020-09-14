@@ -73,7 +73,7 @@
               <div class="card-body h-300">
                 {% if ferias_em_andamento %}
                   <h5 class="text-center text-primary">em andamento</h5>
-                  {% with ferias=ferias_em_andamento tipo='ferias' arquivada=True %}
+                  {% with ferias=ferias_em_andamento tipo='ferias' arquivada=True  impressao=True %}
                     <div class="my-2">
                       {% include 'tables/ferias.html' %}
                     </div>
@@ -81,7 +81,7 @@
                 {% endif %}
                 {% if ferias_futuras %}
                   <h5 class="text-center text-primary">futuras</h5>
-                  {% with ferias=ferias_futuras tipo='ferias' %}
+                  {% with ferias=ferias_futuras tipo='ferias' impressao=True %}
                     <div class="my-2">
                       {% include 'tables/ferias.html' %}
                     </div>
@@ -89,7 +89,7 @@
                 {% endif %}
                 {% with arquivada=True %}
                   {% if ferias_fruidas %}
-                    {% with ferias=ferias_fruidas %}
+                    {% with ferias=ferias_fruidas  impressao=True %}
                       <h5 class="text-center text-primary">fruídas</h5>
                       <div class="my-2">
                         {% include 'tables/ferias.html' %}
@@ -97,7 +97,7 @@
                     {% endwith %}
                     {% endif %}
                   {% if ferias_indeferidas %}
-                    {% with ferias=ferias_indeferidas %}
+                    {% with ferias=ferias_indeferidas  impressao=True %}
                       <h5 class="text-center text-primary">indeferidas</h5>
                       <div class="my-2">
                         {% include 'tables/ferias.html' %}
@@ -119,7 +119,7 @@
               <div class="card-body h-300">
                 {% if licencas_em_andamento %}
                   <h5 class="text-center text-primary">em andamento</h5>
-                  {% with licencas=licencas_em_andamento tipo='licenca' arquivada=True %}
+                  {% with licencas=licencas_em_andamento tipo='licenca' arquivada=True  impressao=True %}
                     <div class="my-2">
                       {% include 'tables/licenca.html' %}
                     </div>
@@ -127,7 +127,7 @@
                 {% endif %}
                 {% if licencas_futuras %}
                   <h3 class="text-center text-primary">futuras</h3>
-                  {% with licencas=licencas_futuras tipo='licenca' %}
+                  {% with licencas=licencas_futuras tipo='licenca' impressao=True %}
                     <div class="my-2">
                       {% include 'tables/licenca.html' %}
                     </div>
@@ -135,7 +135,7 @@
                 {% endif %}
                 {% with arquivada=True %}
                   {% if licencas_fruidas %}
-                    {% with licencas=licencas_fruidas %}
+                    {% with licencas=licencas_fruidas impressao=True %}
                       <h5 class="text-center text-primary">fruídas</h5>
                       <div class="my-2">
                         {% include 'tables/licenca.html' %}
@@ -143,7 +143,7 @@
                     {% endwith %}
                   {% endif %}
                   {% if licencas_indeferidas %}
-                    {% with licencas=licencas_indeferidas %}
+                    {% with licencas=licencas_indeferidas impressao=True %}
                       <h5 class="text-center text-primary">indeferidas</h5>
                       <div class="my-2">
                         {% include 'tables/licenca.html' %}
@@ -165,7 +165,7 @@
               <div class="card-body h-300">
                 {% if abonos_em_andamento %}
                   <h5 class="text-center text-primary">em andamento</h5>
-                  {% with abonos=abonos_em_andamento tipo='abono' arquivado=True %}
+                  {% with abonos=abonos_em_andamento tipo='abono' arquivado=True impressao=True %}
                     <div class="my-2">
                       {% include 'tables/abono.html' %}
                     </div>
@@ -173,7 +173,7 @@
                 {% endif %}
                 {% if abonos_futuros %}
                   <h5 class="text-center text-primary">futuros</h5>
-                  {% with abonos=abonos_futuros tipo='abono' %}
+                  {% with abonos=abonos_futuros tipo='abono' impressao=True %}
                     <div class="my-2">
                       {% include 'tables/abono.html' %}
                     </div>
@@ -181,7 +181,7 @@
                 {% endif %}
                 {% with arquivado=True %}
                   {% if abonos_fruidos %}
-                    {% with abonos=abonos_fruidos %}
+                    {% with abonos=abonos_fruidos impressao=True %}
                       <h5 class="text-center text-primary">fruídos</h5>
                       <div class="my-2">
                         {% include 'tables/abono.html' %}
@@ -189,7 +189,7 @@
                     {% endwith %}
                   {% endif %}
                   {% if abonos_indeferidos %}
-                    {% with abonos=abonos_indeferidos %}
+                    {% with abonos=abonos_indeferidos impressao=True %}
                       <h5 class="text-center text-primary">indeferidos</h5>
                       <div class="my-2">
                         {% include 'tables/abono.html' %}

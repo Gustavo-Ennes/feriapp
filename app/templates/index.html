@@ -7,25 +7,138 @@
 
 
   <div class="">
-    <div class="row justify-content-center align-items-center">
-      <div class="col-12 col-sm-6 col-lg-4">
-        {% include 'modals/marcar_ferias.html' %}
+
+    <div class="row justify-content-center align-items-stretch">
+
+      <h1 class='col-10 col-offset-1 wrapper-label'>Requisições</h1>
+
+      <div class='col-10 col-offset-1 requisicao-wrapper'>
+        <div class='row justify-content-center'>
+
+          <div class='col-10 col-offset-1 col-md-6 col-lg'>
+            {% include 'modals/marcar_ferias.html' %}
+          </div>
+
+          <div class="col-10 col-offset-1 col-md-6 col-lg-4">
+            {% include 'modals/marcar_licenca.html' %}
+          </div>
+
+          <div class="col-10 col-offset-1 col-md-6 col-lg-4">
+            {% include 'modals/marcar_abono.html' %}
+          </div>
+
+          <div class="col-10 col-offset-1 divider">
+          </div>
+
+          <div class="col-10 col-offset-1 col-md-6 col-lg-4 align-items-center">
+            <form method='GET' action='{% url "sexta_parte" %}'>
+              <button type='submit' class='btn btn-primary btn-block btn-big my-1'>Sexta-Parte</button>
+            </form>
+          </div>
+
+          <div class="col-10 col-offset-1 col-md-6 col-lg-4 align-items-center">
+            <form method='GET' action='{% url "pdf" "materiais" 0 %}'>
+              <button type='submit' class='btn btn-primary btn-block btn-big my-1'>Materiais</button>
+            </form>
+          </div>
+
+        </div>
       </div>
-      <div class="col-12 col-sm-6 col-lg-4">
-        {% include 'modals/marcar_licenca.html' %}
+
+      <h1 class='col-10 col-offset-1 wrapper-label'>Novo</h1>
+
+      <div class='col-10 col-offset-1  novo-wrapper'>
+
+        <div class='row justify-content-center'>
+
+
+          <div class="col-10 col-offset-1 col-md-6 col-lg-4">
+            {% include 'modals/novo_trabalhador.html' %}
+          </div>
+
+          <div class="col-10 col-offset-1 col-md-6 col-lg-4">
+            {% include 'modals/novo_setor.html' %}
+          </div>
+
+          <div class="col-10 col-offset-1 col-md-6 col-lg-4 align-items-center">
+            <form method='GET' action='{% url "aviso" %}'>
+              <button type='submit' class='btn btn-primary btn-block btn-big my-1'>Aviso</button>
+            </form>
+          </div>
+
+        </div>
+
       </div>
-      <div class="col-12 col-sm-6 col-lg-4">
-        {% include 'modals/marcar_abono.html' %}
+
+      <h1 class='col-10 col-offset-1 wrapper-label'>Outros</h1>
+
+      <div class='col-10 col-offset-1 outros-wrapper'>
+        <div class='row justify-content-center'>
+
+
+          <div class="col-10 col-offset-1 col-md-6 col-lg-4">
+            {% include 'modals/autorizacao_he.html' %}
+          </div>
+
+          <div class="col-10 col-offset-1 col-md-6 col-lg-4 align-items-center">
+            <form method='GET' action='{% url "atestado" %}'>
+              <button type='submit' class='btn btn-primary btn-block btn-big my-1'>Atestado</button>
+            </form>
+          </div>
+
+        </div>
       </div>
-      <div class="col-12 col-sm-6 col-lg-4">
-        {% include 'modals/novo_setor.html' %}
-      </div>
-      <div class="col-12 col-sm-6 col-lg-4">
-        {% include 'modals/novo_trabalhador.html' %}
-      </div>
-      <div class="col-12 col-sm-6 col-lg-4">
-        {% include 'modals/autorizacao_he.html' %}
-      </div>
+
+      {% if banners %}
+
+        <div class='col-10 col-md-8 col-lg-6 col-offset-1 col-md-offset-2 col-lg-offset-3'>
+
+          <div class='banner-wrapper my-4'>
+            <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+              <ol class="carousel-indicators">
+
+                {% for banner in banners %}
+                  <li data-target="#carouselExampleCaptions" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.counter == 1 %}active{% endif %}"></li>
+                {% endfor %}        
+
+              </ol>
+              <div class="carousel-inner">
+
+                {% for banner in banners %}
+                  <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                    <a href='{{ banner.link }}' target='_blank'>
+                      <img src="{{ banner.link_img }}" class="d-block mx-auto w-100" alt="{{ banner.title }}">
+                    </a>
+                    <div class="carousel-caption d-none d-md-block">
+                      {% if banner.titulo %}
+                        <h5>{{ banner.titulo }}</h5>
+                      {% endif %}
+                      {% if banner.descricao %}
+                        <p>{{ banner.descricao }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+
+              </div>
+              {% if banners|length > 1 %}
+                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Anterior</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Próximo</span>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+      {% endif %}
+
+       
+
       {% if  proximas_folgas and conf.proximas_folgas or proximos_retornos and conf.proximos_retornos or em_andamento and conf.em_andamento %}
         <div class='col-12'>
           <div class="card my-5">
@@ -56,29 +169,32 @@
       {% endif %}
     </div>
   </div>
-
-
 {% endblock %}
 
 {% block js %}
   <script>
     $(document).ready(function(){
-      {% if lembretes  %}
-        let string;
-        string = '#modal_lembrete-'.concat('{{ lembretes.0.id }}');
-        $(string).modal({
-          keyboard: false
-        })
-        {% for l in lembretes|slice:'1:' %}
-          {% if l.is_valid %}
-            .on('hidden.bs.modal', function (e) {
-                $('#modal_lembrete-{{ l.id }}').modal({
-                  keyboard: false
+
+      function seta_lembretes(){
+        {% if lembretes  %}
+          let string;
+          string = '#modal_lembrete-'.concat('{{ lembretes.0.id }}');
+          $(string).modal({
+            keyboard: false
+          })
+          {% for l in lembretes|slice:'1:' %}
+            {% if l.is_valid %}
+              .on('hidden.bs.modal', function (e) {
+                  $('#modal_lembrete-{{ l.id }}').modal({
+                    keyboard: false
+                  })
                 })
-              })
-          {% endif %}
-        {% endfor  %};
-      {% endif %}
+            {% endif %}
+          {% endfor  %};
+        {% endif %}
+      }
+
+      seta_lembretes();
 
     });
   </script>

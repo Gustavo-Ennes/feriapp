@@ -2,7 +2,7 @@
 {% load filtros %}
 
 
-{% if tabela_impressa %}
+{% if requst.is_pc or impressao %}
   {% if abonos %}
     <table class="table table-striped text-center">
       <thead>

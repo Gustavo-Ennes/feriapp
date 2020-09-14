@@ -63,14 +63,14 @@
                 <div class="card-body">
                   {% if ferias_futuras %}
                     <h3 class="text-center text-primary">futuras</h3>
-                    {% with ferias=ferias_futuras %}
+                    {% with ferias=ferias_futuras impressao=True %}
                       <div class="my-2">
                         {% include 'tables/ferias.html' %}
                       </div>
                     {% endwith %}
                   {% endif %}
                   {% if ferias_fruidas %}
-                    {% with ferias=ferias_fruidas %}
+                    {% with ferias=ferias_fruidas impressao=True %}
                       <h3 class="text-center text-primary">fruídas</h3>
                       <div class="my-2">
                         {% include 'tables/ferias.html' %}
@@ -78,7 +78,7 @@
                     {% endwith %}
                   {% endif %}
                   {% if ferias_indeferidas %}
-                    {% with ferias=ferias_indeferidas %}
+                    {% with ferias=ferias_indeferidas impressao=True %}
                       <h3 class="text-center text-primary">indeferidas</h3>
                       <div class="my-2">
                         {% include 'tables/ferias.html' %}
@@ -101,22 +101,22 @@
                 <div class="card-body">
                   {% if licencas_futuras %}
                     <h3 class="text-center text-primary">futuras</h3>
-                    {% with licencas=licencas_futuras %}
+                    {% with licencas=licencas_futuras impressao=True %}
                       <div class="my-2">
                         {% include 'tables/licenca.html' %}
                       </div>
                     {% endwith %}
                   {% endif %}
                   {% if licencas_fruidas %}
-                    {% with licencas=licencas_fruidas %}
+                    {% with licencas=licencas_fruidas impressao=True %}
                       <h3 class="text-center text-primary">fruídas</h3>
                       <div class="my-2">
                         {% include 'tables/licenca.html' %}
                       </div>
                     {% endwith %}
                   {% endif %}
-                  {% if licencas_indeferidas %}
-                    {% with licencas=licencas_indeferidas %}
+                  {% if licencas_indeferidas%}
+                    {% with licencas=licencas_indeferidas impressao=True  %}
                       <h3 class="text-center text-primary">indeferidas</h3>
                       <div class="my-2">
                         {% include 'tables/licenca.html' %}
@@ -139,14 +139,14 @@
                 <div class="card-body">
                   {% if abonos_futuros %}
                     <h3 class="text-center text-primary">futuros</h3>
-                    {% with abonos=abonos_futuros %}
+                    {% with abonos=abonos_futuros impressao=True %}
                       <div class="my-2">
                         {% include 'tables/abono.html' %}
                       </div>
                     {% endwith %}
                   {% endif %}
                   {% if abonos_fruidos %}
-                    {% with abonos=abonos_fruidos %}
+                    {% with abonos=abonos_fruidos impressao=True %}
                       <h3 class="text-center text-primary">fruídos</h3>
                       <div class="my-2">
                         {% include 'tables/abono.html' %}
@@ -154,7 +154,7 @@
                     {% endwith %}
                   {% endif %}
                   {% if abonos_indeferidos %}
-                    {% with abonos=abonos_indeferidos %}
+                    {% with abonos=abonos_indeferidos impressao=True %}
                       <h3 class="text-center text-primary">indeferidos</h3>
                       <div class="my-2">
                         {% include 'tables/abono.html' %}

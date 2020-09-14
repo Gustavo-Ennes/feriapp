@@ -14,6 +14,7 @@ $text_font: 'Roboto Slab', serif;
 $title_font: 'Noto Serif', serif;
 
 $obs_font: 'Abel', sans-serif;
+$breakpoint-tablet: 768px;
 
 
 
@@ -95,7 +96,6 @@ body {
 .table{
 
   color: $main !important;
-  max-height: 600px !important;
 
   thead tr{
     background-color: $main !important;
@@ -293,7 +293,8 @@ nav{
 }
 
 .btn-big{
-  height: 180px;
+
+  height:90px;
 
   &:hover{
     border: 3px solid $secondary !important;
@@ -346,6 +347,11 @@ nav{
 
 }
 
+.swiper-container {
+    width: 600px;
+    height: 300px;
+}
+
 
 
 small, .nav-link,h4,h5{
@@ -353,4 +359,31 @@ small, .nav-link,h4,h5{
 }
 h1,h2,h3{
   font-family: $title_font !important !important;
+}
+
+.wrapper-label{
+    font-family: $title_font;
+    color: $secondary;
+    text-align: left;
+    text-shadow: 1px 1px 1px $main_darker;
+    margin-top:30px;
+    margin-bottom: 0;
+  }
+
+
+.requisicao-wrapper, .novo-wrapper, .outros-wrapper{
+
+  background-color: rgba(0, 0, 255, 0.05);
+  border-radius: 10px;
+  margin-right:10px;
+  margin-left: 10px;
+  padding:15px;
+  
+}
+
+.divider{
+  height:2px;
+  border-bottom: 1px solid #main_darker;
+  width: 70%;
+
 }

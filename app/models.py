@@ -328,6 +328,8 @@ class Lembrete(models.Model):
         help_text="Caso não haja tal dia em algum mês(30, 31), o lembrete será exibido no último dia do mês"
     )
     mostrado_esse_mes = models.BooleanField(default=False)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    modificado_em = models.DateTimeField(auto_now=True)
 
     def is_valid(self):
         is_valid = False
@@ -363,6 +365,24 @@ class Conf(models.Model):
         help_text='Multiplica o total de horas por 1,143, caso marcado'
     )
 
+
+
+class Banner(models.Model):
+
+    objects = models.Manager()
+    titulo = models.CharField(max_length=200, blank=True)
+    descricao = models.TextField(blank=True)
+    link_img = models.URLField(unique=True)
+    link = models.URLField()
+    criado_em = models.DateTimeField(auto_now_add=True)
+    modificado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-criado_em']
+
+
+
+###################################################################################################################
 
 
 
