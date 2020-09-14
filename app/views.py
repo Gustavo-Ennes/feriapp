@@ -656,6 +656,9 @@ def entrar(request):
                     Q(matricula=user.username)).nome
                 messages.success(request, 'Bem-vindo(a), %s' % name)
 
+                if 'next' in request.POST:
+                    if request.POST['next']:
+                        return redirect(request.POST['next'])
                 return redirect("index")
 
             else:

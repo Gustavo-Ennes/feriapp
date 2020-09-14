@@ -23,6 +23,7 @@
 				{% csrf_token %}
 
 				{{ LoginForm|crispy }}
+				<input type='hidden' name='next' value='{{ request.GET.next }}' />
 
 				<div class="form-check my-4">
 				  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name='remember_me'>
