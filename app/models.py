@@ -319,27 +319,46 @@ class Relatorio(models.Model):
 
 
 class Lembrete(models.Model):
+    options = [
+        ('d', 'Diário'),
+        ('s', 'Semanal'),
+        ('m', 'Mensal'),
+    ]
+
     objects = models.Manager()
     titulo = models.CharField(max_length=200)
     mensagem = models.TextField()
     url_name = models.CharField(max_length=100)
+    periodicidade = models.CharField(max_length=2, choices=options)
     dia = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(31)],
-        help_text="Caso não haja tal dia em algum mês(30, 31), o lembrete será exibido no último dia do mês"
+        help_text="Semanal: indique o dia da semana(0=domingo, 1=segunda,...). Mensal: caso não haja tal dia em algum mês(30, 31), o lembrete será exibido no último dia do mês"
     )
     mostrado_esse_mes = models.BooleanField(default=False)
     criado_em = models.DateTimeField(auto_now_add=True)
     modificado_em = models.DateTimeField(auto_now=True)
 
+    @property
     def is_valid(self):
         is_valid = False
+        hoje = timezone.now()
+        weekday = hoje.weekday()
         if not self.mostrado_esse_mes:
-            if timezone.now().day >= self.dia:
-                is_valid = True
+            # aqui a lógica muda dependendo da periodicidade
+            if self.periodicidade == 'm':
+                if weekday >= self.dia:
+                    is_valid = True
+            elif self.periodicidade == 's':
+                if self.dia <= weekday < 6:
+                    is_valid = True
+            elif self.periodicidade == 'd':
+                if hoje.hour == self.day:
+                    is_valid = True
         return is_valid
 
     class Meta:
         ordering = ['dia']
+
 
 
 class Conf(models.Model):
@@ -379,6 +398,40 @@ class Banner(models.Model):
 
     class Meta:
         ordering = ['-criado_em']
+
+
+class RelacaoAbono(models.Model):
+
+    objects = models.Manager()
+    abonos = models.ManyToManyField(Abono, blank=True)
+    ano = models.IntegerField(validators=[MaxValueValidator(timezone.now().year)])
+    semana = models.IntegerField(validators=[MaxValueValidator(54), MinValueValidator(1)])
+
+    class Meta:
+        verbose_name = 'Relação de abonos'
+        verbose_name_plural = "Relações de abonos"
+        ordering = ['-semana', '-ano']
+
+    @staticmethod
+    def factory():
+        data = timezone.now().date()
+        num_semana = int(data.strftime('%U'))
+        try:
+            return RelacaoAbono.objects.get(Q(ano=data.year) & Q(semana=num_semana))
+        except Exception as e:
+            relacao = RelacaoAbono.objects.create(
+                ano=data.year,
+                semana=num_semana
+            )
+            abonos = Abono.objects.filter(
+                Q(deferido=True) &
+                Q(data__lte=data) &
+                Q(data__gte=data-timedelta(days=6))
+            )
+            for abono in abonos:
+                relacao.abonos.add(abono)
+            return relacao.save()
+
 
 
 

@@ -16,6 +16,7 @@
 
         <div class="modal-footer">
             <button class="btn btn-secondary" data-dismiss="modal">Lembrar Depois</button>
+            <a class='btn btn-success' href='{% url "marcar_como_feito" l.id %}'>Marcar como feito</a>
             <a class="btn btn-success modal-url-{{ l.id }}" href="{{ l.url_name }}">Deixe me ver</a>
         </div>
 

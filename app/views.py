@@ -1,5 +1,7 @@
 import os
 from itertools import chain
+import traceback
+import sys
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
@@ -57,6 +59,8 @@ def index(request):
 
         }
 
+        # só quero lembretes válidos
+        context['lembretes'] = [ l for l in context['lembretes'] if l.is_valid ]
         atualiza_situacoes_trabalhadores()
         atualiza_lembretes()
         verifica_banners()
@@ -1148,17 +1152,11 @@ def pdf(request, tipo, obj_id):
             if tipo == 'relacao_abono':
 
                 if verifica_grupo(request.user, 'relatorio'):
-                    # seto o primeiro dia do mês
-                    primeiro_dia_do_mes = hoje.replace(day=1)
-                    ultimo_dia_do_mes = hoje
-                    # e descubro o último
-                    while ultimo_dia_do_mes.month == hoje.month:
-                        ultimo_dia_do_mes = ultimo_dia_do_mes + timedelta(days=1)
-                    ultimo_dia_do_mes -= timedelta(days=1)
-                    obj = Abono.objects.filter(
-                        Q(deferido=True) & Q(data__gte=primeiro_dia_do_mes) & Q(data__lte=ultimo_dia_do_mes))
 
+                    obj = get_relacao_de_abonos()
+                    print('*'*70, "\nrelação:\n", obj, '*'*70)
                     # se obj_id == 1 quer dizer que não quero mais ver esse aviso, então
+                    print("obj_id == ", obj_id, 'type(obj_id)', type(obj_id))
                     if obj_id == 1:
                         l = Lembrete.objects.get(id=2)
                         l.mostrado_esse_mes = True
@@ -1222,6 +1220,7 @@ def pdf(request, tipo, obj_id):
                 }
         except Exception as e:
             print('-' * 40, "\nWarning:%s (%s)\n" % (model_name, e), '-' * 40)
+            traceback.print_exc(file=sys.stdout)
             messages.error(request, "%s: %s" % (model_name, e))
             return redirect('index')
 
@@ -1238,12 +1237,8 @@ def pdf(request, tipo, obj_id):
         elif tipo == 'atestado':
             PDFFactory.get_atestado_trabalho(obj)
         elif tipo == 'relacao_abono':
-            if obj:
+            if obj.abonos:
                 PDFFactory.get_relacao_abono_pdf(obj)
-                l = Lembrete.objects.get(id=2)
-                if not l.mostrado_esse_mes:
-                    l.mostrado_esse_mes = True
-                    l.save()
             else:
                 messages.warning(request, "Não há abonos para listar")
                 return redirect('abono')
@@ -1409,6 +1404,19 @@ def aviso(request):
         return render(request, 'aviso.html', context)
 
 
+@login_required(login_url='/entrar/')
+def marcar_como_feito(request, pk):
+    try:
+        lembrete = Lembrete.objects.get(id=pk)
+    except Exception as e:
+        print('Erro: ', e)
+
+    if lembrete:
+        lembrete.mostrado_esse_mes = True
+        lembrete.save()
+        return redirect('index')
+
+
 ###########################################################################################################
 
 
@@ -1540,4 +1548,26 @@ def verifica_banners():
         text += ' e %d banners mantidos' % (total_banners - counter_ok)
 
     print(text)
+
+
+
+def get_relacao_de_abonos():
+
+    relacao = None
+    lembrete = None
+    num_semana = None
+    data = timezone.now().date()
+    num_semana = int(data.strftime('%U'))
+
+    try:
+        lembrete = Lembrete.objects.get(url_name__icontains='abono')
+    except Exception as e:
+        print(e)
+        traceback.print_exc(sys.stdout);
+        return []
+
+    return RelacaoAbono.factory()
+
+
+
 

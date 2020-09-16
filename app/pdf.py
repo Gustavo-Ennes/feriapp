@@ -234,6 +234,7 @@ class PDF:
     def create_relacao_abono_pdf(obj):
         doc = PDF.get_sdt()
         data = datetime.now()
+        obj = obj.abonos.all()
 
         flowables = []
         style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=25, spaceAfter=5*mm)
@@ -245,7 +246,7 @@ class PDF:
         flowables.append(
             PDF.get_flowable_line()
         )
-        table_data, label = PDF.get_table_data('%s_%s' % (RandomStuff.mes_escrito(data.month), data.year), obj)
+        table_data, label = PDF.get_table_data('Semana_de_%s_à_%s' % ((data - timedelta(days=6)).strftime("%d/%m/%Y"), data.strftime("%d/%m/%Y")), obj)
         if table_data:
             flowables = PDF.build_table(table_data, label, flowables)
 
@@ -434,6 +435,9 @@ class PDF:
                 columns_data = []
                 table_data = []
                 palavras = key.split("_")
+                if len(palavras) > 2:
+                    for palavra in palavras:
+                        text += palavra + " "
                 if len(palavras) == 2:
                     palavras[0] = palavras[0].title()
                     palavras[1] = palavras[1].title()
@@ -446,8 +450,10 @@ class PDF:
                 elif len(palavras) == 1:
                     palavras[0] = palavras[0].title()
                     text = palavras[0]
+
                 text = text.replace("Ferias", "Férias")
                 text = text.replace("Relacao", "Relação de")
+                text = text.strip()
 
                 if type(value[0]) == Abono:
                     columns_data.append("Servidor")

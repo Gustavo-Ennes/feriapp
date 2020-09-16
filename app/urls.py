@@ -40,5 +40,6 @@ urlpatterns = [
     path('sexta-parte/', views.sexta_parte, name='sexta_parte'),
     path('aviso/', views.aviso, name='aviso'),
     path('conf/', views.conf, name='conf'),
+    path('done/<int:pk>/', views.marcar_como_feito, name='marcar_como_feito'),
 
 ]
