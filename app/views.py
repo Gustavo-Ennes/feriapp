@@ -847,10 +847,12 @@ def relatorios(request):
         'qtd_trabalhadores': Trabalhador.objects.count(),
     }
     print(
-        'Em Aberto: ',
+        'Em Aberto:\n ',
         context['relatorios_em_aberto'],
-        'Finalizados: ',
-        context['relatorios_finalizados']
+        'Finalizados:\n',
+        context['relatorios_finalizados'],
+        "Finalizados antigos:\n",
+        context['relatorios_finalizados_antigos'],
     )
 
     # debug
