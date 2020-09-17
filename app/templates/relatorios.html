@@ -64,17 +64,21 @@
               {% for referencia in relatorios_finalizados_antigos|get_referencias %}
                 <div class='col-6 col-lg-3'>
                   <p>
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseRelatoriosFinalizadosAntigos" aria-expanded="false" aria-controls="collapseRelatoriosFinalizadosAntigos">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseRelatoriosFinalizadosAntigos{{ referencia }}" aria-expanded="false" aria-controls="collapseRelatoriosFinalizadosAntigos{{ referencia }}">
                       {{ referencia }}
                     </button>
                   </p>
-                  <div class="collapse" id="collapseRelatoriosFinalizadosAntigos">
+                  <div class="collapse" id="collapseRelatoriosFinalizadosAntigos{{ referencia }}">
                     <div class="card card-body rounded">
                       <div class='row justify-content-center'>
                         {% for relatorio in relatorios_finalizados_antigos %}
-                          <div class='col-12 col-lg-6 text-center'>
-                            {% include 'modals/relatorio.html' %}
-                          </div>
+                          {% if relatorio.referencia == referencia %}
+                            <div class='col-12 col-lg-6 text-center'>
+                              {% with tipo='finalizados_antigos' %}
+                                {% include 'modals/relatorio.html' %}
+                              {% endwith %}
+                            </div>
+                          {% endif %}
                         {% endfor %}
                       </div>
                     </div>
@@ -104,17 +108,21 @@
               {% for referencia in relatorios_finalizados|get_referencias %}
                 <div class='col-6 col-lg-3'>
                   <p>
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseRelatoriosFinalizados" aria-expanded="false" aria-controls="collapseRelatoriosFinalizados">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseRelatoriosFinalizados{{ referencia }}" aria-expanded="false" aria-controls="collapseRelatoriosFinalizados{{ referencia }}">
                       {{ referencia }}
                     </button>
                   </p>
-                  <div class="collapse" id="collapseRelatoriosFinalizados">
+                  <div class="collapse" id="collapseRelatoriosFinalizados{{ referencia }}">
                     <div class="card card-body rounded">
                       <div class='row justify-content-center'>
                         {% for relatorio in relatorios_finalizados %}
-                          <div class='col-12 col-lg-6 text-center'>
-                            {% include 'modals/relatorio.html' %}
-                          </div>
+                          {% if relatorio.referencia == referencia %}
+                            <div class='col-12 col-lg-6 text-center'>
+                              {% with tipo='finalizados' %}
+                                {% include 'modals/relatorio.html' %}
+                              {% endwith %}
+                            </div>
+                          {% endif %}
                         {% endfor %}
                       </div>
                     </div>
@@ -146,17 +154,21 @@
               {% for referencia in relatorios_em_aberto|get_referencias %}
                 <div class='col-6 col-lg-3'>
                   <p>
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseRelatoriosEmAberto" aria-expanded="false" aria-controls="collapseRelatoriosEmAberto">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseRelatoriosEmAberto{{ referencia}}" aria-expanded="false" aria-controls="collapseRelatoriosEmAberto{{ referencia}}">
                       {{ referencia }}
                     </button>
                   </p>
-                  <div class="collapse" id="collapseRelatoriosEmAberto">
+                  <div class="collapse" id="collapseRelatoriosEmAberto{{ referencia}}">
                     <div class="card card-body rounded">
                       <div class='row justify-content-center'>
                         {% for relatorio in relatorios_em_aberto %}
-                          <div class='col-12 col-lg-6 text-center'>
-                            {% include 'modals/relatorio.html' %}
-                          </div>
+                          {% if referencia == relatorio.referencia %}
+                            <div class='col-12 col-lg-6 text-center'>
+                              {% with tipo='em_aberto' %}
+                                {% include 'modals/relatorio.html' %}
+                              {% endwith %}
+                            </div>
+                          {% endif %}
                         {% endfor %}
                       </div>
                     </div>
