@@ -14,6 +14,8 @@ class FeriasForm(forms.ModelForm):
         fields = "__all__"
         widgets = {
             'data_inicio': forms.TextInput(attrs={'id':'ferias_datepicker', 'class': 'datepicker', 'autocomplete': 'off'}),
+            'qtd_dias': forms.NumberInput(attrs={'id':'qtd_dias_ferias'}),
+            'trabalhador': forms.NumberInput(attrs={'id':'trabalhador_ferias'}),
         }
         field_classes = {
             'trabalhador': MyModelChoiceField,
@@ -24,7 +26,11 @@ class LicencaPremioForm(forms.ModelForm):
     class Meta:
         model = LicencaPremio
         fields = "__all__"
-        widgets = {'data_inicio': forms.TextInput(attrs={'id':'licenca_datepicker', 'class': 'datepicker', 'autocomplete': 'off'})}
+        widgets = {
+            'data_inicio': forms.TextInput(attrs={'id':'licenca_datepicker', 'class': 'datepicker', 'autocomplete': 'off'}),
+            'qtd_dias': forms.NumberInput(attrs={'id':'qtd_dias_licenca'}),
+            'trabalhador': forms.NumberInput(attrs={'id':'trabalhador_licenca'}),
+        }
         field_classes = {
             'trabalhador': MyModelChoiceField,
         }
@@ -42,7 +48,8 @@ class AbonoForm(forms.ModelForm):
                     'autocomplete': 'off',
                     'data-mask': '12/22/1978',
                 }
-            )
+            ),
+            'trabalhador': forms.NumberInput(attrs={'id':'trabalhador_abono'}),
         }
         field_classes = {
             'trabalhador': MyModelChoiceField,
@@ -50,10 +57,14 @@ class AbonoForm(forms.ModelForm):
 
 
 class TrabalhadorForm(forms.ModelForm):
+
     class Meta:
         model = Trabalhador
         fields = '__all__'
         widgets = {
+            'nome': forms.TextInput(attrs={
+                'id': 'id_nome_trabalhador'
+            }),
             'data_admissao': forms.TextInput(attrs={
                 'class': 'datepicker2',
                 'autocomplete': 'off',
@@ -80,20 +91,33 @@ class TrabalhadorForm(forms.ModelForm):
         }
 
 
+
 class TrabalhadorFormSemAdmissao(forms.ModelForm):
+
     class Meta:
         model = Trabalhador
         exclude = ['data_admissao', ]
-        widgets = {'data_admissao': forms.TextInput(attrs={'id':'trabalhador_datepicker', 'class': 'datepicker2', 'autocomplete': 'off'})}
+        widgets = {
+            'nome': forms.TextInput(attrs={
+                'id': 'id_nome_trabalhador_sem_admissao'
+            }),
+            'data_admissao': forms.TextInput(attrs={'id':'trabalhador_datepicker', 'class': 'datepicker2', 'autocomplete': 'off'}),
+        }
         field_classes = {
             'setor': MyModelChoiceField,
         }
 
 
 class SetorForm(forms.ModelForm):
+
     class Meta:
         model = Setor
         fields = "__all__"
+        widgets = {
+            'nome': forms.TextInput(attrs={
+                'id': 'id_nome_setor'
+            }),
+        }
 
 
 class ConfForm(forms.ModelForm):
@@ -119,6 +143,7 @@ class LoginForm(forms.Form):
 class AutorizacaoForm(forms.Form):
     trabalhador = MyModelChoiceField(queryset=Trabalhador.objects.all(), widget=forms.Select(attrs={
         'name': 'trabalhador_id',
+        'id': 'trabalhador_autorizacao',
     }))
 
 

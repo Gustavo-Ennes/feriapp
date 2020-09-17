@@ -232,3 +232,12 @@ def referencia(linhaRelatorio):
         print(e)
     return "{r.mes}/{r.ano}" if r else None
 
+
+@register.filter 
+def get_referencias(relatorios):
+    refs = []
+    for r in relatorios:
+        if not r.referencia in refs:
+            refs.append(r.referencia)
+    return refs
+

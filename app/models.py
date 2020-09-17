@@ -26,6 +26,7 @@ class Setor(models.Model):
         ordering = ['nome']
 
 
+
 class Trabalhador(models.Model):
     objects = models.Manager()
     OPCOES = (
@@ -65,6 +66,8 @@ class Trabalhador(models.Model):
     class Meta:
         verbose_name_plural = 'Trabalhadores'
         ordering = ['nome']
+
+
 
 
 class Ferias(models.Model):
@@ -308,6 +311,11 @@ class Relatorio(models.Model):
     def is_valid(self):
         return bool([linha for linha in self.linhas.all() if
                      linha.horas_extras > 0 or linha.adicional_noturno > 0 or linha.faltas > 0])
+
+    @property
+    def referencia(self):
+        return str(self.mes) + "/" + str(self.ano)
+    
 
     def __str__(self):
         return "%s - %d/%d" % (self.setor.nome, self.mes, self.ano)

@@ -126,8 +126,6 @@ h1, h2, h3 { font-family: "Noto Serif", serif !important !important; }
 
 .wrapper-label { font-family: "Noto Serif", serif !important; color: #C2D633 !important; text-align: left !important; text-shadow: 1px 1px 1px #21548A !important; margin-top: 30px !important; margin-bottom: 0 !important; }
 
-.requisicao-wrapper, .novo-wrapper, .outros-wrapper, .relatorio-wrapper { background-color: rgba(0, 0, 255, 0.05); border-radius: 10px; margin-right: 10px; margin-left: 10px; padding: 15px; }
-
-.collapse .card-body { background-color: rgba(0, 0, 255, 0.06) !important; }
+.requisicao-wrapper, .novo-wrapper, .outros-wrapper { background-color: rgba(0, 0, 255, 0.05); border-radius: 10px; margin-right: 10px; margin-left: 10px; padding: 15px; }
 
 .divider { height: 2px; border-bottom: 1px solid #main_darker; width: 70%; }

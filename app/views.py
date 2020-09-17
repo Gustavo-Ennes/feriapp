@@ -843,6 +843,7 @@ def relatorios(request):
         'relatorios_em_aberto': Relatorio.vigentes.em_aberto(),
         'relatorios_finalizados': Relatorio.vigentes.finalizados(),
         'relatorios_finalizados_antigos': Relatorio.objects.filter(Q(estado='oficial') & Q(criado_em__lt=data)),
+        'referencias': get_referencias_relatorios(),
         'qtd_trabalhadores': Trabalhador.objects.count(),
     }
     print(
@@ -851,6 +852,10 @@ def relatorios(request):
         'Finalizados: ',
         context['relatorios_finalizados']
     )
+
+    # debug
+    print(get_referencias_relatorios())
+
     return render(request, 'relatorios.html', context)
 
 
@@ -1569,5 +1574,10 @@ def get_relacao_de_abonos():
     return RelacaoAbono.factory()
 
 
-
-
+def get_referencias_relatorios():
+    relatorios = Relatorio.objects.all()
+    referencias = []
+    for r in relatorios:
+        if r.referencia not in referencias:
+            referencias.append(r.referencia)
+    return referencias

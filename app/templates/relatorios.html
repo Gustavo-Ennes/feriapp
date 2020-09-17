@@ -7,7 +7,7 @@
   <div class="header-gradient">
     <div class="row justify-content-center align-items-center">
       <div class="col-8">
-        <h4 class="text-primary ml-4">RELATÓRIOS</h4>
+        <h4 class="text-primary">RELATÓRIOS</h4>
       </div>
       <div class="col-4">
         {% if relatorios_em_aberto %}
@@ -41,55 +41,134 @@
       </div>
     </div>
   {% elif relatorios_finalizados|length > 0 and relatorios_em_aberto|length == 0 %}
-    <small class="text-primary ml-2">Relatório(s) de {{ relatorios_finalizados.0.mes|mes_escrito }} já fechado(s)</small>
+    <small class="text-danger">Relatório(s) de {{ relatorios_finalizados.0.mes|mes_escrito }} já fechado(s)</small>
   {% else %}
       <h5 class="text-success">O(s) relatório(s) deste mês já foram fechados</h5>
   {% endif %}
+
   {% if relatorios_finalizados or relatorios_em_aberto or relatorios_finalizados_antigos %}
-    <div class="m-3 my-5">
+    <div class="m-3 my-5 text-center">
       {% if relatorios_finalizados_antigos %}
-        <br class="my-4">
-        <div class="row justify-content-center align-items-center ">
-          <div class="col-12">
-            <h3 class="text-success text-center">Finalizados Antigos</h3>
+
+        <div class='row justify-content-center text-center'>
+          <div class='col-12 wrapper-label display-4'>
+            <p class='text-center'>
+              Antigos
+            </p>
           </div>
-          {% for relatorio in relatorios_finalizados_antigos %}
-            {% with finalizados=True %}
 
-              {% include 'modals/relatorio.html' %}
+          <div class='col-12 relatorio-wrapper'>
+            <div class='row justify-content-center'>
 
-            {% endwith %}
-          {% endfor %}
+
+              {% for referencia in relatorios_finalizados_antigos|get_referencias %}
+                <div class='col-6 col-lg-3'>
+                  <p>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseRelatoriosFinalizadosAntigos" aria-expanded="false" aria-controls="collapseRelatoriosFinalizadosAntigos">
+                      {{ referencia }}
+                    </button>
+                  </p>
+                  <div class="collapse" id="collapseRelatoriosFinalizadosAntigos">
+                    <div class="card card-body rounded">
+                      <div class='row justify-content-center'>
+                        {% for relatorio in relatorios_finalizados_antigos %}
+                          <div class='col-12 col-lg-6 text-center'>
+                            {% include 'modals/relatorio.html' %}
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+
+            </div>
+          </div>
         </div>
       {% endif %}
+
       {% if relatorios_finalizados %}
-        <br class="my-4">
-        <div class="row justify-content-center align-items-center ">
-          <div class="col-12">
-            <h3 class="text-success text-center">Finalizados {{ relatorios_finalizados.0.mes|mes_escrito }}/{{ relatorios_finalizados.0.ano }}</h3>
+
+        <div class='row justify-content-center text-center'>
+
+          <div class='col-12 wrapper-label display-4'>
+            <p class='text-center'>
+              Finalizados
+            </p>
           </div>
-          {% for relatorio in relatorios_finalizados %}
-            {% with finalizados=True %}
 
-              {% include 'modals/relatorio.html' %}
+          <div class='col-12 relatorio-wrapper'>
+            <div class='row justify-content-center'>
 
-            {% endwith %}
-          {% endfor %}
+
+              {% for referencia in relatorios_finalizados|get_referencias %}
+                <div class='col-6 col-lg-3'>
+                  <p>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseRelatoriosFinalizados" aria-expanded="false" aria-controls="collapseRelatoriosFinalizados">
+                      {{ referencia }}
+                    </button>
+                  </p>
+                  <div class="collapse" id="collapseRelatoriosFinalizados">
+                    <div class="card card-body rounded">
+                      <div class='row justify-content-center'>
+                        {% for relatorio in relatorios_finalizados %}
+                          <div class='col-12 col-lg-6 text-center'>
+                            {% include 'modals/relatorio.html' %}
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+
+            </div>
+          </div>
         </div>
+
       {% endif %}
+
       {% if relatorios_em_aberto %}
-        <br class="my-4">
-        <div class="row justify-content-center align-items-center">
-          <div class="col-12">
-            <h3 class="text-success text-center">Em Aberto</h3>
+
+
+        <div class='row justify-content-center text-center'>
+
+          <div class='col-12 wrapper-label display-4'>
+            <p class='text-center'>
+              Em Aberto
+            </p>
           </div>
-          {% for relatorio in relatorios_em_aberto %}
 
-            {% include 'modals/relatorio.html' %}
+          <div class='col-12 relatorio-wrapper'>
+            <div class='row justify-content-center'>
 
-          {% endfor %}
+
+              {% for referencia in relatorios_em_aberto|get_referencias %}
+                <div class='col-6 col-lg-3'>
+                  <p>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseRelatoriosEmAberto" aria-expanded="false" aria-controls="collapseRelatoriosEmAberto">
+                      {{ referencia }}
+                    </button>
+                  </p>
+                  <div class="collapse" id="collapseRelatoriosEmAberto">
+                    <div class="card card-body rounded">
+                      <div class='row justify-content-center'>
+                        {% for relatorio in relatorios_em_aberto %}
+                          <div class='col-12 col-lg-6 text-center'>
+                            {% include 'modals/relatorio.html' %}
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+
+            </div>
           </div>
         </div>
+        
+
       {% endif %}
     </div>
 

@@ -1,31 +1,15 @@
 {% load filtros %}
-{% if not finalizados %}
-  <button class='col-6 col-lg-2 btn btn-transparent' data-toggle="modal" data-target="#modalRelatorio{{ relatorio.id}}">
-    <h5 class='text-center text-success'> {{ relatorio.setor.nome|upper }}</h5>
-    <h1 class="display-1 text-primary text-center">
-      <i class="fas big-fas fa-file-invoice"></i>
-    </h1>
-    <strong class="text-success text-center m-0">
-        {{ relatorio.mes }}/{{ relatorio.ano}}
-    </strong>
-  </button>
-{% else %}
-  <button class='col-4 col-lg-1 btn btn-transparent' data-toggle="modal" data-target="#modalRelatorio{{ relatorio.id}}">
-    <small class='text-center text-success'> {{ relatorio.setor.nome|upper }}</small>
-      <p><i class="fas big-fas fa-file-invoice"></i></p>
-    <small class="text-success text-center m-0">
-      {{ relatorio.mes }}/{{ relatorio.ano}}
-    </small>
 
-  </button>
-{% endif %}
+<button class='btn btn-success' data-toggle="modal" data-target="#modalRelatorio{{ relatorio.id }}{{ tipo }}">
+  {{ relatorio.setor.nome }}
+</button>
 
 <!-- Modal -->
-<div class="modal fade" id="modalRelatorio{{ relatorio.id}}" tabindex="-1" role="dialog" aria-labelledby="modalRelatorioLabel{{ relatorio.id}}" aria-hidden="true">
+<div class="modal fade" id="modalRelatorio{{ relatorio.id }}{{ tipo }}" tabindex="-1" role="dialog" aria-labelledby="modalRelatorioLabel{{ relatorio.id }}{{ tipo }}" aria-labelledby-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalRelatorioLabel{{ relatorio.id}}">Selecione a ação</h5>
+        <h5 class="modal-title" id="modalRelatorioLabel{{ relatorio.id}}{{ tipo }}">Selecione a ação</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

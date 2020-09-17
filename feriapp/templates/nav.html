@@ -8,7 +8,7 @@
       <img src="{% static 'logo.png' %}" width="30" height="30" alt="Prefeitura Municipal de Ilha Solteira">
        feriapp
     </a>
-    <button id="'btn_nav" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Alterna navegação">
+    <button id="btn_nav" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Alterna navegação">
       <span id='span_nav' class="fas fa-sort-down text-success"></span>
     </button>
 
@@ -101,17 +101,3 @@
     </div>
   </nav>
 {% endif %}
-
-{% block js %}
-  <script>
-    $(document).ready(() =>{
-      var classname;
-      if(window.screen.width < 1200){
-        className = 'droprigth';
-      }else{
-        className = 'dropleft'
-      }
-      $("#drop_conf").addClass(className);
-    });
-  </script>
-{% endblock %}

@@ -362,16 +362,19 @@ h1,h2,h3{
 }
 
 .wrapper-label{
-    font-family: $title_font;
-    color: $secondary;
-    text-align: left;
-    text-shadow: 1px 1px 1px $main_darker;
-    margin-top:30px;
-    margin-bottom: 0;
+    font-family: $title_font !important;
+    color: $secondary !important;
+    text-align: left !important;
+    text-shadow: 1px 1px 1px $main_darker !important;
+    margin-top:30px !important;
+    margin-bottom: 0 !important;
   }
 
 
-.requisicao-wrapper, .novo-wrapper, .outros-wrapper{
+.requisicao-wrapper,
+.novo-wrapper,
+.outros-wrapper,
+.relatorio-wrapper{
 
   background-color: rgba(0, 0, 255, 0.05);
   border-radius: 10px;
@@ -379,6 +382,10 @@ h1,h2,h3{
   margin-left: 10px;
   padding:15px;
   
+}
+
+.collapse .card-body{
+  background-color:rgba(0, 0, 255, 0.06) !important;
 }
 
 .divider{
