@@ -1,7 +1,7 @@
 {% load filtros %}
 
 <button class='btn btn-transparent btn-relatorio' data-toggle="modal" data-target="#modalRelatorio{{ relatorio.id }}{{ tipo }}">
-  <span class='text-light'>{{ relatorio.setor.nome }}</span>
+  <span class='text-light'>{{ relatorio.setor.nome|primeiro_nome }}</span>
 </button>
 
 <!-- Modal -->

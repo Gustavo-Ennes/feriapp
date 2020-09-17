@@ -241,3 +241,8 @@ def get_referencias(relatorios):
             refs.append(r.referencia)
     return refs
 
+
+@register.filter 
+def primeiro_nome(nome_completo):
+    return nome_completo.split(' ')[0]
+
