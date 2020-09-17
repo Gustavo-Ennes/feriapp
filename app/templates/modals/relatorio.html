@@ -1,7 +1,7 @@
 {% load filtros %}
 
-<button class='btn btn-transparent text-primary' data-toggle="modal" data-target="#modalRelatorio{{ relatorio.id }}{{ tipo }}">
-  {{ relatorio.setor.nome }}
+<button class='btn btn-transparent btn-relatorio' data-toggle="modal" data-target="#modalRelatorio{{ relatorio.id }}{{ tipo }}">
+  <span class='text-light'>{{ relatorio.setor.nome }}</span>
 </button>
 
 <!-- Modal -->

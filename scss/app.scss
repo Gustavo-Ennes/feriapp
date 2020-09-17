@@ -402,3 +402,10 @@ h1,h2,h3{
   color:$secondary;
   text-shadow:1px 1px 1px $secondary_darker;
 }
+
+.btn-relatorio{
+  background-color:$main;
+  color:#EEE;
+  border-radius:15px;
+  box-shadow:inset 1px 1px 2px 1px $main_darker;
+}

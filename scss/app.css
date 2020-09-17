@@ -132,4 +132,6 @@ h1, h2, h3 { font-family: "Noto Serif", serif !important !important; }
 
 .collapse .card.card-body, .collapsing .card.card-body, .collapsed .card.card-body { border-radius: 20px; }
 
-.collapse-label { font-size: 1.3rem; color: #C2D633; text-shadow: 1px 1px 1px #7D8A28; }
+.collapse-label { font-size: 1.3rem; color: #D6675E; text-shadow: 1px 1px 1px #964942; }
+
+.btn-relatorio { background-color: #488DD6; color: #EEE; border-radius: 15px; box-shadow: inset 1px 1px 2px 1px #21548A; }

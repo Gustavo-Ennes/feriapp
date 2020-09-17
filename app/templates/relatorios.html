@@ -73,7 +73,7 @@
                         <div class="collapse" id="collapseFinalizadosAntigos{{ referencia }}">
                           <div class='row justify-content-center'>
                             {% for relatorio in relatorios_finalizados_antigos %}
-                              <div class='col-12'>
+                              <div class='col-12 col-xl-6'>
                                 {% if relatorio.referencia == referencia %}
                                   {% with tipo='finalizados_antigos' %}
                                     {% include 'modals/relatorio.html' %}
@@ -111,7 +111,7 @@
                 <div class="card card-body">
                   <div class='row justify-content-center'>
                     {% for referencia in relatorios_finalizados|get_referencias %}
-                      <div class='col-12 col-lg-6 col-xl-4'>
+                      <div class='col-12 col-lg-6 col-xl-4 collapse-ref'>
                         <p>
                           <a class="btn btn-transparent text-center" data-toggle="collapse" href="#collapseFinalizados{{ referencia }}" role="button" aria-expanded="false" aria-controls="collapseFinalizados{{ referencia }}">
                             {{ referencia }} <i class="fas fa-angle-double-down text-success"></i>
@@ -148,7 +148,7 @@
           <div class='col-12 col-lg-6 col-xl-4 relatorio-wrapper'>
             <div class='relatorio-wrapper my-3'>
               <p>
-                <a class="btn btn-transparent text-center collapse-label" data-toggle="collapse" href="#collapseEmAberto" role="button" aria-expanded="false" aria-controls="collapseEmAberto">
+                <a class="btn btn-transparent text-center text-success" data-toggle="collapse" href="#collapseEmAberto" role="button" aria-expanded="false" aria-controls="collapseEmAberto">
                   Em aberto <i class="fas fa-angle-double-down text-success"></i>
                 </a>
               </p>
@@ -156,7 +156,7 @@
                 <div class="card card-body">
                   <div class='row justify-content-center'>
                     {% for referencia in relatorios_em_aberto|get_referencias %}
-                      <div class='col-12 col-lg-6 col-xl-4'>
+                      <div class='col-12 col-lg-6 col-xl-4 collapse-ref'>
                         <p>
                           <a class="btn btn-transparent text-center" data-toggle="collapse" href="#collapseEmAberto{{ referencia }}" role="button" aria-expanded="false" aria-controls="collapseEmAberto{{ referencia }}">
                             {{ referencia }} <i class="fas fa-angle-double-down text-success"></i>
