@@ -314,7 +314,7 @@ class Relatorio(models.Model):
 
     @property
     def referencia(self):
-        return str(self.mes) + "/" + str(self.ano)
+        return str(self.mes) + "-" + str(self.ano)
     
 
     def __str__(self):
