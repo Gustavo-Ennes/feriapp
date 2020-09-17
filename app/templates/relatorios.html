@@ -53,10 +53,10 @@
       {% if relatorios_finalizados_antigos %}
 
         <div class='row justify-content-center'>
-          <div class='col-12 col-lg-4 col-xl-3 relatorio-wrapper'>
+          <div class='col-12 col-lg-6 col-xl-4 relatorio-wrapper'>
             <p>
-              <a class="btn btn-transparent text-center display-4" data-toggle="collapse" href="#collapseFinalizadosAntigos" role="button" aria-expanded="false" aria-controls="collapseFinalizadosAntigos">
-                Antigos
+              <a class="btn btn-transparent text-center collapse-label" data-toggle="collapse" href="#collapseFinalizadosAntigos" role="button" aria-expanded="false" aria-controls="collapseFinalizadosAntigos">
+                Antigos <i class="fas fa-angle-double-down text-success"></i>
               </a>
             </p>
             <div class="collapse" id="collapseFinalizadosAntigos">
@@ -66,7 +66,7 @@
                     <div class='col-12 col-lg-6 col-xl-4'>
                       <p>
                         <a class="btn btn-transparent text-center" data-toggle="collapse" href="#collapseFinalizadosAntigos{{ referencia }}" role="button" aria-expanded="false" aria-controls="collapseFinalizadosAntigos{{ referencia }}">
-                          {{ referencia }}
+                          {{ referencia }} <i class="fas fa-angle-double-down text-success"></i>
                         </a>
                       </p>
                       <div class="collapse" id="collapseFinalizadosAntigos{{ referencia }}">
@@ -98,8 +98,8 @@
         <div class='row justify-content-center'>
           <div class='col-12 col-lg-4 col-xl-3 relatorio-wrapper'>
             <p>
-              <a class="btn btn-transparent text-center display-4" data-toggle="collapse" href="#collapseFinalizados" role="button" aria-expanded="false" aria-controls="collapseFinalizados">
-                Finalizados
+              <a class="btn btn-transparent text-center collapse-label" data-toggle="collapse" href="#collapseFinalizados" role="button" aria-expanded="false" aria-controls="collapseFinalizados">
+                Finalizados <i class="fas fa-angle-double-down text-success"></i>
               </a>
             </p>
             <div class="collapse" id="collapseFinalizados">
@@ -109,7 +109,7 @@
                     <div class='col-12 col-lg-6 col-xl-4'>
                       <p>
                         <a class="btn btn-transparent text-center" data-toggle="collapse" href="#collapseFinalizados{{ referencia }}" role="button" aria-expanded="false" aria-controls="collapseFinalizados{{ referencia }}">
-                          {{ referencia }}
+                          {{ referencia }} <i class="fas fa-angle-double-down text-success"></i>
                         </a>
                       </p>
                       <div class="collapse" id="collapseFinalizados{{ referencia }}">
@@ -140,36 +140,38 @@
 
         <div class='row justify-content-center'>
           <div class='col-12 col-lg-4 col-xl-3 relatorio-wrapper'>
-            <p>
-              <a class="btn btn-transparent text-center display-4" data-toggle="collapse" href="#collapseEmAberto" role="button" aria-expanded="false" aria-controls="collapseEmAberto">
-                Em aberto
-              </a>
-            </p>
-            <div class="collapse" id="collapseEmAberto">
-              <div class="card card-body">
-                <div class='row justify-content-center'>
-                  {% for referencia in relatorios_em_aberto|get_referencias %}
-                    <div class='col-12 col-lg-6 col-xl-4'>
-                      <p>
-                        <a class="btn btn-transparent text-center" data-toggle="collapse" href="#collapseEmAberto{{ referencia }}" role="button" aria-expanded="false" aria-controls="collapseEmAberto{{ referencia }}">
-                          {{ referencia }}
-                        </a>
-                      </p>
-                      <div class="collapse" id="collapseEmAberto{{ referencia }}">
-                        <div class='row justify-content-center'>
-                          {% for relatorio in relatorios_em_aberto %}
-                            <div class='col-12'>
-                              {% with tipo='em_aberto' %}
-                                {% include 'modals/relatorio.html' %}
-                              {% endwith %}
-                            </div>
-                          {% endfor %}
+            <div class='relatorio-wrapper my-3'>
+              <p>
+                <a class="btn btn-transparent text-center collapse-label" data-toggle="collapse" href="#collapseEmAberto" role="button" aria-expanded="false" aria-controls="collapseEmAberto">
+                  Em aberto <i class="fas fa-angle-double-down text-success"></i>
+                </a>
+              </p>
+              <div class="collapse" id="collapseEmAberto">
+                <div class="card card-body">
+                  <div class='row justify-content-center'>
+                    {% for referencia in relatorios_em_aberto|get_referencias %}
+                      <div class='col-12 col-lg-6 col-xl-4'>
+                        <p>
+                          <a class="btn btn-transparent text-center" data-toggle="collapse" href="#collapseEmAberto{{ referencia }}" role="button" aria-expanded="false" aria-controls="collapseEmAberto{{ referencia }}">
+                            {{ referencia }} <i class="fas fa-angle-double-down text-success"></i>
+                          </a>
+                        </p>
+                        <div class="collapse" id="collapseEmAberto{{ referencia }}">
+                          <div class='row justify-content-center'>
+                            {% for relatorio in relatorios_em_aberto %}
+                              <div class='col-12'>
+                                {% with tipo='em_aberto' %}
+                                  {% include 'modals/relatorio.html' %}
+                                {% endwith %}
+                              </div>
+                            {% endfor %}
+                          </div>
+
                         </div>
 
                       </div>
-
-                    </div>
-                  {% endfor %}
+                    {% endfor %}
+                  </div>
                 </div>
               </div>
             </div>

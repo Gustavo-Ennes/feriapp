@@ -384,13 +384,21 @@ h1,h2,h3{
   
 }
 
-.collapse .card.card-body{
-  background-color:rgba(0, 0, 255, 0.06) !important;
-}
-
 .divider{
   height:2px;
   border-bottom: 1px solid #main_darker;
   width: 70%;
 
+}
+
+.collapse .card.card-body,
+.collapsing .card.card-body,
+.collapsed .card.card-body{
+  border-radius:20px;
+}
+
+.collapse-label{
+  font-size:1.3rem;
+  color:$secondary;
+  text-shadow:1px 1px 1px $secondary_darker;
 }
