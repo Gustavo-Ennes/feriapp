@@ -2,6 +2,13 @@ from django import forms
 from app.models import *
 from django.forms import ModelChoiceField, modelformset_factory
 
+def get_choices(tipo):
+    if tipo == 'trabalhador':
+        return [(t.id, t.nome) for t in Trabalhador.objects.all()]
+    if tipo == 'qtd_dias':
+        return [(15, 'Quinze dias'), (30, 'Trinta dias')]
+
+
 
 class MyModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
@@ -14,9 +21,16 @@ class FeriasForm(forms.ModelForm):
         fields = "__all__"
         widgets = {
             'data_inicio': forms.TextInput(attrs={'id':'ferias_datepicker', 'class': 'datepicker', 'autocomplete': 'off'}),
-            'qtd_dias': forms.NumberInput(attrs={'id':'qtd_dias_ferias'}),
-            'trabalhador': forms.NumberInput(attrs={'id':'trabalhador_ferias'}),
+            'qtd_dias': forms.Select(
+                choices=get_choices('qtd_dias'),
+                attrs={'id':'qtd_dias_ferias'}
+            ),
+            'trabalhador': forms.Select(
+                choices=get_choices('trabalhador'),
+                attrs={'id':'trabalhador_ferias'}
+            ),
         }
+
         field_classes = {
             'trabalhador': MyModelChoiceField,
         }
@@ -28,8 +42,14 @@ class LicencaPremioForm(forms.ModelForm):
         fields = "__all__"
         widgets = {
             'data_inicio': forms.TextInput(attrs={'id':'licenca_datepicker', 'class': 'datepicker', 'autocomplete': 'off'}),
-            'qtd_dias': forms.NumberInput(attrs={'id':'qtd_dias_licenca'}),
-            'trabalhador': forms.NumberInput(attrs={'id':'trabalhador_licenca'}),
+            'qtd_dias': forms.Select(
+                choices=get_choices('qtd_dias'),
+                attrs={'id':'qtd_dias_licenca'}
+            ),
+            'trabalhador': forms.Select(
+                choices=get_choices('trabalhador'),
+                attrs={'id':'trabalhador_licenca'}
+            ),
         }
         field_classes = {
             'trabalhador': MyModelChoiceField,
@@ -49,7 +69,10 @@ class AbonoForm(forms.ModelForm):
                     'data-mask': '12/22/1978',
                 }
             ),
-            'trabalhador': forms.NumberInput(attrs={'id':'trabalhador_abono'}),
+            'trabalhador': forms.Select(
+                choices=get_choices('trabalhador'),
+                attrs={'id':'trabalhador_licenca'}
+            ),
         }
         field_classes = {
             'trabalhador': MyModelChoiceField,
