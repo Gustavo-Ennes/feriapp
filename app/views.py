@@ -639,6 +639,9 @@ def indeferir(request):
 
 def entrar(request):
     if request.method == "GET":
+        if request.user:
+            return redirect("index")
+            
         context = {
             'LoginForm': LoginForm(),
         }
