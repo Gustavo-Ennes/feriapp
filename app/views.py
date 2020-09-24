@@ -639,7 +639,7 @@ def indeferir(request):
 
 def entrar(request):
     if request.method == "GET":
-        if request.user:
+        if request.user.is_authenticated:
             return redirect("index")
             
         context = {
