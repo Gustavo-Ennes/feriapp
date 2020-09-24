@@ -423,6 +423,7 @@ def pesquisa(request):
                         Q(trabalhador__nome__icontains=query) |
                         Q(trabalhador__funcao__icontains=query) |
                         Q(trabalhador__setor__nome__icontains=query)
+                        | Q(trabalhador__matricula__icontains=query)
                 ) &
                 Q(deferida=True) &
                 Q(data_inicio__gt=hoje) &
@@ -432,11 +433,13 @@ def pesquisa(request):
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
+                | Q(trabalhador__matricula__icontains=query)
             ),
             'ferias_indeferidas': Ferias.indeferidas.all().filter(
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
+                | Q(trabalhador__matricula__icontains=query)
 
             ),
             'licencas_futuras': LicencaPremio.objects.filter(
@@ -444,6 +447,7 @@ def pesquisa(request):
                         Q(trabalhador__nome__icontains=query) |
                         Q(trabalhador__funcao__icontains=query) |
                         Q(trabalhador__setor__nome__icontains=query)
+                        | Q(trabalhador__matricula__icontains=query)
                 ) &
                 Q(deferida=True) &
                 Q(data_inicio__gt=hoje)
@@ -452,17 +456,20 @@ def pesquisa(request):
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
+                | Q(trabalhador__matricula__icontains=query)
             ),
             'licencas_indeferidas': LicencaPremio.indeferidas.all().filter(
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
+                | Q(trabalhador__matricula__icontains=query)
             ),
             'abonos_futuros': Abono.objects.filter(
                 (
                         Q(trabalhador__nome__icontains=query) |
                         Q(trabalhador__funcao__icontains=query) |
                         Q(trabalhador__setor__nome__icontains=query)
+                        | Q(trabalhador__matricula__icontains=query)
                 ) &
                 Q(deferido=True) &
                 Q(data__gt=hoje)
@@ -471,16 +478,19 @@ def pesquisa(request):
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
+                | Q(trabalhador__matricula__icontains=query)
             ),
             'abonos_indeferidos': Abono.indeferidos.all().filter(
                 Q(trabalhador__nome__icontains=query) |
                 Q(trabalhador__funcao__icontains=query) |
                 Q(trabalhador__setor__nome__icontains=query)
+                | Q(trabalhador__matricula__icontains=query)
             ),
             'trabalhadores': Trabalhador.objects.filter(
                 Q(nome__icontains=query) |
                 Q(funcao__icontains=query) |
                 Q(setor__nome__icontains=query)
+                | Q(matricula__icontains=query)
             ),
             'setores': Setor.objects.filter(Q(nome__icontains=query)),
             'query': query,
