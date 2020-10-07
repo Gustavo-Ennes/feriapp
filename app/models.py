@@ -412,35 +412,30 @@ class RelacaoAbono(models.Model):
 
     objects = models.Manager()
     abonos = models.ManyToManyField(Abono, blank=True)
-    ano = models.IntegerField(validators=[MaxValueValidator(timezone.now().year)])
-    semana = models.IntegerField(validators=[MaxValueValidator(54), MinValueValidator(1)])
+    data_inicio = models.DateTimeField()
+    data_termino = models.DateTimeField()
 
     class Meta:
         verbose_name = 'Relação de abonos'
         verbose_name_plural = "Relações de abonos"
-        ordering = ['-semana', '-ano']
+        ordering = ['-data_inicio']
 
     @staticmethod
-    def factory():
-        data = timezone.now().date()
-        num_semana = int(data.strftime('%U'))
-        try:
-            return RelacaoAbono.objects.get(Q(ano=data.year) & Q(semana=num_semana))
-        except Exception as e:
-            relacao = RelacaoAbono.objects.create(
-                ano=data.year,
-                semana=num_semana
-            )
-            abonos = Abono.objects.filter(
-                Q(deferido=True) &
-                Q(data__lte=data) &
-                Q(data__gte=data-timedelta(days=6))
-            )
-            for abono in abonos:
-                relacao.abonos.add(abono)
-            return relacao.save()
+    def factory(data_inicio, data_termino):
+        abonos = Abono.objects.filter(
+            Q(deferido=True)
+            & Q(data__gte=data_inicio)
+            & Q(data__lte=data_termino)
+        )      
+        relacao = RelacaoAbono.objects.create(
+            data_inicio=data_inicio,
+            data_termino=data_termino
+        )
+        for abono in abonos:
+            relacao.abonos.add(abono)
 
-
+        relacao.save()
+        return relacao
 
 
 ###################################################################################################################
@@ -505,7 +500,6 @@ def valida_abono(abono):
 
     a = a.exclude(id=abono.id)
 
-    print(type(data), type(hoje), type(data.weekday()))
     if l or f or a or data < hoje or contagem_abonos(trabalhador) > 6 or abonou_esse_mes(trabalhador, data,
                                                                                          abono) or data.weekday() in [5,
                                                                                                                       6]:

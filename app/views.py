@@ -530,7 +530,7 @@ def editar_data(request):
 
             obj = Abono.objects.get(id=pk)
             verbose_name = tipo
-            data_antiga = obj.data
+            data_antiga = obj.datas
             obj.data = datetime.strptime(data, '%d/%m/%Y').date()
             obj.save()
             return_name = "abono"
@@ -915,7 +915,23 @@ def pdf(request, tipo, obj_id):
 
     if request.method == "POST":
 
-        if tipo == 'aviso':
+        if tipo == 'relacao_abono':
+
+                if verifica_grupo(request.user, 'relatorio'):
+
+                    data_inicio = datetime.strptime(request.POST['data_inicio'], "%d/%m/%Y")
+                    data_termino = datetime.strptime( request.POST['data_final'], "%d/%m/%Y")
+                    obj = get_relacao_de_abonos(data_inicio, data_termino)
+                    print('\n\nRelação:\n', obj)
+                    if obj_id == 1:
+                        l = Lembrete.objects.get(id=2)
+                        l.mostrado_esse_mes = True
+                        l.save()
+                else:
+                    messages.error(request, "Permissão negada")
+                    return redirect('abono')
+
+        elif tipo == 'aviso':
             obj = {
                 'orientacao': request.POST['orientacao'],
                 'tipo': request.POST['tipo'],
@@ -1169,21 +1185,7 @@ def pdf(request, tipo, obj_id):
         hoje = datetime.now().date()
 
         try:
-            if tipo == 'relacao_abono':
-
-                if verifica_grupo(request.user, 'relatorio'):
-
-                    obj = get_relacao_de_abonos()
-                    print('*'*70, "\nrelação:\n", obj, '*'*70)
-                    # se obj_id == 1 quer dizer que não quero mais ver esse aviso, então
-                    print("obj_id == ", obj_id, 'type(obj_id)', type(obj_id))
-                    if obj_id == 1:
-                        l = Lembrete.objects.get(id=2)
-                        l.mostrado_esse_mes = True
-                        l.save()
-                else:
-                    messages.error(request, "Permissão negada")
-                    return redirect('abono')
+            
 
             if tipo == 'relatorio':
                 if verifica_grupo(request.user, 'relatorio'):
@@ -1567,11 +1569,11 @@ def verifica_banners():
     if counter_ok != total_banners:
         text += ' e %d banners mantidos' % (total_banners - counter_ok)
 
-    print(text)
+    
 
 
 
-def get_relacao_de_abonos():
+def get_relacao_de_abonos(data_inicio, data_termino):
 
     relacao = None
     lembrete = None
@@ -1586,7 +1588,7 @@ def get_relacao_de_abonos():
         traceback.print_exc(sys.stdout);
         return []
 
-    return RelacaoAbono.factory()
+    return RelacaoAbono.factory(data_inicio, data_termino)
 
 
 def get_referencias_relatorios():

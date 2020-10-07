@@ -148,13 +148,11 @@
                 }
             }
         );
-        $( ".datepicker" ).datepicker( "option", "dateFormat", "dd/mm/yy" );
-        $( ".datepicker" ).datepicker( "option", "showAnim", 'slideDown' );
-
+        $( ".datepicker, .datepicker2, .datepicker_all" ).datepicker( "option", "dateFormat", "dd/mm/yy" );
         $( ".datepicker2" ).datepicker({maxDate: 0, changeMonth:true, changeYear:true});
-        $( ".datepicker2" ).datepicker( "option", "dateFormat", "dd/mm/yy" );
-        $( ".datepicker2" ).datepicker( "option", "showAnim", 'slideDown' );
+
         });
+        $('.datepicker_all').datepicker({changeMonth:true, changeYear:true, dateFormat:"dd/mm/yy"});
 
     </script>
     <script>

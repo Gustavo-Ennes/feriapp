@@ -1,0 +1,35 @@
+
+<button class="btn btn-primary btn-block my-1" data-toggle="modal" data-target="#modalAutorizacao" data-toggle="tooltip" data-placement="top" title="Imprimir autorização de horas extras">
+			Imprimir relação
+</button>
+
+<div class="modal fade" id="modalAutorizacao" tabindex="-1" role="dialog" aria-labelledby="labelAutorizacao" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="labelAutorizacao">Imprimir relação de abonadas</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    	</div>
+
+
+		<form action="{% url 'pdf' 'relacao_abono' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
+	   		{% csrf_token %}
+	     	<div class="modal-body">
+
+          <p class='text-center'>Selecione um intervalo de tempo</p>
+          <input type='text' class='form-control datepicker_all' name='data_inicio' placeholder='Data inicial' autocomplete="off">
+          <input type='text' class='form-control datepicker_all my-3' name='data_final' placeholder='Data final' autocomplete="off">
+
+    		</div>
+    		<div class="modal-footer">
+    			<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+    			<button class="btn btn-success" type='submit'>Imprimir</button>
+	     	</div>
+		</form>
+
+
+    </div>
+  </div>
+</div>

@@ -233,9 +233,7 @@ class PDF:
     @staticmethod
     def create_relacao_abono_pdf(obj):
         doc = PDF.get_sdt()
-        data = datetime.now()
-        obj = obj.abonos.all()
-
+        data = datetime.now().date()
         flowables = []
         style = ParagraphStyle(name='titulo', alignment=TA_CENTER, fontSize=25, spaceAfter=5*mm)
         style_c = ParagraphStyle(name='sub_titulo', alignment=TA_CENTER, fontSize=13, spaceAfter=10 * mm)
@@ -246,7 +244,13 @@ class PDF:
         flowables.append(
             PDF.get_flowable_line()
         )
-        table_data, label = PDF.get_table_data('Semana_de_%s_à_%s' % ((data - timedelta(days=6)).strftime("%d/%m/%Y"), data.strftime("%d/%m/%Y")), obj)
+        table_data, label = PDF.get_table_data(
+            'De_%s_à_%s' % (
+                obj.data_inicio.strftime('%d/%m/%Y'), 
+                obj.data_termino.strftime('%d/%m/%Y'),
+            ), 
+            obj.abonos.all()
+        )
         if table_data:
             flowables = PDF.build_table(table_data, label, flowables)
 
@@ -517,6 +521,7 @@ class PDF:
                             columns_data = []
 
                 else:
+                    print("Value: ", value)
                     for obj in value:
                         if type(obj) == Abono:
 

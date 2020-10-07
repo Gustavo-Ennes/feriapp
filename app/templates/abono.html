@@ -22,7 +22,7 @@
       </div>
       {% if user|has_group:'relatorio' %}
         <div class='col'>
-            <a href="{% url 'pdf' 'relacao_abono' 0 %}" class="btn btn-success btn-sm btn-block">Relação Mensal</a>
+          {% include 'modals/relacao.html' %}
         </div>
      {% endif %}
     </div>
