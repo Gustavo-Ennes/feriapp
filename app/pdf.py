@@ -461,6 +461,7 @@ class PDF:
 
                 if type(value[0]) == Abono:
                     columns_data.append("Servidor")
+                    columns_data.append("Expediente")
                     columns_data.append("Pedido")
                     columns_data.append("Fruido em")
                 elif type(value[0]) == Trabalhador:
@@ -526,6 +527,7 @@ class PDF:
                         if type(obj) == Abono:
 
                             columns_data.append("%s" % obj.trabalhador.nome)
+                            columns_data.append("%s" % obj.trabalhador.expediente)
                             columns_data.append("%s" % (obj.criado_em.strftime("%d/%m/%Y")))
                             columns_data.append("%s" % (obj.data.strftime("%d/%m/%Y")))
 
@@ -877,9 +879,15 @@ class PDF:
 
         PDF.draw_title(c, "Requerimento de Abono", start_y)
         start_y -= spacement * 3
-        PDF.draw_line(c, 15 * mm, start_y,
-                      'Através deste, venho requerer a Vossa Senhoria, conforme dispõe a Lei Complementar 001/1993 em seu capítulo IV, artigo 129, inciso IV o abono de trabalho de 1(um) dia, usufruindo em <strong>%s</strong> para tratar de assuntos de interesse particular.' % (
-                          data_abono), first_line_indent=50)
+        PDF.draw_line(
+            c, 
+            15 * mm, start_y,
+            'Através deste, venho requerer a Vossa Senhoria, conforme dispõe a Lei Complementar 001/1993 em seu capítulo IV, artigo 129, inciso IV o abono de trabalho %s, usufruindo em <strong>%s</strong> para tratar de assuntos de interesse particular.' % (
+                ('de <b>1(um) dia</b>') if abono.expediente == 'integral' else ('no expediente <b>%s</b>' % (abono.expediente)),       
+                data_abono
+            ), 
+            first_line_indent=50
+        )
         start_y -= spacement
 
         PDF.draw_line(c, 15 * mm, start_y, "Nesse termos, peço deferimento.")
@@ -910,9 +918,15 @@ class PDF:
 
         PDF.draw_title(c, "Requerimento de Abono", start_y)
         start_y -= spacement * 3
-        PDF.draw_line(c, 15 * mm, start_y,
-                      "Através deste, venho requerer a Vossa Senhoria, conforme dispõe a Lei Complementar 001/1993 em seu capítulo IV, artigo 129, inciso IV o abono de trabalho de 1(um) dia, usufruindo em <strong>%s</strong> para tratar de assuntos de interesse particular.""" % data_abono,
-                      first_line_indent=50)
+        PDF.draw_line(
+            c, 
+            15 * mm, start_y,
+            'Através deste, venho requerer a Vossa Senhoria, conforme dispõe a Lei Complementar 001/1993 em seu capítulo IV, artigo 129, inciso IV o abono de trabalho %s, usufruindo em <strong>%s</strong> para tratar de assuntos de interesse particular.' % (
+                ('de <b>1(um) dia</b>') if abono.expediente == 'integral' else ('no expediente <b>%s</b>' % (abono.expediente)),       
+                data_abono
+            ), 
+            first_line_indent=50
+        )
         start_y -= spacement
         PDF.draw_line(c, 15 * mm, start_y, "Nesse termos, peço deferimento.")
         start_y -= spacement

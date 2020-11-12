@@ -11,6 +11,7 @@
           <th scope="col">Nome</th>
           <th scope="col">Secretaria</th>
           <th scope="col">Situação</th>
+          <th scope="col">Expediente</th>
           <th scope="col">Pedido</th>
           {% if observacoes %}
             <th scope="col">Observações</th>
@@ -44,6 +45,9 @@
               <button form='setorForm{{ abono.id}}{{ abono.trabalhador.setor.id }}' class="btn btn-sm btn-block btn-transparent " type="submit">{{ abono.trabalhador.setor.nome }}</button>
             </td>
             <td>{{ abono.trabalhador.situacao|title }}</td>
+            <td>
+              {{ abono.expediente }}
+            </td>
             <td>{{ abono.criado_em|date:"d/m/Y" }}</td>
             {% if observacoes %}
               <td>{{ abono.observacoes|title }}</td>
