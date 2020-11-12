@@ -204,7 +204,7 @@ class Abono(models.Model):
     em_andamento = AbonoEmAndamento()
 
     trabalhador = models.ForeignKey(Trabalhador, on_delete=models.CASCADE)
-    expediente = models.CharField(choices=expedientes_opt, max_length=1)
+    expediente = models.CharField(choices=expedientes_opt, max_length=20)
     data = models.DateField()
     criado_em = models.DateTimeField(auto_now_add=True)
     modificado_em = models.DateTimeField(auto_now=True)
