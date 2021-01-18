@@ -29,10 +29,13 @@
         <form action="{% url 'pdf' 'justificativa' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
           {% csrf_token %}
           <label for='select_year'>Selecione o ano:</label>
-          <select id='select_year' class='custom-select' name='ano_selecionado'>
+          <select id='select_year' class='custom-select' name='ano_selecionado' aria-describedby="anoHelp">
             <option value={{ data.year }}>{{ data.year }}</option>          
             <option value={{ data.year|add:'1' }}>{{ data.year|add:'1' }}</option>
           </select>
+          <small id="anoHelp" class="form-text text-muted">
+            Talvez você já queira as suas justificativas pro ano que vem, já que é dezembro.
+          </small>
           {{ AutorizacaoForm|crispy }}
           <div class="modal-footer">
             <button class='btn btn-secondary' type='button' data-dismiss:'modal'>Cancelar</button> 
@@ -49,10 +52,13 @@
         <form action="{% url 'pdf' 'justificativa' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
           {% csrf_token %}
           <label for='select_year'>Selecione o ano:</label>
-          <select id='select_year' class='custom-select' name='ano_selecionado'>
+          <select id='select_year' class='custom-select' name='ano_selecionado' aria-describedby="anoHelp">
             <option value={{ data.year }}>{{ data.year }}</option>          
             <option value={{ data.year|add:'-1' }}>{{ data.year|add:'-1' }}</option>
           </select>
+          <small id="anoHelp" class="form-text text-muted">
+            Talvez você queira justificar horas extra do ano passado, já que é janeiro.
+          </small>
           {{ AutorizacaoForm|crispy }}
           <div class="modal-footer">
             <button class='btn btn-secondary' type='button' data-dismiss:'modal'>Cancelar</button> 

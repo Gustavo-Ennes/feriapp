@@ -1284,7 +1284,7 @@ def pdf(request, tipo, obj_id):
         elif tipo == 'ferias' and request.method == "POST":
             PDFFactory.get_ferias_gerais_pdf(obj)
         elif tipo == 'justificativa':
-            if 'ano_selectionado' in request.POST:
+            if 'ano_selecionado' in request.POST:
                 PDFFactory.get_justificativa_pdf(obj, ano=int(request.POST['ano_selecionado']))
             else:
                 PDFFactory.get_justificativa_pdf(obj)
