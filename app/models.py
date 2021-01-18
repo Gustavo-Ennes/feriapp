@@ -445,6 +445,32 @@ class RelacaoAbono(models.Model):
         return relacao
 
 
+class Diretor(models.Model):
+    objects = models.Manager()
+    nome = models.CharField(max_length=200)
+    legenda = models.CharField(max_length=100)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    modificado = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Diretores"
+        ordering = ['nome']
+
+
+
+class ChefeDeSetor(models.Model):
+    objects = models.Manager()
+    nome = models.CharField(max_length=200)
+    legenda = models.CharField(max_length=100)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    modificado = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Chefes de Setor"
+        ordering = ['nome']
+
+
+
 ###################################################################################################################
 
 
