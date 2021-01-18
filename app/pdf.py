@@ -527,7 +527,7 @@ class PDF:
                         if type(obj) == Abono:
 
                             columns_data.append("%s" % obj.trabalhador.nome)
-                            columns_data.append("%s" % obj.trabalhador.expediente)
+                            columns_data.append("%s" % obj.expediente)
                             columns_data.append("%s" % (obj.criado_em.strftime("%d/%m/%Y")))
                             columns_data.append("%s" % (obj.data.strftime("%d/%m/%Y")))
 

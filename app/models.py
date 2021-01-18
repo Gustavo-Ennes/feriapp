@@ -431,8 +431,8 @@ class RelacaoAbono(models.Model):
     def factory(data_inicio, data_termino):
         abonos = Abono.objects.filter(
             Q(deferido=True)
-            & Q(data__gte=data_inicio)
-            & Q(data__lte=data_termino)
+            & Q(criado_em__gte=data_inicio)
+            & Q(criado_em__lte=data_termino)
         )      
         relacao = RelacaoAbono.objects.create(
             data_inicio=data_inicio,
