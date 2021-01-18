@@ -534,15 +534,33 @@ def valida_abono(abono):
 
 
 def contagem_abonos(trabalhador):
-    return Abono.objects.filter(
-        Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__year=timezone.now().date().year)).count()
+    abonos = Abono.objects.filter(
+        Q(trabalhador=trabalhador) & 
+        Q(deferido=True) & 
+        Q(data__year=timezone.now().date().year)
+    )
+    counter = 0.0
+    for i in abonos.all():
+        if i.expediente == 'integral':
+            counter += 1.0
+        else:
+            counter += .5
+    print('contagem: %.1f' % counter)
+    return counter
 
 
 def abonou_esse_mes(trabalhador, data, abono):
     abonos = Abono.objects.filter(
         Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__month=data.month) & Q(data__year=data.year)).exclude(
         id=abono.id)
-    print(trabalhador, data.strftime("%d/%m/%Y"), abonos)
+
+    # se o trabalhador utilizou só meio abono, e o abono requerido agora é meia abonada,
+    #  afunção retorna que ele não abonou esse mês, o permitindo abonar
+    if abonos:
+        if len(abonos) == 1:
+            if abonos[0].expediente != 'integral':
+                if abono.expediente != 'integral':
+                    return False
     return bool(abonos)
 
 
