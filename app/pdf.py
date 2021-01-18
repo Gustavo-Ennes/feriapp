@@ -608,7 +608,7 @@ class PDF:
         doc.build(flowables, onFirstPage=PDF.papel_timbrado, onLaterPages=PDF.papel_timbrado)
 
     @staticmethod
-    def draw_justificativa_block(canvas, start_y, trabalhador):
+    def draw_justificativa_block(canvas, start_y, trabalhador, ano):
 
         c = canvas
         spacement = 7 * mm
@@ -629,7 +629,7 @@ class PDF:
 
         columns_data.clear()
         table_data.clear()
-        columns_data.append("Data: _____/______/%s" % (data.strftime('%Y')))
+        columns_data.append("Data: _____/______/%d" % ano)
         columns_data.append("Horário: _____:_____ ÁS _____:_____")
         columns_data.append("H.E.: ( _____ hs. )")
         table_data.append(columns_data)
@@ -669,16 +669,16 @@ class PDF:
         return start_y
 
     @staticmethod
-    def create_justificativa_pdf(trabalhador: Trabalhador):
+    def create_justificativa_pdf(trabalhador: Trabalhador, ano):
 
         c = canvas.Canvas(os.path.join(PROJECT_ROOT, 'temp/pdf.pdf'), pagesize=A4)
         start_y = 272 * mm
 
         PDF.draw_header(c)
-        start_y = PDF.draw_justificativa_block(c, start_y, trabalhador)
-        start_y = PDF.draw_justificativa_block(c, start_y, trabalhador)
-        start_y = PDF.draw_justificativa_block(c, start_y, trabalhador)
-        PDF.draw_justificativa_block(c, start_y, trabalhador)
+        start_y = PDF.draw_justificativa_block(c, start_y, trabalhador, ano)
+        start_y = PDF.draw_justificativa_block(c, start_y, trabalhador, ano)
+        start_y = PDF.draw_justificativa_block(c, start_y, trabalhador, ano)
+        PDF.draw_justificativa_block(c, start_y, trabalhador, ano)
 
         PDF.draw_footer(c)
         c.showPage()
@@ -1417,9 +1417,9 @@ class PDFFactory(PDF):
             PDFFactory.create_trabalhador_historico_pdf(dados)
 
     @staticmethod
-    def get_justificativa_pdf(trabalhador: Trabalhador):
+    def get_justificativa_pdf(trabalhador: Trabalhador, ano=datetime.now().date().year):
         if trabalhador:
-            PDFFactory.create_justificativa_pdf(trabalhador)
+            PDFFactory.create_justificativa_pdf(trabalhador, ano)
 
     @staticmethod
     def get_abono_pdf(abono: Abono):

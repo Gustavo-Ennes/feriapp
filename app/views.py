@@ -697,6 +697,8 @@ def sair(request):
 def autorizacao(request):
     context = {
         'AutorizacaoForm': AutorizacaoForm(),
+        'ano': datetime.now().date().year,
+        'data': datetime.now(),
     }
     return render(request, 'justificativas_he.html', context)
 
@@ -1264,6 +1266,7 @@ def pdf(request, tipo, obj_id):
             else:
                 messages.warning(request, "Não há abonos para listar")
                 return redirect('abono')
+
         elif tipo == 'relatorio':
             PDFFactory.get_relatorio_pdf(obj, copia=False)
         elif tipo == 'relatorio-copia':
@@ -1281,7 +1284,10 @@ def pdf(request, tipo, obj_id):
         elif tipo == 'ferias' and request.method == "POST":
             PDFFactory.get_ferias_gerais_pdf(obj)
         elif tipo == 'justificativa':
-            PDFFactory.get_justificativa_pdf(obj)
+            if 'ano_selectionado' in request.POST:
+                PDFFactory.get_justificativa_pdf(obj, ano=int(request.POST['ano_selecionado']))
+            else:
+                PDFFactory.get_justificativa_pdf(obj)
         elif tipo == "trabalhador_historico":
             PDFFactory.get_trabalhador_historico_pdf(obj)
         elif tipo == 'setor_historico':

@@ -22,17 +22,60 @@
         </button>
     	</div>
 
+    {% if data|e_dezembro %}
 
-		<form action="{% url 'pdf' 'justificativa' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
-	   		{% csrf_token %}
-	     	<div class="modal-body">
-          		{{ AutorizacaoForm|crispy }}
-      		</div>
-      		<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-				<button class="btn btn-success" type='submit'>Imprimir</button>
-	     	</div>
-  		</form>
+      <div class='modal-body'>
+
+        <form action="{% url 'pdf' 'justificativa' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
+          {% csrf_token %}
+          <label for='select_year'>Selecione o ano:</label>
+          <select id='select_year' class='custom-select' name='ano_selecionado'>
+            <option value={{ data.year }}>{{ data.year }}</option>          
+            <option value={{ data.year|add:'1' }}>{{ data.year|add:'1' }}</option>
+          </select>
+          {{ AutorizacaoForm|crispy }}
+          <div class="modal-footer">
+            <button class='btn btn-secondary' type='button' data-dismiss:'modal'>Cancelar</button> 
+            <button class="btn btn-success" type='submit'>Imprimir</button>
+          </div>
+        </form>
+
+      </div>
+
+    {% elif data|e_janeiro %}
+
+      <div class='modal-body'>
+
+        <form action="{% url 'pdf' 'justificativa' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
+          {% csrf_token %}
+          <label for='select_year'>Selecione o ano:</label>
+          <select id='select_year' class='custom-select' name='ano_selecionado'>
+            <option value={{ data.year }}>{{ data.year }}</option>          
+            <option value={{ data.year|add:'-1' }}>{{ data.year|add:'-1' }}</option>
+          </select>
+          {{ AutorizacaoForm|crispy }}
+          <div class="modal-footer">
+            <button class='btn btn-secondary' type='button' data-dismiss:'modal'>Cancelar</button> 
+            <button class="btn btn-success" type='submit'>Imprimir</button>
+          </div>
+        </form>
+
+      </div>
+
+
+
+    {% else %}
+      <form action="{% url 'pdf' 'justificativa' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
+        {% csrf_token %}
+        <div class="modal-body">
+              {{ AutorizacaoForm|crispy }}
+          </div>
+          <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+        <button class="btn btn-success" type='submit'>Imprimir</button>
+        </div>
+      </form>
+    {% endif %}
 
 
     </div>

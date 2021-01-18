@@ -246,3 +246,23 @@ def get_referencias(relatorios):
 def primeiro_nome(nome_completo):
     return nome_completo.split(' ')[0]
 
+
+@register.filter 
+def soma(num1, num2):
+    num1 = int(num1)
+    if num2:
+        return num1 + int(num2)
+    return num1
+
+@register.filter 
+def e_dezembro(data):
+    if data.month == 12:
+        return True
+    return False
+
+@register.filter 
+def e_janeiro(data):
+    if data.month == 1:
+        return True
+    return False
+
