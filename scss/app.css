@@ -2,6 +2,8 @@ html, body, .page-header { max-width: 100%; overflow-x: hidden; }
 
 html .page-header, body .page-header, .page-header .page-header { font-family: "Noto Serif", serif; }
 
+.carousel-caption { background-color: rgba(0, 0, 0, 0.6) !important; border-radius: 15px; }
+
 body { background-color: #EDF6FF; }
 
 .card { box-shadow: 2px 2px 10px 2px #DAE2EA; }
@@ -132,6 +134,6 @@ h1, h2, h3 { font-family: "Noto Serif", serif !important !important; }
 
 .collapse .card.card-body, .collapsing .card.card-body, .collapsed .card.card-body { border-radius: 20px; }
 
-.collapse-label { font-size: 1.3rem; color: #D6675E; text-shadow: 1px 1px 1px #964942; }
+.collapse-label { font-size: 1.3rem; color: #C2D633; text-shadow: 1px 1px 1px #7D8A28; }
 
 .btn-relatorio { background-color: #488DD6; color: #EEE; border-radius: 15px; box-shadow: inset 1px 1px 2px 1px #21548A; }

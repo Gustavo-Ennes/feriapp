@@ -27,6 +27,11 @@ html, body, .page-header{
     }
 }
 
+.carousel-caption{
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  border-radius: 15px;
+}
+
 body {
 
     background-color: $background;

@@ -28,6 +28,7 @@ def verifica_conf():
 @login_required(login_url='/entrar/')
 def index(request):
     verifica_conf()
+    banner_manager = BannerManager()
 
     if not request.user.groups.filter(Q(name='ferias') | Q(name='relatorio')):
         try:
@@ -63,7 +64,7 @@ def index(request):
         context['lembretes'] = [ l for l in context['lembretes'] if l.is_valid ]
         atualiza_situacoes_trabalhadores()
         atualiza_lembretes()
-        verifica_banners()
+        banner_manager.banner_routine()
         print("lembretes: ", context['lembretes'])
         print(context['banners'])
 
@@ -1533,50 +1534,6 @@ def mes_escrito(num):
 
 def verifica_grupo(user, group_name):
     return bool(user.groups.filter(Q(name=group_name)))
-
-
-# essa função faz web scraping no site da prefeitura, pega os banners e respectivas informações
-# e tenta inserí-las no banco de dados; que tem o campo 'link_img' único; falhando em inserir imagens iguais
-def verifica_banners():
-
-    url = 'https://www.ilhasolteira.sp.gov.br/'
-    soup = bs(requests.get(url).content, 'html.parser')
-    slide_tag = 'swiper-slide'
-    tags = {
-        'titulo': None,
-        'descricao':None,
-        'img_link': 'img',
-        'link': 'a',
-    }
-    text = 'Banners verificados: '
-    counter_ok = 0
-    total_banners = Banner.objects.count()
-    #find all containers 
-    slides = soup.find_all('div', {'class': slide_tag})
-    for s in slides:
-
-        try:
-            imglink_component = s.find(tags['img_link'])
-            link_component = s.find(tags['link'])
-
-            Banner.objects.create(
-                link_img=imglink_component.get('src'),
-                link=link_component.get('href') 
-            )
-
-            counter_ok += 1
-
-        except Exception as e:
-            parts = imglink_component.get('src').split('/')
-            img_name = parts[len(parts) - 1]
-            print("Imagem '%s' já existe no banco." % img_name)
-
-    text += '%d banners atualizados' % counter_ok
-    if counter_ok != total_banners:
-        text += ' e %d banners mantidos' % (total_banners - counter_ok)
-
-    
-
 
 
 def get_relacao_de_abonos(data_inicio, data_termino):

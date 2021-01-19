@@ -109,12 +109,12 @@
                     <a href='{{ banner.link }}' target='_blank'>
                       <img src="{{ banner.link_img }}" class="d-block mx-auto w-100" alt="{{ banner.title }}">
                     </a>
-                    <div class="carousel-caption d-none d-md-block">
+                    <div class="carousel-caption d-none d-md-block text-light ">
                       {% if banner.titulo %}
                         <h5>{{ banner.titulo }}</h5>
                       {% endif %}
                       {% if banner.descricao %}
-                        <p>{{ banner.descricao }}</p>
+                        <p>{{ banner.descricao }}...</p>
                       {% endif %}
                     </div>
                   </div>
