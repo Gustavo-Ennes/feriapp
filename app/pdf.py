@@ -23,7 +23,7 @@ def get_diretor():
 
 def get_chefe_de_setor():
     if ChefeDeSetor.objects.count() > 0:
-        chefe_de_setor = ChefeDeSetor.objects.all().order_by('id')[0]
+        return ChefeDeSetor.objects.all().order_by('id')[0]
         
 
 diretor = get_diretor()
