@@ -14,7 +14,7 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph, Table, TableStyle, SimpleDocTemplate, Image
 
 from feriapp.settings import PROJECT_ROOT, BASE_DIR
-from .models import Relatorio, Abono, LicencaPremio, Ferias, Trabalhador, Setor, LinhaRelatorio# , Diretor, ChefeDeSetor
+from .models import Relatorio, Abono, LicencaPremio, Ferias, Trabalhador, Setor, LinhaRelatorio, Diretor, ChefeDeSetor
 
 
 def get_diretor():
