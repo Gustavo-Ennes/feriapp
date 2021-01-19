@@ -14,10 +14,10 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph, Table, TableStyle, SimpleDocTemplate, Image
 
 from feriapp.settings import PROJECT_ROOT, BASE_DIR
-from .models import Relatorio, Abono, LicencaPremio, Ferias, Trabalhador, Setor, LinhaRelatorio, Diretor, ChefeDeSetor
+from .models import Relatorio, Abono, LicencaPremio, Ferias, Trabalhador, Setor, LinhaRelatorio# , Diretor, ChefeDeSetor
 
 
-
+'''
 def get_diretor():
     if Diretor.objects.count() > 0:
         return Diretor.objects.all().order_by('id')[0]
@@ -29,7 +29,7 @@ def get_chefe_de_setor():
 
 diretor = get_diretor()
 chefe_de_setor = get_chefe_de_setor()
-
+'''
 class RandomStuff:
 
     @staticmethod
@@ -271,7 +271,7 @@ class PDF:
 
         flowables.append(Paragraph("Ilha Solteira, %d de %s de %s" % (data.day, RandomStuff.mes_escrito(data.month), data.year), style=style_r))
 
-        flowables = PDF.assinatura_de(chefe_de_setor.nome, flowables=flowables, legenda=chefe_de_setor.legenda)
+        flowables = PDF.assinatura_de("Chefe", flowables=flowables, legenda=chefe_de_setor.legenda)
         doc.build(flowables, onFirstPage=PDF.papel_timbrado, onLaterPages=PDF.papel_timbrado)
 
 
@@ -674,7 +674,7 @@ class PDF:
 
         PDF.draw_line(c, 12 * mm, start_y, "%s" % ('_' * 40), font_size=10, align=TA_CENTER)
         start_y -= spacement
-        PDF.draw_line(c, 12 * mm, start_y, chefe_de_setor.nome, font_size=10, align=TA_CENTER)
+        PDF.draw_line(c, 12 * mm, start_y, "Chefe", font_size=10, align=TA_CENTER)
         start_y -= spacement / 2
         PDF.draw_line(c, 12 * mm, start_y, chefe_de_setor.legenda, font_size=8, align=TA_CENTER)
         start_y -= spacement * 1.3
@@ -745,7 +745,7 @@ class PDF:
         start_y -= spacement * 1.5
         PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.nome, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, "Chefe", align=TA_CENTER, font_size=10.5)
         start_y -= spacement / 2
         PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.legenda, align=TA_CENTER, font_size=10.5)
         start_y -= spacement * 2.5
@@ -780,7 +780,7 @@ class PDF:
         start_y -= spacement * 1.5
         PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.nome, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, "Chefe", align=TA_CENTER, font_size=10.5)
         start_y -= spacement / 2
         PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.legenda, align=TA_CENTER, font_size=10.5)
 
@@ -834,7 +834,7 @@ class PDF:
         start_y -= spacement * 1.5
         PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, diretor.nome, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, "Diretor", align=TA_CENTER, font_size=10.5)
         start_y -= spacement / 2
         PDF.draw_line(c, 15 * mm, start_y, diretor.legenda, align=TA_CENTER, font_size=10.5)
         start_y -= spacement * 2.5
@@ -867,7 +867,7 @@ class PDF:
         start_y -= spacement * 1.5
         PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, diretor.nome, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, "Diretor", align=TA_CENTER, font_size=10.5)
         start_y -= spacement / 2
         PDF.draw_line(c, 15 * mm, start_y, diretor.legenda, align=TA_CENTER, font_size=10.5)
 
@@ -924,7 +924,7 @@ class PDF:
         start_y -= spacement * 1.5
         PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.nome, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, "Chefe", align=TA_CENTER, font_size=10.5)
         start_y -= spacement / 2
         PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.legenda, align=TA_CENTER, font_size=10.5)
         start_y -= spacement * 2
@@ -962,7 +962,7 @@ class PDF:
         start_y -= spacement * 1.5
         PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.nome, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, "Chefe", align=TA_CENTER, font_size=10.5)
         start_y -= spacement / 2
         PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.legenda, align=TA_CENTER, font_size=10.5)
 
@@ -1030,7 +1030,7 @@ class PDF:
 
         flowables.append(Paragraph("Ilha Solteira, %d de %s de %s" % (data.day, RandomStuff.mes_escrito(data.month), data.year), style=style_data))
 
-        flowables = PDF.assinatura_de("<b>%s</b>" % diretor.nome, flowables,
+        flowables = PDF.assinatura_de("<b>%s</b>" % "Diretor", flowables,
                                       legenda=diretor.legenda)
         flowables = PDF.assinatura_de("<b>Assinatura do(a) Secretário(a)</b>", flowables,
                                       legenda="Secretaria de %s" % relatorio.setor.nome.title())
@@ -1259,7 +1259,7 @@ class PDF:
             )
         )
 
-        flowables = PDF.assinatura_de(chefe_de_setor.nome, flowables, legenda=chefe_de_setor.legenda)
+        flowables = PDF.assinatura_de("Chefe", flowables, legenda=chefe_de_setor.legenda)
 
         doc.build(flowables, onFirstPage=PDF.papel_timbrado, onLaterPages=PDF.papel_timbrado)
 
