@@ -14,23 +14,27 @@
       	</div>
 
 
-  			<form action="{% url 'indeferir' %}" method="POST" enctype="multipart/form-data" class="text-left">
-     		{% csrf_token %}
-  	     	<div class="modal-body">
-
+  			<div class="modal-body">
+          <form id='form_indeferir'action="{% url 'indeferir' %}" method="POST" enctype="multipart/form-data" class="text-left">
+              {% csrf_token %}
 
               <h5>Você deseja indeferir a licença-prêmio de {{ f.trabalhador.nome }}, de {{ f.data_inicio|date:"d/m/Y"}} até {{ f.data_termino|date:"d/m/Y"}}?</h5>
               <label for='obs'>Justifique seu indeferimento</label>
               <textarea id='obs' type='text' class="form-control" rows="5" name='observacoes' required></textarea>
               <input type='hidden' name='licenca_id' value='{{f.id}}' />
               <input type='hidden' name='tipo' value='licenca' />
-
-        	</div>
-        	<div class="modal-footer">
-  	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-  	        <button class="btn btn-danger" type='submit'>Indeferir</button>
-  	     	</div>
-    		</form>
+          </form>
+          <form id='form_imprimir' method='POST' action='{% url "pdf" "cancelamento_licenca" 0 %}'>
+              {% csrf_token %}
+              <input type='hidden' name='licenca_id' value='{{f.id}}' />
+              <input type='hidden' name='tipo' value='licenca' />                         
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button class="btn btn-danger" type='submit' form='form_indeferir'>Indeferir</button>
+          <button class='btn btn-danger' type'submit' form='form_imprimir'>Indeferir e Imprimir Cancelamento</button>
+      </div>
 
 
       </div>

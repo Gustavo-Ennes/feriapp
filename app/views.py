@@ -1175,6 +1175,14 @@ def pdf(request, tipo, obj_id):
             obj = {
                 'trabalhadores': Trabalhador.objects.all()
             }
+        elif tipo == 'cancelamento_ferias':
+            obj = Ferias.objects.get(id=int(request.POST['ferias_id']))
+            obj.save(validacao=False)
+
+        elif tipo == 'cancelamento_licenca':
+            obj = LicencaPremio.objects.get(id=int(request.POST['licenca_id']))
+            obj.save(validacao=False)
+
         else:
             try:
                 obj = Trabalhador.objects.get(id=int(request.POST['trabalhador']))
@@ -1299,6 +1307,10 @@ def pdf(request, tipo, obj_id):
             PDFFactory.get_setores_pdf(obj)
         elif tipo == 'trabalhadores':
             PDFFactory.get_trabalhadores_pdf(obj)
+        elif tipo == 'cancelamento_ferias':
+            PDFFactory.get_cancelamento_ferias_pdf(obj)
+        elif tipo == 'cancelamento_licenca':
+            PDFFactory.get_cancelamento_licenca_pdf(obj)
 
         pdf = open(temp_pdf, 'rb')
         return FileResponse(pdf, filename=temp_pdf, as_attachment=request.user_agent.is_mobile)

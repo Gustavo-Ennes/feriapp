@@ -1407,6 +1407,191 @@ class PDF:
         doc.build(flowables, onFirstPage=PDF.header_duplo, onLaterPages=PDF.header_duplo)
 
 
+    @staticmethod
+    def create_cancelamento_ferias_pdf(ferias: Ferias):
+        trabalhador = ferias.trabalhador
+        c = canvas.Canvas(PDF.PDF_PATH, pagesize=A4)
+        start_y = 264 * mm
+        spacement = 10 * mm
+
+        data_inicio = ferias.data_inicio.strftime("%d/%m/%Y")
+        data_termino = ferias.data_termino.strftime("%d/%m/%Y")
+        data = datetime.now()
+
+        # desenhando no canvas
+
+        PDF.draw_header(c)
+
+        PDF.draw_line(c, 0, start_y + 10 * mm, "%d dias" % ferias.qtd_dias, align=TA_RIGHT, font_size=15)
+        start_y -= spacement / 2
+        PDF.draw_title(c, "Requerimento de Cancelamento de Férias", start_y)
+        start_y -= spacement * 2.5
+        dias_escrito = "trinta" if ferias.qtd_dias == 30 else "quinze"
+        PDF.draw_line(c, 15 * mm, start_y,
+                      'Através deste, venho solicitar o  <strong>C A N C E L A M E N T O</strong>  das férias de %d(%s) dias de fruição, com início no dia <b>%s</b> e término no dia <b>%s</b>' % (
+                          ferias.qtd_dias, dias_escrito, data_inicio, data_termino), first_line_indent=50)
+        start_y -= spacement
+
+        PDF.draw_line(c, 15 * mm, start_y, "Nesse termos, peço deferimento.")
+        start_y -= spacement
+        PDF.draw_line(c, 130 * mm, start_y, 'Ilha Solteira, %s de %s de %s' % (
+            (str(data.day) if data.day > 9 else '0' + str(data.day)),
+            RandomStuff.mes_escrito(data.month),
+            str(data.year)
+        )
+                      )
+        start_y -= spacement * 1.5
+        PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "<b>%s</b>" % trabalhador.nome, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "Matrícula: %s" % trabalhador.matricula, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "Função: %s - Secretaria: %s" % (trabalhador.funcao, trabalhador.setor.nome),
+                      align=TA_CENTER, font_size=10.5)
+
+        start_y -= spacement * 1.5
+        PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, diretor.nome, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, diretor.legenda, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement * 2.5
+
+        PDF.draw_line(c, 0, start_y + 10 * mm, "%d dias" % ferias.qtd_dias, align=TA_RIGHT, font_size=15)
+        start_y -= spacement / 2
+        PDF.draw_title(c, "Requerimento de Cancelamento de Férias", start_y)
+        start_y -= spacement * 2.5
+        PDF.draw_line(c, 15 * mm, start_y,
+                      'Através deste, venho solicitar o  <strong>C A N C E L A M E N T O</strong>  das férias de %d(%s) dias de fruição, com início no dia <b>%s</b> e término no dia <b>%s</b>' % (
+                          ferias.qtd_dias, dias_escrito, data_inicio, data_termino), first_line_indent=50)
+        start_y -= spacement
+        PDF.draw_line(c, 15 * mm, start_y, "Nesse termos, peço deferimento.")
+        start_y -= spacement
+        PDF.draw_line(c, 130 * mm, start_y, 'Ilha Solteira, %s de %s de %s' % (
+            (str(data.day) if data.day > 9 else '0' + str(data.day)),
+            RandomStuff.mes_escrito(data.month),
+            str(data.year)
+        )
+                      )
+        start_y -= spacement * 1.5
+        PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "<b>%s</b>" % trabalhador.nome, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "Matrícula: %s" % trabalhador.matricula, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "Função: %s - Secretaria: %s" % (trabalhador.funcao, trabalhador.setor.nome),
+                      align=TA_CENTER, font_size=10.5)
+
+        start_y -= spacement * 1.5
+        PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, diretor.nome, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, diretor.legenda, align=TA_CENTER, font_size=10.5)
+
+        PDF.draw_footer(c)
+        c.showPage()
+        c.save()
+
+
+    def create_cancelamento_licenca_pdf(licenca: LicencaPremio):
+        trabalhador = licenca.trabalhador
+        c = canvas.Canvas(PDF.PDF_PATH, pagesize=A4)
+        start_y = 265 * mm
+        spacement = 10 * mm
+
+        data_inicio = licenca.data_inicio.strftime("%d/%m/%Y")
+        data_termino = licenca.data_termino.strftime("%d/%m/%Y")
+        data = datetime.now()
+
+        # desenhando no canvas
+
+        PDF.draw_header(c)
+
+        PDF.draw_line(c, 0, start_y + 10 * mm, "%d dias" % licenca.qtd_dias, align=TA_RIGHT, font_size=15)
+        start_y -= spacement / 2
+        PDF.draw_title(c, "Requerimento de Cancelamento de Licença Prêmio", start_y)
+        start_y -= spacement * 2.5
+        dias_escrito = "trinta" if licenca.qtd_dias == 30 else "quinze"
+        PDF.draw_line(c, 15 * mm, start_y,
+                      "Através deste, venho solicitar a Vossa Senhoria, o <strong> C A N C E L A M E N T O</strong> do período de gozo da Licênça Prêmio por Assiduidade, acordo com os artigos 121 a 124 da Lei Complementar 001/93 de 01/02/1993 e Lei Complementar121/2007, de 17/01/2007,no período de:",
+                      first_line_indent=50)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, '<b>%s</b> a <b>%s</b>' % (data_inicio, data_termino), align=TA_CENTER)
+        start_y -= spacement
+
+        PDF.draw_line(c, 15 * mm, start_y, "Nesse termos, peço deferimento.")
+        start_y -= spacement / 2
+        PDF.draw_line(c, 130 * mm, start_y, 'Ilha Solteira, %s de %s de %s' % (
+            (str(data.day) if data.day > 9 else '0' + str(data.day)),
+            RandomStuff.mes_escrito(data.month),
+            str(data.year)
+        )
+                      )
+        start_y -= spacement * 1.5
+        PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "<b>%s</b>" % trabalhador.nome, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "Matrícula: %s" % trabalhador.matricula, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "Função: %s - Secretaria: %s" % (trabalhador.funcao, trabalhador.setor.nome),
+                      align=TA_CENTER, font_size=10.5)
+
+        start_y -= spacement * 1.5
+        PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.nome, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.legenda, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement * 2.5
+
+        PDF.draw_line(c, 0, start_y + 10 * mm, "%d dias" % licenca.qtd_dias, align=TA_RIGHT, font_size=15)
+        start_y -= spacement / 2
+        PDF.draw_title(c, "Requerimento de Cancelamento de Licença Prêmio", start_y)
+        start_y -= spacement * 2.5
+        PDF.draw_line(c, 15 * mm, start_y,
+                      "Através deste, venho solicitar a Vossa Senhoria, o <strong> C A N C E L A M E N T O</strong> do período de gozo da Licênça Prêmio por Assiduidade, acordo com os artigos 121 a 124 da Lei Complementar 001/93 de 01/02/1993 e Lei Complementar121/2007, de 17/01/2007,no período de:",
+                      first_line_indent=50)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, '<b>%s</b> a <b>%s</b>' % (data_inicio, data_termino), align=TA_CENTER)
+        start_y -= spacement
+        PDF.draw_line(c, 15 * mm, start_y, "Nesse termos, peço deferimento.")
+        start_y -= spacement / 2
+        PDF.draw_line(c, 130 * mm, start_y, 'Ilha Solteira, %s de %s de %s' % (
+            (str(data.day) if data.day > 9 else '0' + str(data.day)),
+            RandomStuff.mes_escrito(data.month),
+            str(data.year)
+        )
+                      )
+        start_y -= spacement * 1.5
+        PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "<b>%s</b>" % trabalhador.nome, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "Matrícula: %s" % trabalhador.matricula, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, "Função: %s - Secretaria: %s" % (trabalhador.funcao, trabalhador.setor.nome),
+                      align=TA_CENTER, font_size=10.5)
+
+        start_y -= spacement * 1.5
+        PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.nome, align=TA_CENTER, font_size=10.5)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 15 * mm, start_y, chefe_de_setor.legenda, align=TA_CENTER, font_size=10.5)
+
+        PDF.draw_footer(c)
+        c.showPage()
+        c.save()
+
+
+
+
+
+
 class PDFFactory(PDF):
 
     @staticmethod
@@ -1502,6 +1687,18 @@ class PDFFactory(PDF):
     def get_aviso_pdf(obj):
         if obj:
             PDFFactory.create_aviso_pdf(obj)
+
+
+    @staticmethod
+    def get_cancelamento_ferias_pdf(obj):
+        if obj:
+            PDFFactory.create_cancelamento_ferias_pdf(obj)
+
+
+    @staticmethod
+    def get_cancelamento_licenca_pdf(obj):
+        if obj:
+            PDFFactory.create_cancelamento_licenca_pdf(obj)
 
 
 '''
