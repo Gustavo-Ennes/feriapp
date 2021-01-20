@@ -75,30 +75,17 @@
 {% endblock %}
 
 {% block js %}
-  <script>
-    jQuery('#futuros-tab').click(function(){
-      $("#nav-tab-abono [aria-selected=true]").attr('aria-selected', false);
-      $("#nav-tab-abono [aria-selected=true]").removeClass("active")
-      $(self).attr('aria-selected', true);
-      $(self).addClass('active');
-    });
-    jQuery('#andamento-tab').click(function(){
-      $("#nav-tab-abono [aria-selected=true]").attr('aria-selected', false);
-      $("#nav-tab-abono [aria-selected=true]").removeClass("active")
-      $(self).attr('aria-selected', true);
-      $(self).addClass('active');
-    });
-    jQuery('#fruidos-tab').click(function(){
-      $("#nav-tab-abono [aria-selected=true]").attr('aria-selected', false);
-      $("#nav-tab-abono [aria-selected=true]").removeClass("active")
-      $(self).attr('aria-selected', true);
-      $(self).addClass('active');
-    });
-    jQuery('#indeferidos-tab').click(function(){
-      $("#nav-tab-abono [aria-selected=true]").attr('aria-selected', false);
-      $("#nav-tab-abono [aria-selected=true]").removeClass("active")
-      $(self).attr('aria-selected', true);
-      $(self).addClass('active');
+
+  <script >
+    $(document).ready(function(){
+        $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+            localStorage.setItem('activeTab', $(e.target).attr('href'));
+        });
+        var activeTab = localStorage.getItem('activeTab');
+        if(activeTab){
+            $('#nav-tab-abono a[href="' + activeTab + '"]').tab('show');
+        }
     });
   </script>
+
 {% endblock %}
