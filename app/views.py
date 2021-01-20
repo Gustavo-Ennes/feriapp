@@ -1211,9 +1211,14 @@ def pdf(request, tipo, obj_id):
             if tipo == 'ferias':
                 obj = Ferias.objects.get(id=int(obj_id))
                 model_name = "Feŕias"
+                # para imprimir cancelamento ao invés das férias, se elas estiverem deferidas sem observações
+                if not obj.deferida and obj.observacoes == '':
+                    tipo = 'cancelamento_ferias'
             if tipo == 'licenca':
                 obj = LicencaPremio.objects.get(id=int(obj_id))
                 model_name = "Licença Prêmio"
+                if not obj.deferida and obj.observacoes == '':
+                    tipo = 'cancelamento_licenca'
             if tipo == 'abono':
                 obj = Abono.objects.get(id=int(obj_id))
                 model_name = "Abono"
