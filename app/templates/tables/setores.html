@@ -7,10 +7,22 @@
     <table class="table table-striped text-center">
       <thead>
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Nome</th>
+          <th scope="col">
+            <a href='{% url "setor" "id" %}' class='text-success'>
+              ID
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "setor" "nome" %}' class='text-success'>
+              Nome
+            </a>
+          </th>
           <th scope="col">Qtd. servidores</th>
-          <th scope="col">Desde</th>
+          <th scope="col">
+            <a href='{% url "setor" "-criado_em" %}' class='text-success'>
+              Desde
+            </a>
+          </th>
           <th scope="col">Criador</th>
           {% if not pdf and not query %}
             <th scope='col'>Ações</th>

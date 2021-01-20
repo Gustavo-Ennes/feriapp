@@ -6,12 +6,36 @@
     <table class="table table-striped text-center">
       <thead>
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Nome</th>
-          <th scope="col">Função</th>
-          <th scope='col'>Secretaria</th>
-          <th scope="col">Admissão</th>
-          <th scope="col">Situação</th>
+          <th scope="col">
+            <a href='{% url "trabalhadores" "id" %}' class='text-success'>
+              ID
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "trabalhadores" "nome" %}' class='text-success'>
+              Nome
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "trabalhadores" "funcao" %}' class='text-success'>
+              Função
+            </a>
+          </th>
+          <th scope='col'>
+            <a href='{% url "trabalhadores" "setor__nome" %}' class='text-success'>
+              Secretaria
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "trabalhadores" "-data_admissao" %}' class='text-success'>
+              Admissão
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "trabalhadores" "situacao" %}' class='text-success'>
+              Situação
+            </a>
+          </th>
           <th scope="col">Criador</th>
           {% if not pdf %}
             <th scope="col">Ações</th>

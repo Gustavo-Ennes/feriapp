@@ -25,11 +25,14 @@
               <th scope="row" class="mt-2">{{ forloop.counter }}</th>
               <td>
 
+                <a href='{% url "trabalhador" linha.trabalhador.id %}'>{{ linha.trabalhador.nome }}</a>
+                <!--
                 <form method='POST' action="{% url 'trabalhador' %}">
                   {% csrf_token %}
                   <input type="hidden" name='trabalhador' value='{{ linha.trabalhador.id }}' />
                   <button class="btn btn-transparent" type="submit">{{ linha.trabalhador.nome }}</button>
                  </form>
+               -->
               </td>
 
               <td>

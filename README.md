@@ -12,7 +12,8 @@ Sistema escrito em Python~Django que visa automatizar a rotina de seu autor, Age
     3. Licença-Prêmio
     4. Justificativas de horas extras
     5. Atestado de Trabalho
-    6. Sexta-Parte*
+    6. Sexta-Parte
+    
     
 - Automação de Relatórios de H.E.:
     1. Transferência entre Relatórios

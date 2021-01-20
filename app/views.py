@@ -128,13 +128,13 @@ def conf(request):
 
 @login_required(login_url='/entrar/')
 @permission_required('app.add_ferias')
-def ferias(request):
+def ferias(request, ordenation='data_inicio'):
     hoje = timezone.now().date()
     context = {
-        'futuras': Ferias.objects.filter(Q(deferida=True) & Q(tipo='f') & Q(data_inicio__gt=hoje)),
-        'fruidas': Ferias.fruidas.all(),
-        'indeferidas': Ferias.indeferidas.all(),
-        'em_andamento': Ferias.em_andamento.all(),
+        'futuras': Ferias.objects.filter(Q(deferida=True) & Q(tipo='f') & Q(data_inicio__gt=hoje)).order_by(ordenation),
+        'fruidas': Ferias.fruidas.all().order_by(ordenation),
+        'indeferidas': Ferias.indeferidas.all().order_by(ordenation),
+        'em_andamento': Ferias.em_andamento.all().order_by(ordenation),
         'tipo': 'ferias',
         'FeriasForm': FeriasForm(),
     }
@@ -143,13 +143,13 @@ def ferias(request):
 
 @login_required(login_url='/entrar/')
 @permission_required('app.add_ferias')
-def licenca_premio(request):
+def licenca_premio(request, ordenation='-data_inicio'):
     hoje = timezone.now().date()
     context = {
-        'futuras': LicencaPremio.objects.filter(Q(deferida=True) & Q(data_inicio__gt=hoje)),
-        'fruidas': LicencaPremio.fruidas.all(),
-        'indeferidas': LicencaPremio.indeferidas.all(),
-        'em_andamento': LicencaPremio.em_andamento.all(),
+        'futuras': LicencaPremio.objects.filter(Q(deferida=True) & Q(data_inicio__gt=hoje)).order_by(ordenation),
+        'fruidas': LicencaPremio.fruidas.all().order_by(ordenation),
+        'indeferidas': LicencaPremio.indeferidas.all().order_by(ordenation),
+        'em_andamento': LicencaPremio.em_andamento.all().order_by(ordenation),
         'tipo': 'licenca',
         'LicencaPremioForm': LicencaPremioForm(),
     }
@@ -158,10 +158,10 @@ def licenca_premio(request):
 
 @login_required(login_url='/entrar/')
 @permission_required('app.add_ferias')
-def abono(request):
+def abono(request, ordenation='data'):
     hoje = timezone.now().date()
     context = {
-        'futuros': Abono.objects.filter(Q(deferido=True) & Q(data__gt=hoje)),
+        'futuros': Abono.objects.filter(Q(deferido=True) & Q(data__gt=hoje)).order_by(ordenation),
         'fruidos': Abono.fruidos.all(),
         'indeferidos': Abono.indeferidos.all(),
         'em_andamento': Abono.em_andamento.all(),
@@ -173,7 +173,7 @@ def abono(request):
 
 
 @login_required(login_url='/entrar/')
-def trabalhador(request, trabalhador_id=None):
+def trabalhador(request, trabalhador_id=None, ordenation=None):
     trabalhador = None
     usuario_e_trabalhador = bool(Trabalhador.objects.filter(Q(user=request.user)))
     if usuario_e_trabalhador:
@@ -249,9 +249,9 @@ def trabalhador(request, trabalhador_id=None):
 
 @login_required(login_url='/entrar/')
 @permission_required('app.add_ferias')
-def setor(request):
+def setor(request, ordenation='nome'):
     context = {
-        'setores': Setor.objects.all(),
+        'setores': Setor.objects.all().order_by(ordenation),
         'SetorForm': SetorForm(),
     }
 
@@ -403,8 +403,8 @@ def novo_trabalhador(request):
 
 @login_required(login_url='/entrar/')
 @permission_required('app.add_ferias')
-def trabalhadores(request):
-    trabalhadores = Trabalhador.objects.all()
+def trabalhadores(request, ordenation='nome'):
+    trabalhadores = Trabalhador.objects.all().order_by(ordenation)
     context = {
         'trabalhadores': trabalhadores,
         'TrabalhadorFormSemAdmissao': TrabalhadorFormSemAdmissao(),

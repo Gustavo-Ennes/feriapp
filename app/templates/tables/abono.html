@@ -7,12 +7,43 @@
     <table class="table table-striped text-center">
       <thead>
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Nome</th>
-          <th scope="col">Secretaria</th>
-          <th scope="col">Situação</th>
-          <th scope="col">Expediente</th>
-          <th scope="col">Pedido</th>
+          <th scope="col">
+            <a href='{% url "abono" "id" %}' class='text-success'>
+              ID
+           </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "abono" "trabalhador__nome" %}' class='text-success'>
+              Nome
+           </a>
+          </th>
+          <th scope="col">
+
+            <a href='{% url "abono" "trabalhador__setor__nome" %}' class='text-success'>
+              Secretaria
+           </a>
+
+          </th>
+          <th scope="col">
+
+            <a href='{% url "abono" "trabalhador__situacao" %}' class='text-success'>
+              Situação
+            </a>
+
+          </th>
+          <th scope="col">
+
+            <a href='{% url "abono" "expediente" %}' class='text-success'>
+              Expediente
+            </a>
+          </th>
+          <th scope="col">
+
+            <a href='{% url "abono" "-criado_em" %}' class='text-success'>
+              Pedido
+            </a>
+
+          </th>
           {% if observacoes %}
             <th scope="col">Observações</th>
           {% else %}

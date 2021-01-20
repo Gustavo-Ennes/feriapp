@@ -6,17 +6,49 @@
     <table class="table table-striped text-center">
       <thead>
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Nome</th>
-          <th scope="col">Secretaria</th>
-          <th scope="col">Situação</th>
-          <th scope="col">Pedido</th>
+          <th scope="col">
+            <a href='{% url "licenca_premio" "id" %}' class='text-success'>
+              ID
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "licenca_premio" "trabalhador__nome" %}' class='text-success'>
+              Nome
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "licenca_premio" "trabalhador__setor__nome" %}' class='text-success'>
+              Secretaria
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "licenca_premio" "trabalhador__situacao" %}' class='text-success'>
+              Situação
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "licenca_premio" "-criado_em" %}' class='text-success'>
+              Pedido
+            </a>
+          </th>
           {% if observacoes %}
             <th scope="col">Observações</th>
           {% else %}
-            <th scope="col">Duração</th>
-            <th scope="col">Início</th>
-            <th scope="col">Retorno</th>
+            <th scope="col">
+            <a href='{% url "licenca_premio" "qtd_dias" %}' class='text-success'>
+              Duração
+            </a>
+            </th>
+            <th scope="col">
+            <a href='{% url "licenca_premio" "-data_inicio" %}' class='text-success'>
+              Início
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "licenca_premio" "data_termino" %}' class='text-success'>
+              Retorno
+            </a>
+          </th>
             <th scope="col">Criador</th>
           {% endif %}
           {% if not pdf and not query and not arquivada or impressao %}
