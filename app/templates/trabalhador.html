@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load filtros %}
+{% load user_agents %}
+
+{% block header %}
+
+  <div class="header-gradient">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-10">
+        <h4 class="text-primary ml-4">
+          {{ trabalhador.nome }}
+          {% if trabalhador.situacao == 'abono' %}
+            - abonando hoje
+          {% elif trabalhador.situacao == 'ferias' %}
+            - de férias
+          {% elif trabalhador.situacao == 'licenca' %}
+            - de licença-prêmio
+          {% endif %}
+        </h4>
+      </div>
+      <div class="col-2">
+        <form method="GET" action="{% url 'pdf' 'trabalhador_historico' trabalhador.id %}" class="mr-1" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
+          <button type='submit' class="btn btn-sm btn-block btn-success" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not ferias_fruidas and not ferias_futuras and not ferias_indeferidas and not abonos_fruidos and not abonos_futuros and not abonos_indeferidos and not licencas_fruidas and not licencas_futuras and not licencas_indeferidas %}disabled{% endif %}>
+            <i class="far fa-file-pdf text-light"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block conteudo %}
+
+  <div class="row">
+    <div class="col-12 col-lg-2">
+      <div class="m-2">
+
+        <small for="funcao">Secretaria:</small>
+        <br>
+        <p id="funcao"> {{ trabalhador.setor.nome }} </p>
+
+        <small for="matricula">Matrícula:</small>
+        <br>
+        <p id="matricula"> {{ trabalhador.matricula }} </p>
+
+        <small for="admissao">Adimissão:</small>
+        <br>
+        <p id="admissao"> {{ trabalhador.data_admissao|date:"d/m/Y" }} </p>
+
+        <small for="funcao">Função:</small>
+        <br>
+        <p id="funcao"> {{ trabalhador.funcao }} </p>
+
+        {% if tem_horas %}
+
+          <p class="text-primary text-center mt-3 mb-1">Histórico H.E.</p>
+          {% include 'tables/trabalhador_historico_relatorios.html' %}
+
+        {% endif %}
+      </div>
+
+    </div>
+    <div class="col-12 col-lg-10">
+      <div class="m-2">
+
+        {% if ferias_futuras or ferias_fruidas or ferias_indeferidas or ferias_em_andamento %}
+          <div class="col-12 my-2">
+            <div class="card">
+              <div class="card-header">
+                <h3 class='card-title text-center'>Férias</h3>
+              </div>
+              <div class="card-body h-300">
+                {% if ferias_em_andamento %}
+                  <h5 class="text-center text-primary">em andamento</h5>
+                  {% with ferias=ferias_em_andamento tipo='ferias' arquivada=True  impressao=True %}
+                    <div class="my-2">
+                      {% include 'tables/ferias.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% if ferias_futuras %}
+                  <h5 class="text-center text-primary">futuras</h5>
+                  {% with ferias=ferias_futuras tipo='ferias' impressao=True %}
+                    <div class="my-2">
+                      {% include 'tables/ferias.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% with arquivada=True %}
+                  {% if ferias_fruidas %}
+                    {% with ferias=ferias_fruidas  impressao=True %}
+                      <h5 class="text-center text-primary">fruídas</h5>
+                      <div class="my-2">
+                        {% include 'tables/ferias.html' %}
+                      </div>
+                    {% endwith %}
+                    {% endif %}
+                  {% if ferias_indeferidas %}
+                    {% with ferias=ferias_indeferidas  impressao=True %}
+                      <h5 class="text-center text-primary">indeferidas</h5>
+                      <div class="my-2">
+                        {% include 'tables/ferias.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if licencas_futuras or licencas_fruidas or licencas_indeferidas or licencas_em_andamento%}
+          <div class="col-12 my-2">
+            <div class="card">
+              <div class="card-header">
+                <h3 class='card-title text-center'>Licenças-prêmio</h3>
+              </div>
+              <div class="card-body h-300">
+                {% if licencas_em_andamento %}
+                  <h5 class="text-center text-primary">em andamento</h5>
+                  {% with licencas=licencas_em_andamento tipo='licenca' arquivada=True  impressao=True %}
+                    <div class="my-2">
+                      {% include 'tables/licenca.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% if licencas_futuras %}
+                  <h3 class="text-center text-primary">futuras</h3>
+                  {% with licencas=licencas_futuras tipo='licenca' impressao=True %}
+                    <div class="my-2">
+                      {% include 'tables/licenca.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% with arquivada=True %}
+                  {% if licencas_fruidas %}
+                    {% with licencas=licencas_fruidas impressao=True %}
+                      <h5 class="text-center text-primary">fruídas</h5>
+                      <div class="my-2">
+                        {% include 'tables/licenca.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                  {% if licencas_indeferidas %}
+                    {% with licencas=licencas_indeferidas impressao=True %}
+                      <h5 class="text-center text-primary">indeferidas</h5>
+                      <div class="my-2">
+                        {% include 'tables/licenca.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if abonos_futuros or abonos_fruidos or abonos_indeferidos or abonos_em_andamento %}
+          <div class="col-12 my-2">
+            <div class="card">
+              <div class="card-header">
+                <h3 class='card-title text-center'>Abonos</h3>
+              </div>
+              <div class="card-body h-300">
+                {% if abonos_em_andamento %}
+                  <h5 class="text-center text-primary">em andamento</h5>
+                  {% with abonos=abonos_em_andamento tipo='abono' arquivado=True impressao=True %}
+                    <div class="my-2">
+                      {% include 'tables/abono.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% if abonos_futuros %}
+                  <h5 class="text-center text-primary">futuros</h5>
+                  {% with abonos=abonos_futuros tipo='abono' impressao=True %}
+                    <div class="my-2">
+                      {% include 'tables/abono.html' %}
+                    </div>
+                  {% endwith %}
+                {% endif %}
+                {% with arquivado=True %}
+                  {% if abonos_fruidos %}
+                    {% with abonos=abonos_fruidos impressao=True %}
+                      <h5 class="text-center text-primary">fruídos</h5>
+                      <div class="my-2">
+                        {% include 'tables/abono.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                  {% if abonos_indeferidos %}
+                    {% with abonos=abonos_indeferidos impressao=True %}
+                      <h5 class="text-center text-primary">indeferidos</h5>
+                      <div class="my-2">
+                        {% include 'tables/abono.html' %}
+                      </div>
+                    {% endwith %}
+                  {% endif %}
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+{% endblock %}

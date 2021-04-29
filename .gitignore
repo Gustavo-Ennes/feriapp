@@ -1,0 +1,10 @@
+venv
+*.pyc
+staticfiles
+.env
+*.sqlite3
+test
+.idea
+*.yaml
+.remember
+static/

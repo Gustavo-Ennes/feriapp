@@ -1,0 +1,40 @@
+{% if tipo %}
+  <button class="btn btn-danger btn-sm btn-block" data-toggle="modal" data-target="#modalIndeferirFerias" data-toggle="tooltip" data-placement="top" title="Indeferir">
+    <i class='fas fa-times-circle'></i> </button>
+
+  <div class="modal fade" id="modalIndeferirFerias" tabindex="-1" role="dialog" aria-labelledby="labelIndeferirFerias" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="labelIndeferirFeriass">Indeferir Férias</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      	</div>
+
+
+        <div class="modal-body">
+		      <form id='form_indeferir'action="{% url 'indeferir' %}" method="POST" enctype="multipart/form-data" class="text-left">
+              {% csrf_token %}
+
+              <h5>Você deseja indeferir as férias de {{ f.trabalhador.nome }}, de {{ f.data_inicio|date:"d/m/Y"}} até {{ f.data_termino|date:"d/m/Y"}}?</h5>
+              <label for='obs'>Justifique seu indeferimento</label>
+              <textarea id='obs' type='text' class="form-control" rows="5" name='observacoes' required></textarea>
+              <input type='hidden' name='ferias_id' value='{{f.id}}' />
+              <input type='hidden' name='tipo' value='ferias' />
+          </form>
+          <form id='form_imprimir' method='POST' action='{% url "pdf" "cancelamento_ferias" 0 %}'>
+              {% csrf_token %}
+              <input type='hidden' name='ferias_id' value='{{f.id}}' />
+              <input type='hidden' name='tipo' value='ferias' />                         
+          </form>
+      	</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button class="btn btn-danger" type='submit' form='form_indeferir'>Indeferir</button>
+          <button class='btn btn-danger' type'submit' form='form_imprimir'>Indeferir e Imprimir Cancelamento</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}

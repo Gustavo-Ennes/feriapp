@@ -1,0 +1,39 @@
+{% if tipo %}
+  <button class="btn btn-danger btn-sm btn-block" data-toggle="modal" data-target="#modalIndeferirAbono" data-toggle="tooltip" data-placement="top" title="Indeferir">
+    <i class='fas fa-times-circle'></i>
+  </button>
+
+  <div class="modal fade" id="modalIndeferirAbono" tabindex="-1" role="dialog" aria-labelledby="labelIndeferirAbono" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="labelIndeferirAbono">Indeferir Abono</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      	</div>
+
+
+  			<form action="{% url 'indeferir' %}" method="POST" enctype="multipart/form-data" class="text-left">
+     		{% csrf_token %}
+  	     	<div class="modal-body">
+
+
+              <h5>Você deseja indeferir o abono de {{ abono.trabalhador.nome }} para {{ abono.data|date:"d/m/Y"}}?</h5>
+              <label for='obs'>Justifique seu indeferimento</label>
+              <textarea id='obs' type='text' class="form-control" rows="5" name='observacoes' required></textarea>
+              <input type='hidden' name='abono_id' value='{{abono.id}}' />
+              <input type='hidden' name='tipo' value='abono' />
+
+        	</div>
+        	<div class="modal-footer">
+  	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+  	        <button class="btn btn-danger" type='submit'>Indeferir</button>
+  	     	</div>
+    		</form>
+
+
+      </div>
+    </div>
+  </div>
+{% endif %}

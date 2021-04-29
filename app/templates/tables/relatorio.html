@@ -1,0 +1,323 @@
+{% load filtros %}
+{% load user_agents %}
+
+{% if relatorio %}
+  {% if request|is_pc %}
+      <table class="table table-striped text-center">
+        <thead>
+          <tr>
+            <th scope="col">Linha</th>
+            <th scope="col">Servidor</th>
+            <th scope="col">Registro</th>
+            <th scope="col">Horas Extras</th>
+            <th scope="col">Adicional Noturno</th>
+            <th scope="col">Faltas</th>
+            {% if not pdf and not query %}
+              <th scope='col'>Ações</th>
+            {% endif %}
+
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for linha in relatorio.linhas.all %}
+            <tr class='p-0'>
+              <th scope="row" class="mt-2">{{ forloop.counter }}</th>
+              <td>
+
+                <a href='{% url "trabalhador" linha.trabalhador.id %}'>{{ linha.trabalhador.nome }}</a>
+                <!--
+                <form method='POST' action="{% url 'trabalhador' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name='trabalhador' value='{{ linha.trabalhador.id }}' />
+                  <button class="btn btn-transparent" type="submit">{{ linha.trabalhador.nome }}</button>
+                 </form>
+               -->
+              </td>
+
+              <td>
+                <p class=" mt-2">{{ linha.trabalhador.matricula }}</p>
+              </td>
+
+              <td>
+                {% if not user|has_group:'relatorio' %}
+                  <p>{{ linha.horas_extras }}</p>
+                {% else %}
+                  <!-- btn trigger modal -->
+                  <button type="button" class="btn btn-sm btn-block btn-transparent " data-toggle="modal" data-target="#modalRelatorioHoras-{{ linha.id }}">
+                    {{ linha.horas_extras }}
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="modalRelatorioHoras-{{ linha.id }}" tabindex="-1" role="dialog" aria-labelledby="modalRelatorioHorasLabel-{{ linha.id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="modalRelatorioHorasLabel-{{ linha.id }}">Editar Horas Extras</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="formRelatorioHoras-{{ linha.id }}" action='{% url "modifica_relatorio" %}' method='POST'>
+                            {% csrf_token %}
+                            <p>
+                              Você está prestes a modificar as horas extras do trabalhador {{ linha.trabalhador.nome }}
+                            </p>
+                            <p>Insira as horas extras atualizadas</p>
+                            <input type='hidden' name='tipo' value='horas_extras'>
+                            <input type='hidden' name='linha_id' value='{{ linha.id }}'>
+                            <input placeholder='{{ linha.horas_extras }}' type='number' step='0.1' class='form-control' name='qtd_horas_extras-{{ linha.id }}' min='0.1' autofocus='true' required>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                          <button form='formRelatorioHoras-{{ linha.id }}' type="submit" class="btn btn-success">Salvar alterações</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </td>
+
+              <td>
+
+
+                  {% if not user|has_group:"relatorio" %}
+                    <p>{{ linha.adicional_noturno }}</p>
+                  {% else %}
+                      <!-- btn trigger modal -->
+                    <button type="button" class="btn btn-sm btn-block btn-transparent " data-toggle="modal" data-target="#modalRelatorioAdicional-{{ linha.id }}">
+                      {{ linha.adicional_noturno }}
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="modalRelatorioAdicional-{{ linha.id }}" tabindex="-1" role="dialog" aria-labelledby="modalRelatorioAdicionalLabel-{{ linha.id }}" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="modalRelatorioAdicionalLabel-{{ linha.id }}">Editar Adicional Noturno</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <form id="formRelatorioAdicional-{{ linha.id }}" action="{% url 'modifica_relatorio' %}" method='POST'>
+                              {% csrf_token %}
+                              <p>
+                                Você está prestes a modificar o adicional noturno do trabalhador {{ linha.trabalhador.nome }}
+                              </p>
+                              <p>Insira o adicional noturno atualizado</p>
+                              <input type='hidden' name='tipo' value='adicional_noturno'>
+                              <input type='hidden' name='linha_id' value='{{ linha.id }}'>
+                              <input placeholder='{{ linha.adicional_noturno }}' type='number' step='0.1' class='form-control' name='qtd_adicional_noturno-{{ linha.id }}' min='0.1' required>
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                            <button form='formRelatorioAdicional-{{ linha.id }}' type="submit" class="btn btn-success">Salvar alterações</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                {% endif %}
+
+              </td>
+              <td>
+
+                {% if not user|has_group:'relatorio' %}
+                  <p>{{ linha.faltas }}</p>
+                {% else %}
+                  <!-- btn trigger modal -->
+                  <button type="button" class="btn btn-sm btn-block btn-transparent " data-toggle="modal" data-target="#modalRelatorioFaltas-{{ linha.id }}">
+                    {{ linha.faltas }}
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="modalRelatorioFaltas-{{ linha.id }}" tabindex="-1" role="dialog" aria-labelledby="modalRelatorioFaltasLabel-{{ linha.id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="modalRelatorioFaltasLabel-{{ linha.id }}">Editar Faltas</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="formRelatorioFaltas-{{ linha.id }}" action='{% url "modifica_relatorio" %}' method='POST'>
+                            {% csrf_token %}
+                            <p>
+                              Você está prestes a modificar as faltas do trabalhador {{ linha.trabalhador.nome }}
+                            </p>
+                            <p>Insira as faltas atualizadas</p>
+                            <input type='hidden' name='tipo' value='faltas'>
+                            <input type='hidden' name='linha_id' value='{{ linha.id }}'>
+                            <input placeholder='{{ linha.faltas }}' type='number' class='form-control' name='qtd_faltas-{{ linha.id }}' min='1' required>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                          <button form='formRelatorioFaltas-{{ linha.id }}' type="submit" class="btn btn-success">Salvar alterações</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </td>
+
+              <td>
+                  <div class='row justify-content-center align-items-center'>
+                      <div class="col-4">
+                        {% if user|has_group:'relatorio' %}
+                          {% include 'modals/divide_linha_relatorio.html' %}
+                        {% endif %}
+                      </div>
+                      <div class="col-4">
+                        {% if user|has_group:'relatorio' %}
+
+                          <button type="button" class="btn btn-sm btn-block btn-success" data-toggle="modal" data-target="#modalRelatorioTransferencia-{{ linha.id }}" {% if relatorios|length == 0 %}disabled{% endif %}>
+                            <small>{% if relatorios|length %}Transferência{% else %}Não há setores á transferir{% endif %}</small>
+                          </button>
+
+                          <!-- Modal -->
+                          <div class="modal fade" id="modalRelatorioTransferencia-{{ linha.id }}" tabindex="-1" role="dialog" aria-labelledby="modalRelatorioTransferenciaLabel-{{ linha.id }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="modalRelatorioTransferenciaLabel-{{ linha.id }}">Transferir Linha Entre Relatórios</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <form id="formRelatorioTransferencia-{{ linha.id }}" action='{% url "modifica_relatorio" %}' method='POST'>
+                                    {% csrf_token %}
+                                    <p>
+                                      A qual relatório você deseja transferir a linha referente ao servidor {{ linha.trabalhador.nome }}?
+                                    </p>
+
+                                    <select name='transferencia-{{ linha.id }}' class="custom-select">
+                                      {% for relatorio in relatorios %}
+                                        <option value='{{ relatorio.id }}'>
+                                          {{ relatorio.setor.nome }} - {{ relatorio.mes }}/{{ relatorio.ano }}
+                                        </option>
+                                      {% endfor %}
+                                    </select>
+
+
+                                    <input type='hidden' name='tipo' value='transferencia'>
+                                    <input type='hidden' name='linha_id' value='{{ linha.id }}'>
+                                    <input type="hidden" name="relatorio_id" value='{{ relatorio.id }}'>
+
+                                  </form>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                  <button form='formRelatorioTransferencia-{{ linha.id }}' type="submit" class="btn btn-success">Salvar alterações</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                      {% endif  %}
+
+                     </div>
+
+
+
+
+                  <div class='col-4'>
+                    {% if user|has_group:'relatorio' %}
+                      <button type="button" class="btn btn-sm btn-block btn-danger " data-toggle="modal" data-target="#modalRelatorioExcluir-{{ linha.id }}">
+                        Excluir
+                      </button>
+
+                      <!-- Modal -->
+                      <div class="modal fade" id="modalRelatorioExcluir-{{ linha.id }}" tabindex="-1" role="dialog" aria-labelledby="modalRelatorioExcluirLabel-{{ linha.id }}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="modalRelatorioExcluirLabel-{{ linha.id }}">Transferir Linha Entre Relatórios</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <strong>
+                                Tem certeza que deseja excluir a linha #{{ forloop.counter }} do relatório do(a) {{ relatorio.setor.nome }}?
+                              </strong>
+                              <form id="formRelatorioExcluir-{{ linha.id }}" action='{% url "modifica_relatorio" %}' method='POST'>
+                                {% csrf_token %}
+                                <input type='hidden' name='tipo' value='excluir'>
+                                <input type='hidden' name='linha_id' value='{{ linha.id }}'>
+
+                              </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                              <button form='formRelatorioExcluir-{{ linha.id }}' type="submit" class="btn btn-danger">Excluir!</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <h4 class='text-primary text-center'>Esse relatório está em branco</h4>
+          {% endfor %}
+        </tbody>
+      </table>
+  {% else %}
+    {% for linha in relatorio.linhas.all %}
+      <div class="card my-5">
+        <div class="card-header">
+          <h1 class="card-title">
+
+            <form method='POST' action="{% url 'trabalhador' %}">
+              {% csrf_token %}
+              <input type="hidden" name='trabalhador' value='{{ linha.trabalhador.id }}' />
+              <button class="btn btn-transparent" type="submit"><h3>#{{ linha.id }} -{{ linha.trabalhador.nome }}</h3></button>
+             </form>
+          </h1>
+        </div>
+        <div class="card-body text-center">
+          <h5>Matrícula: {{ linha.trabalhador.matricula }}</h5
+          <h5>
+            {% if not user|has_group:'relatorio' %}
+              <h5>{{ linha.horas_extras }}</h5>
+            {% else %}
+              <!-- btn trigger modal -->
+              <button type="button" class="btn btn-sm btn-block btn-transparent " data-toggle="modal" data-target="#modalRelatorioHoras-{{ linha.id }}">
+                <h5>Horas Extras: {{ linha.horas_extras }}</h5>
+              </button>
+            {% endif %}
+          </h5>
+          <h5>
+             {% if not user|has_group:"relatorio" %}
+                <h5>{{ linha.adicional_noturno }}</h5>
+              {% else %}
+                  <!-- btn trigger modal -->
+                <button type="button" class="btn btn-sm btn-block btn-transparent " data-toggle="modal" data-target="#modalRelatorioAdicional-{{ linha.id }}">
+                  <h5> Adiiconal Noturno: {{ linha.adicional_noturno }}</h5>
+                </button>
+              {% endif %}
+          </h5>
+          <h5>
+             {% if not user|has_group:'relatorio' %}
+                <h5>{{ linha.faltas }}</h5>
+              {% else %}
+                <!-- btn trigger modal -->
+                <button type="button" class="btn btn-sm btn-block btn-transparent " data-toggle="modal" data-target="#modalRelatorioFaltas-{{ linha.id }}">
+                  <h5>Faltas: {{ linha.faltas }}</h5>
+                </button>
+            {% endif %}
+          </h5>
+        </div>
+      </div>
+    {% empty %}
+      <h4 class='text-primary text-center'>Esse relatório está em branco</h4>
+    {% endfor %}
+  {% endif %}
+{% endif %}

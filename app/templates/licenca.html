@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load filtros %}
+{% load user_agents %}
+
+{% block header %}
+
+  <div class="header-gradient">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-8">
+        <h4 class="text-primary ml-4">LICENÇAS-PRÊMIO</h4>
+      </div>
+      <div class="col-2">
+        {% include 'modals/marcar_licenca.html' %}
+      </div>
+      <div class="col-2">
+        <form method="POST" action="{% url 'pdf' 'licenca' 0 %}" class="mr-1">
+          {% csrf_token %}
+          <button type='submit' class="btn btn-success btn-sm btn-block" data-toggle="tooltip" data-placement="top" title="Gerar PDF" {% if not futuras and not fruidas and not indeferidas and not em_andamento %}disabled{% endif %}>
+            <i class="far fa-file-pdf"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block conteudo %}
+
+
+
+  <div class='row align-items-center justify-content-center'>
+
+    <nav class='col-12'>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="futuros-tab" data-toggle="tab" href="#futuros" role="tab" aria-controls="futuros" aria-selected="true">Futuras</a>
+        <a class="nav-item nav-link" id="andamento-tab" data-toggle="tab" href="#andamento" role="tab" aria-controls="andamento" aria-selected="false">Em andamento</a>
+        <a class="nav-item nav-link" id="fruidos-tab" data-toggle="tab" href="#fruidos" role="tab" aria-controls="fruidos" aria-selected="false">Fruídas</a>
+        <a class="nav-item nav-link" id="indeferidos-tab" data-toggle="tab" href="#indeferidos" role="tab" aria-controls="indeferidos" aria-selected="false">Indeferidas</a>
+      </div>
+    </nav>
+    <div class="tab-content col-12 mt-4" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="futuros" role="tabpanel" aria-labelledby="futuros-tab">
+        <div>
+          {% with licencas=futuras impressao=True %}
+            {% include 'tables/licenca.html' %}
+          {% endwith %}
+        </div>
+      </div>
+      <div class="tab-pane fade show" id="andamento" role="tabpanel" aria-labelledby="andamento-tab">
+        <div>
+          {% with arquivada=True impressao=True %}
+            {% with licencas=em_andamento %}
+              {% include 'tables/licenca.html' %}
+            {% endwith %}
+          {% endwith%}
+        </div>
+      </div>
+      <div class="tab-pane fade" id="fruidos" role="tabpanel" aria-labelledby="fruidos-tab">
+        {% with arquivada=True impressao=True %}
+          {% with licencas=fruidas %}
+            {% include 'tables/licenca.html' %}
+          {% endwith %}
+        {% endwith %}
+      </div>
+      <div class="tab-pane fade" id="indeferidos" role="tabpanel" aria-labelledby="indeferidos-tab">
+        {% with arquivada=True impressao=True %}
+          {% with licencas=indeferidas observacoes=True %}
+            {% include 'tables/licenca.html' %}
+          {% endwith %}
+        {% endwith %}
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}
+
+
+{% block js %}
+
+  <script >
+    $(document).ready(function(){
+        $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+            localStorage.setItem('activeTab', $(e.target).attr('href'));
+        });
+        var activeTab = localStorage.getItem('activeTab');
+        if(activeTab){
+            $('#nav-tab a[href="' + activeTab + '"]').tab('show');
+        }
+    });
+  </script>
+
+{% endblock %}

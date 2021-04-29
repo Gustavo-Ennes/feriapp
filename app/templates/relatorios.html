@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load filtros %}
+{% load user_agents %}
+
+{% block header %}
+
+  <div class="header-gradient">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-8">
+        <h4 class="text-primary">RELATÓRIOS</h4>
+      </div>
+      <div class="col-4">
+        {% if relatorios_em_aberto %}
+          {% if relatorios_em_aberto.0.estado == 'justificativas' %}
+            <form action="{% url 'soma_horas' %}" method="GET">
+              <button class="btn btn-sm btn-block btn-primary" type="submit" {% if not user|has_group:'relatorio' %}disabled{% endif %}>
+                Concluir Relatórios
+              </button>
+            </form>
+
+          {% else %}
+            {% include 'modals/finalizar_relatorio.html' %}
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block conteudo %}
+
+  {% if relatorios_finalizados|length == 0 and relatorios_em_aberto|length == 0 %}
+    <div class="row justify-content-center align-items-center">
+      <div class="col-12 text-center">
+        {% if qtd_trabalhadores > 0 %}
+          <a class="btn btn-lg btn-success text-center mb-5" href="{% url 'soma_horas' %}" {% if not user|has_group:'relatorio' %}disabled{% endif %}>Começar a somar as justificativas</a>
+        {% else %}
+          <h5 class="text-success">Primeiramente, cadastre setores, e então trabalhadores</h5>
+        {% endif %}
+      </div>
+    </div>
+  {% elif relatorios_finalizados|length > 0 and relatorios_em_aberto|length == 0 %}
+    <small class="text-danger">Relatório(s) de {{ relatorios_finalizados.0.mes|mes_escrito }} já fechado(s)</small>
+  {% else %}
+      <h5 class="text-success">O(s) relatório(s) deste mês já foram fechados</h5>
+  {% endif %}
+
+  {% if relatorios_finalizados or relatorios_em_aberto or relatorios_finalizados_antigos %}
+    <div class="m-3 my-5 text-center">
+
+
+      {% if relatorios_finalizados_antigos %}
+
+        <div class='row justify-content-center'>
+          <div class='col-12 col-lg-6 col-xl-4'>
+            <div class='relatorio-wrapper my-3'>
+              <p>
+                <a class="btn btn-transparent text-center collapse-label" data-toggle="collapse" href="#collapseFinalizadosAntigos" role="button" aria-expanded="false" aria-controls="collapseFinalizadosAntigos">
+                  Antigos <i class="fas fa-angle-double-down text-success"></i>
+                </a>
+              </p>
+              <div class="collapse" id="collapseFinalizadosAntigos">
+                <div class="card card-body">
+                  <div class='row justify-content-center'>
+                    {% for referencia in relatorios_finalizados_antigos|get_referencias %}
+                      <div class='col-12 col-lg-6 col-xl-4'>
+                        <p>
+                          <a class="btn btn-transparent text-center" data-toggle="collapse" href="#collapseFinalizadosAntigos{{ referencia }}" role="button" aria-expanded="false" aria-controls="collapseFinalizadosAntigos{{ referencia }}">
+                            {{ referencia }} <i class="fas fa-angle-double-down text-success"></i>
+                          </a>
+                        </p>
+                        <div class="collapse" id="collapseFinalizadosAntigos{{ referencia }}">
+                          <div class='row justify-content-center'>
+                            {% for relatorio in relatorios_finalizados_antigos %}
+                              <div class='col-10 col-offset-1'>
+                                {% if relatorio.referencia == referencia %}
+                                  {% with tipo='finalizados_antigos' %}
+                                    {% include 'modals/relatorio.html' %}
+                                  {% endwith %}
+                                {% endif %}
+                              </div>
+                            {% endfor %}
+                          </div>
+
+                        </div>
+
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {% endif %}
+
+
+      {% if relatorios_finalizados %}
+
+        <div class='row justify-content-center'>
+          <div class='col-12 col-lg-6 col-xl-4'>
+            <div class='relatorio-wrapper my-3'>
+              <p>
+                <a class="btn btn-transparent text-center collapse-label" data-toggle="collapse" href="#collapseFinalizados" role="button" aria-expanded="false" aria-controls="collapseFinalizados">
+                  Finalizados <i class="fas fa-angle-double-down text-success"></i>
+                </a>
+              </p>
+              <div class="collapse" id="collapseFinalizados">
+                <div class="card card-body">
+                  <div class='row justify-content-center'>
+                    {% for referencia in relatorios_finalizados|get_referencias %}
+                      <div class='col-12 col-lg-6 col-xl-4 collapse-ref'>
+                        <p>
+                          <a class="btn btn-transparent text-center" data-toggle="collapse" href="#collapseFinalizados{{ referencia }}" role="button" aria-expanded="false" aria-controls="collapseFinalizados{{ referencia }}">
+                            {{ referencia }} <i class="fas fa-angle-double-down text-success"></i>
+                          </a>
+                        </p>
+                        <div class="collapse" id="collapseFinalizados{{ referencia }}">
+                          <div class='row justify-content-center'>
+                            {% for relatorio in relatorios_finalizados %}
+                              <div class='col-12'>
+                                {% with tipo='finalizados' %}
+                                  {% include 'modals/relatorio.html' %}
+                                {% endwith %}
+                              </div>
+                            {% endfor %}
+                          </div>
+
+                        </div>
+
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {% endif %}
+
+
+      {% if relatorios_em_aberto %}
+
+        <div class='row justify-content-center'>
+          <div class='col-12 col-lg-6 col-xl-4 relatorio-wrapper'>
+            <div class='relatorio-wrapper my-3'>
+              <p>
+                <a class="btn btn-transparent text-center text-success" data-toggle="collapse" href="#collapseEmAberto" role="button" aria-expanded="false" aria-controls="collapseEmAberto">
+                  Em aberto <i class="fas fa-angle-double-down text-success"></i>
+                </a>
+              </p>
+              <div class="collapse" id="collapseEmAberto">
+                <div class="card card-body">
+                  <div class='row justify-content-center'>
+                    {% for referencia in relatorios_em_aberto|get_referencias %}
+                      <div class='col-12 col-lg-6 col-xl-4 collapse-ref'>
+                        <p>
+                          <a class="btn btn-transparent text-center" data-toggle="collapse" href="#collapseEmAberto{{ referencia }}" role="button" aria-expanded="false" aria-controls="collapseEmAberto{{ referencia }}">
+                            {{ referencia }} <i class="fas fa-angle-double-down text-success"></i>
+                          </a>
+                        </p>
+                        <div class="collapse" id="collapseEmAberto{{ referencia }}">
+                          <div class='row justify-content-center'>
+                            {% for relatorio in relatorios_em_aberto %}
+                              <div class='col-12'>
+                                {% with tipo='em_aberto' %}
+                                  {% include 'modals/relatorio.html' %}
+                                {% endwith %}
+                              </div>
+                            {% endfor %}
+                          </div>
+
+                        </div>
+
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {% endif %}
+
+
+
+      
+    </div>
+  {% endif  %}  
+
+
+{% endblock %}

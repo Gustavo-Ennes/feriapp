@@ -1,0 +1,37 @@
+{% load filtros %}
+
+<button class='btn btn-transparent btn-relatorio' data-toggle="modal" data-target="#modalRelatorio{{ relatorio.id }}{{ tipo }}">
+  <span class='text-light'>{{ relatorio.setor.nome|primeiro_nome }}</span>
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="modalRelatorio{{ relatorio.id }}{{ tipo }}" tabindex="-1" role="dialog" aria-labelledby="modalRelatorioLabel{{ relatorio.id }}{{ tipo }}" aria-labelledby-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalRelatorioLabel{{ relatorio.id}}{{ tipo }}">Selecione a ação</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% if user|has_group:'relatorio' %}
+          <form action='{% url "pdf" "relatorio" relatorio.id %}' method='get'>
+            <button class="btn btn-success btn-sm btn-block my-1" type='submit' {% if not relatorio.is_valid %}disabled{% endif %}>Ver Original</button>
+          </form>
+        {% endif %}
+        <form action='{% url "pdf" "relatorio-copia" relatorio.id %}' method='get'>
+          <button class="btn btn-success btn-sm btn-block my-2" type='submit' {% if not relatorio.is_valid %}disabled{% endif %}>Ver Cópia</button>
+        </form>
+        {% if relatorio.estado != 'oficial' %}
+          <form action='{% url "relatorio_edicao" relatorio.id %}' method='GET'>
+            {% if user|has_group:'relatorio' %}
+              <button class="btn btn-success btn-sm btn-block my-2" type='submit'>Editar</button>
+            {% endif %}
+          </form>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>

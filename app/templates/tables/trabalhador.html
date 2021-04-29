@@ -1,0 +1,146 @@
+{% load user_agents %}
+
+
+{% if trabalhadores %}
+  {% if request|is_pc or tabela_impressa %}
+    <table class="table table-striped text-center">
+      <thead>
+        <tr>
+          <th scope="col">
+            <a href='{% url "trabalhadores" "id" %}' class='text-success'>
+              ID
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "trabalhadores" "nome" %}' class='text-success'>
+              Nome
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "trabalhadores" "funcao" %}' class='text-success'>
+              Função
+            </a>
+          </th>
+          <th scope='col'>
+            <a href='{% url "trabalhadores" "setor__nome" %}' class='text-success'>
+              Secretaria
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "trabalhadores" "-data_admissao" %}' class='text-success'>
+              Admissão
+            </a>
+          </th>
+          <th scope="col">
+            <a href='{% url "trabalhadores" "situacao" %}' class='text-success'>
+              Situação
+            </a>
+          </th>
+          <th scope="col">Criador</th>
+          {% if not pdf %}
+            <th scope="col">Ações</th>
+          {% endif %}
+
+        </tr>
+      </thead>
+      <tbody>
+
+
+        {% for trabalhador in trabalhadores %}
+          <tr>
+            <th scope="row">{{ trabalhador.id }}</th>
+            <td>
+              <form id='trabalhadorForm{{ trabalhador.id }}' method='POST' action='{% url 'trabalhador' %}'>
+                {% csrf_token %}
+                <input type="hidden" name='trabalhador' value='{{ trabalhador.id }}' />
+              </form>
+              <button form='trabalhadorForm{{ trabalhador.id }}' class="btn btn-sm btn-block btn-transparent " type="submit">{{ trabalhador.nome }}</button>
+            </td>
+            <td>{{ trabalhador.funcao }}</td>
+            <td>
+              <form id='setorForm{{ trabalhador.id }}' method='POST' action='{% url 'setor_espec' %}'>
+                {% csrf_token %}
+                <input type="hidden" name='setor' value='{{ trabalhador.setor.id }} '/>
+              </form>
+              <button form='setorForm{{ trabalhador.id }}' class="btn btn-sm btn-block btn-transparent " type="submit">{{ trabalhador.setor.nome }}</button>
+            </td>
+            <td>{{ trabalhador.data_admissao|date:"d/m/Y" }}</td>
+            <td>{{ trabalhador.situacao|title }}</td>
+            <td>{{ trabalhador.criado_por.first_name }}</td>
+            {% if not pdf %}
+              <td>
+                <small class='row justify-content-center align-items-center'>
+                  <div class="col">
+                    {% include 'modals/editar_trabalhador.html' %}
+                  </div>
+                  <div class='col'>
+                    {% include 'modals/excluir_trabalhador.html' %}
+                  </div>
+                  <div class='col'>
+                    <form action='{% url "pdf" "justificativa" trabalhador.id %}' method="GET">
+                      <button type='submit' class="btn btn-sm btn-block btn-success" data-toggle="tooltip" data-placement="top" title="Autorização de horas extras">H.E.</button>
+                    </form>
+                  </div>
+
+                </small>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  {% else %}
+
+    <div class="row justify-content-center align-items-center">
+      {% for trabalhador in trabalhadores %}
+          <div class="col-12">
+            <div class="card my-2 w-100">
+              <div class="card-header">
+                <h3 class="card-title text-center">
+                  #{{ trabalhador.id }}
+
+                  <form id='trabalhadorForm{{ trabalhador.id }}' method='POST' action="{% url 'trabalhador' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name='trabalhador' value='{{ trabalhador.id }}' />
+                  </form>
+                  <button form='trabalhadorForm{{ trabalhador.id }}' class="btn btn-sm btn-block btn-transparent " type="submit">{{ trabalhador.nome }}</button>
+
+                </h3>
+                <p class="card-subtitle text-center ">
+                  {{ trabalhador.funcao }} - {{ trabalhador.situacao|title }}
+                </p>
+              </div>
+            <div class="card-body">
+              <p>
+                setor: {{ trabalhador.setor.nome }}
+              </p>
+              <p>
+                Admissão: {{ trabalhador.data_admissao|date:"d/m/Y" }}
+              </p>
+              <p>
+                Criador: {{ trabalhador.criado_por.first_name }}
+              </p>
+              {% if not pdf and not query and not arquivado %}
+                <div class="text-center">
+                  Ações
+                  <small class='row justify-content-center align-items-center'>
+                    <div class="col">
+                      {% include 'modals/editar_trabalhador.html' %}
+                    </div>
+                    <div class='col'>
+                      {% include 'modals/excluir_trabalhador.html' %}
+                    </div>
+                  </small>
+
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% else %}
+  <h1 class="text-center">Não há trabalhadores  a listar</h1>
+{% endif %}

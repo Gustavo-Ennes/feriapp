@@ -1,0 +1,31 @@
+{% load filtros %}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#finalizar_relatorio_modal">
+  Finalizar Relatórios
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="finalizar_relatorio_modal" tabindex="-1" role="dialog" aria-labelledby="finalizar_relatorio_modal-lbl" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="finalizar_relatorio_modal-lbl">Confirmação</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <p>Após a finalização deste(s) relatório(s), você<span class="text-danger lead"> não poderá</span> mais editá-los!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <form action="{% url 'finalizar_relatorios' %}" method="POST">
+          {% csrf_token %}
+          <button class="btn btn-lg btn-block btn-success" type="submit" {% if not user|has_group:'relatorio' %}disabled{% endif %}>
+            Finalizar Relatório(s) em Aberto
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

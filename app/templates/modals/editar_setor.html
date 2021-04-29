@@ -1,0 +1,36 @@
+{% load crispy_forms_tags %}
+{% load filtros %}
+
+<button class="btn btn-warning btn-sm btn-block" data-toggle="modal" data-target="#modalEditarSetor{{ setor.id }}" data-toggle="tooltip" data-placement="top" title="Editar Secretaria">
+  <i class='fas fa-pen text-primary'></i>
+</button>
+
+<div class="modal fade" id="modalEditarSetor{{ setor.id }}" tabindex="-1" role="dialog" aria-labelledby="labelEditarSetor{{ setor.id }}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="labelEditarSetor{{ setor.id }}">Editar Secretaria</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    	</div>
+
+
+			<form action="{% url 'editar_setor' %}" method="POST" enctype="multipart/form-data" class="text-left">
+   		   {% csrf_token %}
+	     	<div class="modal-body">
+
+          {{ 'SetorForm'|formulario_preenchido:setor.id|crispy }}
+          <input type='hidden' name='id' value='{{setor.id}}' />
+
+      	</div>
+      	<div class="modal-footer">
+	        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+	        <button class="btn btn-success" type='submit'>Editar</button>
+	     	</div>
+  		</form>
+
+
+    </div>
+  </div>
+</div>

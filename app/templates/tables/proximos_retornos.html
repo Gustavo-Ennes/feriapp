@@ -1,0 +1,107 @@
+{% load filtros %}
+{% load user_agents %}
+
+
+{% if proximos_retornos %}
+  {% if request|is_pc or tabela_impressa %}
+    <table class="table table-striped text-center">
+      <thead>        
+
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Trabalhador</th>
+          <th scope="col">Secretaria</th>
+          <th scope="col">Pedido</th>
+          <th scope='col'>Tipo</th>
+          <th scope="col">Término</th>
+        </tr>
+
+      </thead>
+      <tbody>
+
+        {% for folga in proximos_retornos %}
+
+          <tr>
+            <th scope="row">{{ folga.id }}</th>
+            <td>
+              <form id='trabalhadorForm{{ folga.trabalhador.id }}' method='POST' action='{% url 'trabalhador' %}'>
+                {% csrf_token %}
+                <input type="hidden" name='trabalhador' value='{{ folga.trabalhador.id }}' />
+              </form>
+              <button form='trabalhadorForm{{ folga.trabalhador.id }}' class="btn btn-sm btn-block btn-transparent " type="submit">{{ folga.trabalhador.nome }}</button>
+            </td>
+            <td>
+              <form id='setorForm{{ folga.trabalhador.id }}' method='POST' action='{% url 'setor_espec' %}'>
+                {% csrf_token %}
+                <input type="hidden" name='setor' value='{{ folga.trabalhador.setor.id }}' />
+              </form>
+              <button form='setorForm{{ folga.trabalhador.id }}' class="btn btn-sm btn-block btn-transparent " type="submit">{{ folga.trabalhador.setor.nome }}</button>
+            </td>
+            <td>{{ folga.criado_em|date:"d/m/Y" }}</td>
+            <td>
+              {% if folga|verifica_tipo:'abono' %}
+                Abono
+              {% elif folga|verifica_tipo:"ferias" %}
+                Férias
+              {% elif folga|verifica_tipo:"licenca" %}
+                Licença-Prêmio
+              {% endif %}
+            </td>
+            {% if folga|verifica_tipo:'abono' %}
+              <td>
+                <strong>
+                  {{ folga.data|soma_dias:1 }}
+                </strong>
+              </td>
+            {% else %}
+              <td>
+                <strong>
+                  {{ folga.data_termino|soma_dias:1|check_amanha }}
+                </strong>
+              </td>
+            {% endif %}
+
+          </tr>
+
+        {% endfor %}
+
+      </tbody>
+    </table>
+  {% else %}
+    <div class="row justify-content-center align-items-center">
+      {% for folga in proximos_retornos %}
+        <div  class="col-12">
+          <div class="card my-2 w-100">
+            <div class="card-header">
+              <h3 class="card-title text-center">
+                {% if folga|verifica_tipo:'abono' %}
+                  Abono
+                {% elif folga|verifica_tipo:"ferias" %}
+                  Férias
+                {% elif folga|verifica_tipo:"licenca" %}
+                  Licença-Prêmio
+                {% endif %}
+               de {{ folga.criado_em|date:"d/m/Y" }}
+              </h3>
+            </div>
+            <div class="card-body">
+              <p>#{{ folga.id }}</p>
+              <p>{{ folga.trabalhador.nome }} - {{ folga.trabalhador.setor.nome }}</p>
+              <p>Retorno:
+                {% if folga|verifica_tipo:'abono' %}
+                  <strong>
+                    {{ folga.data|date:"d/m/Y" }}
+                  </strong>
+                {% else %}
+                  <strong>
+                    {{ folga.data_termino|soma_dias:1 }}
+                  </strong>
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+{% endif %}

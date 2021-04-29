@@ -1,0 +1,23 @@
+<div class="card my-3">
+  <div class="card-header">
+    <div class="row justify-content-">
+      <div class="col-12 text-right">
+        <i class="fas fa-puzzle-piece text-right text-primary"></i>
+      </div>
+      <div class='col-12 text-center'>
+        <h5 class="card-title"> Colaboradores </h5>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+
+    {% include  'tables/trabalhador.html' %}
+
+  </div>
+  <div class="card-footer">
+    <div class="row justify-content-center align-items-center">
+      <div class="col">
+        <small class="text-muted text-left"> {{ trabalhadores.count }} colaborador(es) </small>
+      </div>
+  </div>
+</div>

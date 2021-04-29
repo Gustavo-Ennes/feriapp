@@ -1,0 +1,89 @@
+{% load crispy_forms_tags %}
+{% load filtros %}
+
+
+{% if index %}
+	<button class="btn btn-primary btn-block btn-big my-1" data-toggle="modal" data-target="#modalAutorizacao" data-toggle="tooltip" data-placement="top" title="Imprimir autorização de horas extras">
+				Autorização de Horas Extras
+	</button>
+{% else %}
+	<button class="btn btn-big" data-toggle="modal" data-target="#modalAutorizacao" data-toggle="tooltip" data-placement="top" title="Imprimir autorização de horas extra">
+		<i class="fas fa-plus"></i>
+	</button>
+{% endif %}
+
+<div class="modal fade" id="modalAutorizacao" tabindex="-1" role="dialog" aria-labelledby="labelAutorizacao" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="labelAutorizacao">Imprimir autorização de horas extras</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    	</div>
+
+    {% if data|e_dezembro %}
+
+      <div class='modal-body'>
+
+        <form action="{% url 'pdf' 'justificativa' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
+          {% csrf_token %}
+          <label for='select_year'>Selecione o ano:</label>
+          <select id='select_year' class='custom-select' name='ano_selecionado' aria-describedby="anoHelp">
+            <option value={{ data.year }}>{{ data.year }}</option>          
+            <option value={{ data.year|add:'1' }}>{{ data.year|add:'1' }}</option>
+          </select>
+          <small id="anoHelp" class="form-text text-muted">
+            Talvez você já queira as suas justificativas pro ano que vem, já que é dezembro.
+          </small>
+          {{ AutorizacaoForm|crispy }}
+          <div class="modal-footer">
+            <button class='btn btn-secondary' type='button' data-dismiss:'modal'>Cancelar</button> 
+            <button class="btn btn-success" type='submit'>Imprimir</button>
+          </div>
+        </form>
+
+      </div>
+
+    {% elif data|e_janeiro %}
+
+      <div class='modal-body'>
+
+        <form action="{% url 'pdf' 'justificativa' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
+          {% csrf_token %}
+          <label for='select_year'>Selecione o ano:</label>
+          <select id='select_year' class='custom-select' name='ano_selecionado' aria-describedby="anoHelp">
+            <option value={{ data.year }}>{{ data.year }}</option>          
+            <option value={{ data.year|add:'-1' }}>{{ data.year|add:'-1' }}</option>
+          </select>
+          <small id="anoHelp" class="form-text text-muted">
+            Talvez você queira justificar horas extra do ano passado, já que é janeiro.
+          </small>
+          {{ AutorizacaoForm|crispy }}
+          <div class="modal-footer">
+            <button class='btn btn-secondary' type='button' data-dismiss:'modal'>Cancelar</button> 
+            <button class="btn btn-success" type='submit'>Imprimir</button>
+          </div>
+        </form>
+
+      </div>
+
+
+
+    {% else %}
+      <form action="{% url 'pdf' 'justificativa' 0 %}" method="POST" enctype="multipart/form-data" class="text-left">
+        {% csrf_token %}
+        <div class="modal-body">
+              {{ AutorizacaoForm|crispy }}
+          </div>
+          <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+        <button class="btn btn-success" type='submit'>Imprimir</button>
+        </div>
+      </form>
+    {% endif %}
+
+
+    </div>
+  </div>
+</div>

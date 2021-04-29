@@ -1,0 +1,62 @@
+{% load filtros %}
+<div class="col-12">
+  <div class="card my-3">
+    <div class="card-header">
+      <div class="row justify-content-">
+        <div class='col-12 text-center'>
+          <h5 class="card-title"> {{ setor.nome }} </h5>
+        </div>
+      </div>
+    </div>
+    <div class="card-body bg-none">
+      {% for trabalhador in setor.trabalhador_set.all %}
+        <small class="my-2">{{ trabalhador.nome|upper }}</small>
+        <div class='row justify-content-center align-items-center border rounded pt-2'>
+          {% if trabalhador.setor == setor %}
+
+
+            <div class="col-5">
+              <small>
+                <label for='{{ trabalhador.id }}horas'>Horas Extras</label>
+              </small>
+              <input id='{{ trabalhador.id }}horas' value="{{ trabalhador|horas_justificadas }}" step='0.1' min='0' class='form-control mb-2' name="{{ trabalhador.id }}horas" type="number" placeholder="Horas justificadas por {{ trabalhador.nome }}">
+              
+
+            </div>
+
+            <div class="col-5">
+              <small>
+                <label for='{{ trabalhador.id }}adc_noturno'>Adicional Noturno</label>
+              </small>
+
+              <input id='{{ trabalhador.id }}adc_noturno' value='0.0' step='0.1' min='0' class='form-control mb-2' name="{{ trabalhador.id }}adc_noturno" type="number" placeholder="Horas de adicional noturno por {{ trabalhador.nome }}">                    
+
+            </div>
+
+            <div class='col-2'>
+              
+              <small>
+                <label for='{{ trabalhador.id }}faltas'>Faltas</label>
+              </small>
+              <input id='{{ trabalhador.id }}faltas' value='0' min='0' class='form-control mb-2' name="{{ trabalhador.id }}faltas" type="number" placeholder="Faltas de {{ trabalhador.nome }}">
+
+            </div>
+
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+      <div class="card-footer">
+          <div class="row justify-content-center align-items-center">
+              <div class="col-12 col-lg-4 col-lg-offset-4">
+                  <div class="my-2 text-center">
+                      <strong class="text-success text-center">Número do ofício:</strong><br>
+                      <input id='input_num_oficio' name="num_oficio-{{ setor.id }}" class="form-control text-center" value="{{ setor|num_oficio_do_setor }}"required >
+
+                  </div>
+              </div>
+          </div>
+
+      </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load filtros %}
+{% block header %}
+
+
+  <div class="header-gradient">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-12">
+        <h4 class="text-primary ml-4">SOMAR JUSTIFICATIVAS</h4>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block conteudo %}
+    <form action="{% url 'soma_justificativas' %}" method="POST">
+      {%csrf_token%}
+        <div class="row justify-content-center">
+            <div class='col-6'>
+              <label for='mes_input'>Mês</label>
+              <input class="form-control" id="mes_input" type='number' name='mes' value='{% mes_anterior %}'>
+            </div>
+            <div class='col-6'>
+              <label for='ano_input'>Ano</label>
+              <input class="form-control" id="ano_input" type='number' name='ano' value='{% ano_padrao %}'>
+
+            </div>
+            {% for setor in setores %}
+                {% include 'cards/soma_justificativa_setor.html' %}
+            {% endfor %}
+            <div class="col-12">
+                <button class="btn btn-success btn-lg btn-block my-2" type="submit">Submeter horas justificadas</button>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load filtros %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+  <div class="header-gradient">
+    <div class="row justify-content-center align-items-center">
+      <div class="col">
+        <h4 class="text-primary ml-4">AVISO</h4>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+{% block conteudo %}
+    <div class="row justify-content-center align-items-center">
+        <div class='col-12 col-lg-8 col-offset-lg-2'>
+          <form action="{% url 'pdf' 'aviso' 0 %}" method="POST" enctype="multipart/form-data" class="text-left my-4">
+              {% csrf_token %}
+              {{ AvisoForm|crispy }}
+              <button class="btn btn-success btn-lg btn-block mt-3" type='submit'>Imprimir</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

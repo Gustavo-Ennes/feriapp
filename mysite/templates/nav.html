@@ -1,0 +1,103 @@
+{% load user_agents %}
+{% load static %}
+{% load filtros %}
+
+{% if user.is_authenticated %}
+  <nav class="navbar navbar-expand-xl">
+    <a class="navbar-brand" href="{% url 'index' %}">
+      <img src="{% static 'logo.png' %}" width="30" height="30" alt="Prefeitura Municipal de Ilha Solteira">
+       feriapp
+    </a>
+    <button id="btn_nav" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Alterna navegação">
+      <span id='span_nav' class="fas fa-sort-down text-success"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        {% if user|has_group:'relatorio' or user|has_group:'ferias' or user|has_group:'Test' %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Requisições
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{% url 'abono' %}">Abono</a>
+              <a class="dropdown-item" href="{% url 'ferias' %}">Férias</a>
+              <a class="dropdown-item" href="{% url 'licenca_premio' %}">Licenças-Prêmio</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'sexta_parte' %}">Sexta-Parte</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'pdf' 'materiais' 0  %}">Materiais</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'setor' %}">Secretarias</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'trabalhadores' %}">Colaboradores</a>
+          </li>
+          {% if request|is_pc %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'autorizacao' %}">Autorização HE</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'relatorios' %}">Relatórios</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Diversos
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                <a class="dropdown-item" href="{% url 'atestado'  %}">Atestado de Trabalho</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'aviso'  %}">Imprimir Aviso</a>
+              </div>
+            </li>
+          {% endif %}
+        {% else %}
+          <li class="nav-item">
+            <a href="{% url 'index' %}" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            {% with trabalhador=user|trabalhador_por_usuario %}
+              <form action="{% url 'pdf' 'justificativa' 0 %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="trabalhador" value="{{ trabalhador.id }}">
+                <button class="btn btn-link nav-link pt-1" type="submit">Justificativa H.E.</button>
+              </form>
+            {% endwith %}
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'atestado'  %}">Atestado de Trabalho</a>
+          </li>
+          <li class="nav-link">
+            <a href="{% url 'sexta_parte' %}" class="nav-link m-0 p-0">Sexta-Parte</a>
+          </li>
+
+
+        {% endif %}
+      </ul>
+      {% if user|has_group:'relatorio' or user|has_group:'ferias' or user|has_group:'Test'  %}
+        <form class="form-inline my-2 my-lg-0" method="POST" action='{% url "pesquisa" %}'>
+          {% csrf_token %}
+          <input class="form-control input-transparent mr-sm-2" type="search" placeholder="Pesquisar" name='query' />
+          <button class="btn btn-success my-2 my-sm-0" type="submit" >Pesquisar</button>
+        </form>
+      {% endif %}
+
+      {% if user|has_group:'relatorio' or user|has_group:'ferias' or user|has_group:'Test'  %}
+        <div id='drop_conf'>
+          <button class="btn btn-link dropdown-toggle nav-link" role="button" id="ddconf" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-cog"></i>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="ddconf">
+            <a class="dropdown-item" href="{% url 'conf' %}">Configurações</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'sair' %}">Sair</a>
+          </div>
+        </div>
+      {% else %}
+          <a class="btn btn-link nav-link" href="{% url 'sair' %}">Sair</a>
+      {% endif %}
+    </div>
+  </nav>
+{% endif %}

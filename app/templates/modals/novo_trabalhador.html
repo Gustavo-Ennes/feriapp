@@ -1,0 +1,45 @@
+{% load crispy_forms_tags %}
+
+
+{% if index %}
+
+	<button class="btn btn-primary btn-block btn-big my-1" data-toggle="modal" data-target="#modalNovoTrabalhador" data-toggle="tooltip" data-placement="top" title="Cadastrar Trabalhador">
+				Trabalhador
+	</button>
+
+{% else %}
+	<button class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#modalNovoTrabalhador" data-toggle="tooltip" data-placement="top" title="Cadastrar Trabalhador">
+		<i class="fas fa-plus text-light"></i>
+	</button>
+{% endif %}
+
+
+
+<div class="modal fade" id="modalNovoTrabalhador" tabindex="-1" role="dialog" aria-labelledby="labelNovoTrabalhador" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="labelNovoTrabalhador">Cadastrar Trabalhador</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    	</div>
+
+
+			<form action="{% url 'novo_trabalhador' %}" method="POST" enctype="multipart/form-data" class="text-left">
+   		{% csrf_token %}
+	     	<div class="modal-body">
+
+          {{ TrabalhadorForm|crispy }}
+
+      	</div>
+      	<div class="modal-footer">
+	        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+	        <button class="btn btn-success" type='submit'>Cadastrar</button>
+	     	</div>
+  		</form>
+
+
+    </div>
+  </div>
+</div>
