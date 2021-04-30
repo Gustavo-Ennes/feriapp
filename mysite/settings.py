@@ -26,6 +26,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import environ
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -42,6 +43,38 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+
+env_file = os.path.join(BASE_DIR, ".env")
+
+
+env = environ.Env()
+# If no .env has been provided, pull it from Secret Manager
+if os.path.isfile(env_file):
+    env.read_env(env_file)
+else:
+    # Create local settings if running with CI, for unit testing
+    if os.getenv("TRAMPOLINE_CI", None):
+        placeholder = f"SECRET_KEY=a\nGS_BUCKET_NAME=none\nDATABASE_URL=sqlite://{os.path.join(BASE_DIR, 'db.sqlite3')}"
+        env.read_env(io.StringIO(placeholder))
+    else:
+        # [START cloudrun_django_secretconfig]
+        import google.auth
+        from google.cloud import secretmanager
+
+        _, project = google.auth.default()
+
+        if project:
+            client = secretmanager.SecretManagerServiceClient()
+
+            SETTINGS_NAME = os.environ.get("SETTINGS_NAME", "django_settings")
+            name = f"projects/{project}/secrets/{SETTINGS_NAME}/versions/latest"
+            payload = client.access_secret_version(name=name).payload.data.decode(
+                "UTF-8"
+            )
+        env.read_env(io.StringIO(payload))
+        # [END cloudrun_django_secretconfig]
+
+
 
 # SECURITY WARNING: App Engine's security features ensure that it is safe to
 # have ALLOWED_HOSTS = ['*'] when the app is deployed. If you deploy a Django
@@ -100,46 +133,46 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# Check to see if MySQLdb is available; if not, have pymysql masquerade as
-# MySQLdb. This is a convenience feature for developers who cannot install
-# MySQLdb locally; when running in production on Google App Engine Standard
-# Environment, MySQLdb will be used.
-try:
-    import MySQLdb  # noqa: F401
-except ImportError:
-    import pymysql
-    pymysql.install_as_MySQLdb()
+# Install PyMySQL as mysqlclient/MySQLdb to use Django's mysqlclient adapter
+# See https://docs.djangoproject.com/en/2.1/ref/databases/#mysql-db-api-drivers
+# for more information
+import pymysql  # noqa: 402
+pymysql.version_info = (1, 4, 6, 'final', 0)  # change mysqlclient version
+pymysql.install_as_MySQLdb()
 
 # [START db_setup]
-# if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
-#     # Running on production App Engine, so connect to Google Cloud SQL using
-#     # the unix socket at /cloudsql/<your-cloudsql-connection string>
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': '/cloudsql/feriapp-312209:southamerica-east1:feriapp',
-        # 'HOST': '35.247.255.159'
-        'NAME': 'feriapp',
-        'USER': 'kratos',
-        'PASSWORD': os.environ["DB_PASS"],
+if os.getenv('GAE_APPLICATION', None):
+    # Running on production App Engine, so connect to Google Cloud SQL using
+    # the unix socket at /cloudsql/<your-cloudsql-connection string>
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '/cloudsql/feriapp-312209:us-central1:feriapp-db',
+            'USER': 'kratos',
+            'PASSWORD': env('DB_PASS'),
+            'NAME': 'feriapp',
+        }
     }
-}
-# else:
-#     # Running locally so connect to either a local MySQL instance or connect to
-#     # Cloud SQL via the proxy. To start the proxy via command line:
-#     #
-#     #     $ cloud_sql_proxy -instances=[INSTANCE_CONNECTION_NAME]=tcp:3306
-#     #
-#     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
-#         }
-#     }
-# [END db_setup]
+else:
+    # Running locally so connect to either a local MySQL instance or connect to
+    # Cloud SQL via the proxy. To start the proxy via command line:
+    #
+    #     $ cloud_sql_proxy -instances=[INSTANCE_CONNECTION_NAME]=tcp:3306
+    #
+    # See https://cloud.google.com/sql/docs/mysql-connect-proxy
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '35.224.167.107',
+            'USER': 'kratos',
+            'PASSWORD': env('DB_PASS'),
+            'NAME': 'feriapp_test',
+        }
+    }
+# [END
+
 
 # Use a in-memory sqlite3 database when testing in CI systems
 if os.getenv('TRAMPOLINE_CI', None):
@@ -150,8 +183,6 @@ if os.getenv('TRAMPOLINE_CI', None):
         }
     }
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'America/Sao_Paulo'
@@ -167,7 +198,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = os.environ['STATIC']
+STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = [
@@ -246,3 +277,12 @@ DEBUG_PROPAGATE_EXCEPTIONS = True
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
 )
+
+# [START cloudrun_django_staticconfig]
+# Define static storage via django-storages[google]
+GS_BUCKET_NAME = 'feriapp'
+
+DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+GS_DEFAULT_ACL = "publicRead"
+# [END cloudrun_django_staticconfig]

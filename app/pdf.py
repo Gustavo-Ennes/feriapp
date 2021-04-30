@@ -633,7 +633,7 @@ class PDF:
 
         columns_data = []
         table_data = []
-        columns_data.append("Diretoria: %s" % trabalhador.setor.nome)
+        columns_data.append("get_diretor()ia: %s" % trabalhador.setor.nome)
         columns_data.append("")
         columns_data.append("Setor: Transporte")
         table_data.append(columns_data)
@@ -834,9 +834,9 @@ class PDF:
         start_y -= spacement * 1.5
         PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, diretor.nome, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, get_diretor().nome, align=TA_CENTER, font_size=10.5)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, diretor.legenda, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, get_diretor().legenda, align=TA_CENTER, font_size=10.5)
         start_y -= spacement * 2.5
 
         PDF.draw_line(c, 0, start_y + 10 * mm, "%d dias" % ferias.qtd_dias, align=TA_RIGHT, font_size=15)
@@ -867,9 +867,9 @@ class PDF:
         start_y -= spacement * 1.5
         PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, diretor.nome, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, get_diretor().nome, align=TA_CENTER, font_size=10.5)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, diretor.legenda, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, get_diretor().legenda, align=TA_CENTER, font_size=10.5)
 
         PDF.draw_footer(c)
         c.showPage()
@@ -1030,8 +1030,8 @@ class PDF:
 
         flowables.append(Paragraph("Ilha Solteira, %d de %s de %s" % (data.day, RandomStuff.mes_escrito(data.month), data.year), style=style_data))
 
-        flowables = PDF.assinatura_de("<b>%s</b>" % diretor.nome, flowables,
-                                      legenda=diretor.legenda)
+        flowables = PDF.assinatura_de("<b>%s</b>" % get_diretor().nome, flowables,
+                                      legenda=get_diretor().legenda)
         flowables = PDF.assinatura_de("<b>Assinatura do(a) Secretário(a)</b>", flowables,
                                       legenda="Secretaria de %s" % relatorio.setor.nome.title())
         doc.build(flowables, onFirstPage=PDF.papel_timbrado, onLaterPages=PDF.papel_timbrado)
@@ -1453,9 +1453,9 @@ class PDF:
         start_y -= spacement * 1.5
         PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, diretor.nome, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, get_diretor().nome, align=TA_CENTER, font_size=10.5)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, diretor.legenda, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, get_diretor().legenda, align=TA_CENTER, font_size=10.5)
         start_y -= spacement * 2.5
 
         PDF.draw_line(c, 0, start_y + 10 * mm, "%d dias" % ferias.qtd_dias, align=TA_RIGHT, font_size=15)
@@ -1487,9 +1487,9 @@ class PDF:
         start_y -= spacement * 1.5
         PDF.draw_line(c, 15 * mm, start_y, "__________________________", align=TA_CENTER)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, diretor.nome, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, get_diretor().nome, align=TA_CENTER, font_size=10.5)
         start_y -= spacement / 2
-        PDF.draw_line(c, 15 * mm, start_y, diretor.legenda, align=TA_CENTER, font_size=10.5)
+        PDF.draw_line(c, 15 * mm, start_y, get_diretor().legenda, align=TA_CENTER, font_size=10.5)
 
         PDF.draw_footer(c)
         c.showPage()
