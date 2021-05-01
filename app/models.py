@@ -476,77 +476,77 @@ class ChefeDeSetor(models.Model):
 
 
 
-class BannerManager():
-    def __init__(self):
-        self.site_name = "https://www.ilhasolteira.sp.gov.br"
-        self.slide_tag = 'sp-pc-post'
-        self.slide_container_type = 'div'
-        self.tags = {
-            'titulo': 'sp-pc-post-title',
-            'descricao':'sp-pc-content',
-            'img_link': 'sp-pc-post-img',
-            'link': 'sp-pc-post-image',
-        }
+# class BannerManager():
+#     def __init__(self):
+#         self.site_name = "https://www.ilhasolteira.sp.gov.br"
+#         self.slide_tag = 'sp-pc-post'
+#         self.slide_container_type = 'div'
+#         self.tags = {
+#             'titulo': 'sp-pc-post-title',
+#             'descricao':'sp-pc-content',
+#             'img_link': 'sp-pc-post-img',
+#             'link': 'sp-pc-post-image',
+#         }
 
-    def is_site_up(self):
-        return request.urlopen(self.site_name).getcode() == 200
+#     def is_site_up(self):
+#         return request.urlopen(self.site_name).getcode() == 200
 
-    def get_slides(self):
-        soup = bs(requests.get(self.site_name).content, 'html.parser')
-        return soup.find_all(self.slide_container_type, {'class': self.slide_tag})
+#     def get_slides(self):
+#         soup = bs(requests.get(self.site_name).content, 'html.parser')
+#         return soup.find_all(self.slide_container_type, {'class': self.slide_tag})
 
 
-    def are_there_slides(self):  
-        slides = self.get_slides()      
-        return bool(len(slides))
+#     def are_there_slides(self):  
+#         slides = self.get_slides()      
+#         return bool(len(slides))
 
-    def need_replacement(self):
-        banners = Banner.objects.all()
-        slides = self.get_slides()
-        pass_test = False
+#     def need_replacement(self):
+#         banners = Banner.objects.all()
+#         slides = self.get_slides()
+#         pass_test = False
 
-        if slides and not banners:
-            pass_test = True
-        elif slides and banners:
-            # slides[len(slides) - 1] comparado com Banners[0]
-            last_getted_slide = slides[len(slides) - 1]
-            first_slide_in_query = banners[0]
-            if last_getted_slide.find('img', self.tags['img_link']).get('src') != first_slide_in_query.link_img:
-                pass_test = True
+#         if slides and not banners:
+#             pass_test = True
+#         elif slides and banners:
+#             # slides[len(slides) - 1] comparado com Banners[0]
+#             last_getted_slide = slides[len(slides) - 1]
+#             first_slide_in_query = banners[0]
+#             if last_getted_slide.find('img', self.tags['img_link']).get('src') != first_slide_in_query.link_img:
+#                 pass_test = True
 
-        return pass_test
+#         return pass_test
 
-    def do_replacement(self):
-        slides = self.get_slides()
-        Banner.objects.all().delete()
+#     def do_replacement(self):
+#         slides = self.get_slides()
+#         Banner.objects.all().delete()
 
-        for slide in slides:
-            b = Banner(
-                link_img= slide.find('img', self.tags['img_link']).get('src'),
-                link= slide.find('div', self.tags['link']).find('a').get("href")
-            )
+#         for slide in slides:
+#             b = Banner(
+#                 link_img= slide.find('img', self.tags['img_link']).get('src'),
+#                 link= slide.find('div', self.tags['link']).find('a').get("href")
+#             )
 
-            titulo = slide.find("h2", self.tags['titulo']).find('a')
-            descricao = slide.find('p', self.tags['descricao'])
-            if titulo:
-                b.titulo = titulo.text.strip()
-            if descricao:
-                b.descricao = descricao.text.strip()
+#             titulo = slide.find("h2", self.tags['titulo']).find('a')
+#             descricao = slide.find('p', self.tags['descricao'])
+#             if titulo:
+#                 b.titulo = titulo.text.strip()
+#             if descricao:
+#                 b.descricao = descricao.text.strip()
 
-            b.save()
+#             b.save()
 
-    def banner_routine(self):
-        if self.is_site_up():
-            if self.are_there_slides():
-                if self.need_replacement():
-                    self.do_replacement()
-                else:
-                    print("Banners verificados. Troca desnecessária.")
+#     def banner_routine(self):
+#         if self.is_site_up():
+#             if self.are_there_slides():
+#                 if self.need_replacement():
+#                     self.do_replacement()
+#                 else:
+#                     print("Banners verificados. Troca desnecessária.")
 
-            else:
-                raise Exception("O site não possui slides hoje")
-        else:
-            raise Exception("O site parece estar offline")
+#             else:
+#                 raise Exception("O site não possui slides hoje")
+#         else:
+#             raise Exception("O site parece estar offline")
 
 
 

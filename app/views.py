@@ -28,7 +28,7 @@ def verifica_conf():
 @login_required(login_url='/entrar/')
 def index(request):
     verifica_conf()
-    banner_manager = BannerManager()
+    # banner_manager = BannerManager()
 
     if not request.user.groups.filter(Q(name='ferias') | Q(name='relatorio') | Q(name='Test')):
         try:
@@ -62,12 +62,6 @@ def index(request):
 
         # só quero lembretes válidos
         context['lembretes'] = [ l for l in context['lembretes'] if l.is_valid ]
-        atualiza_situacoes_trabalhadores()
-        atualiza_lembretes()
-        banner_manager.banner_routine()
-        print("lembretes: ", context['lembretes'])
-        print(context['banners'])
-
         return render(request, 'index.html', context)
 
 
@@ -668,6 +662,11 @@ def entrar(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+
+                # atualizo no login e não na index
+                atualiza_situacoes_trabalhadores()
+                atualiza_lembretes()
+
                 if not remember_me:
                     request.session.set_expiry(0)
                 name = user.username if user.groups.count() > 0 else Trabalhador.objects.get(
