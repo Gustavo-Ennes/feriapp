@@ -1,12 +1,12 @@
 # FERIAPP
 
-Sistema escrito em Python e Django que visa automatizar a rotina de seu autor, Agente Administrativo na Prefeitura Municipal de Ilha Solteira e  estudante de Sistemas de Informação pela UFMS/CPTL. O intuito desse projeto é apenas a aquisição de conhecimento e a comprovação de experiência em desenvolvimento, não tendo a Prefeitura de Ilha Solteira relação com o mesmo.
+Sistema escrito em Python e Django que visa automatizar a rotina de seu autor, ex Agente Administrativo na Prefeitura Municipal de Ilha Solteira e  estudante de Sistemas de Informação pela UFMS/CPTL. O intuito desse projeto é apenas a aquisição de conhecimento e a comprovação de experiência em desenvolvimento, não tendo a Prefeitura de Ilha Solteira relação com o mesmo.
 
 ## O que ele faz
 
 - Principais funções agrupadas na página principal de forma intuitiva
 
-- Banner informativo via Web Scrapping: banners informativos são buscados no site oficial da Prefeitura de Ilha Solteira, copiados e rearranjados na página principal 
+- Banner informativo via Web Scrapping: banners informativos são buscados no site oficial da Prefeitura de Ilha Solteira utilizando o Google Cloud Functions, copiados e rearranjados na página principal todos os dias, rotina que é mantida utilizando Google Cloud Scheduler. 
 
 - Cadastro de trabalhadores e secretarias
 
