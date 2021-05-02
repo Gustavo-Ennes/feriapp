@@ -1,7 +1,5 @@
 from django.contrib import admin
 from app.models import *
-from myapp.seo import MyMetadatafrom 
-from rollyourown.seo.admin import register_seo_admin
 
 
 class TrabalhadorAdmin(admin.ModelAdmin):
@@ -56,6 +54,3 @@ admin.site.register(LinhaRelatorio, LinhaRelatorioAdmin)
 admin.site.register(Lembrete, LembreteAdmin)
 admin.site.register(Diretor, DiretorAdmin)
 admin.site.register(ChefeDeSetor, ChefeDeSetorAdmin)
-
-
-register_seo_admin(admin.site, MyMetadata)

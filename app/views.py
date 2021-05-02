@@ -15,7 +15,7 @@ from .tasks import *
 from bs4 import BeautifulSoup as bs
 import requests
 
-from ..temp.cloud_functions import download_from_cloud, upload_to_cloud
+from utils.cloud_functions import download_from_cloud, upload_to_cloud
 
 
 

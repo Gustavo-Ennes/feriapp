@@ -5,11 +5,11 @@ from django.db.models import Q
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.urls import reverse
 from bs4 import BeautifulSoup as bs
 import random
 from urllib import request
 import requests
-from rollyourown import seo
 
 
 # Create your models here.
@@ -24,6 +24,9 @@ class Setor(models.Model):
 
     def __str__(self):
         return '%s - desde %s' % (self.nome, self.criado_em.strftime("%d/%m/%Y"))
+
+    def get_absolute_url(self):
+        return reverse('setor')
 
     class Meta:
         verbose_name_plural = 'Setores'
@@ -66,6 +69,9 @@ class Trabalhador(models.Model):
         if not self.user:
             self.user = User.objects.create_user(self.matricula, password=self.matricula)
         super(Trabalhador, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('trabalhadores')
 
     class Meta:
         verbose_name_plural = 'Trabalhadores'
@@ -126,6 +132,9 @@ class Ferias(models.Model):
     def __str__(self):
         return '%d dias - %s -saindo %s' % (self.qtd_dias, self.trabalhador.nome, self.data_inicio.strftime("%d/%m/%Y"))
 
+    def get_absolute_url(self):
+        return reverse('ferias')
+
     class Meta:
         verbose_name_plural = "Férias"
         verbose_name = "Férias"
@@ -175,6 +184,10 @@ class LicencaPremio(Ferias):
             self.deferida = valida_ferias(self)
 
         super(LicencaPremio, self).save(validacao, *args, **kwargs)
+
+
+    def get_absolute_url(self):
+        return reverse('licenca_premio')
 
     class Meta:
         verbose_name_plural = "Licença Prêmio"
@@ -227,6 +240,9 @@ class Abono(models.Model):
 
     def __str__(self):
         return '%s - %s' % (self.trabalhador.nome, self.data.strftime("%d/%m/%Y"))
+
+    def get_absolute_url(self):
+        return reverse('abono')
 
     class Meta:
         ordering = ['data']
@@ -747,4 +763,3 @@ class WorkerFactory:
             str(dia) if dia > 9 else '0' + str(dia)) + " " + hora + minuto
 
 
-class Metadata(seo.Metadata)

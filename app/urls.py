@@ -2,6 +2,18 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from app import views
+from django.contrib.sitemaps.views import sitemap
+from app.sitemaps import *
+
+sitemaps = {
+        "setores": SetorSitemap,
+        "trabalhadores": TrabalhadorSitemap,
+        "ferias": FeriasSitemap,
+        "licencas": LicencaPremioSitemap,
+        "abonos": AbonoSitemap
+}
+
+
 
 urlpatterns = [
     path('', views.index, name="index"),
@@ -49,5 +61,7 @@ urlpatterns = [
     path('aviso/', views.aviso, name='aviso'),
     path('conf/', views.conf, name='conf'),
     path('done/<int:pk>/', views.marcar_como_feito, name='marcar_como_feito'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
+                        name='django.contrib.sitemaps.views.sitemap')
 
 ]

@@ -2,12 +2,10 @@
 {# {% load staticfiles %} #}
 {% load sass_tags %}
 {% load filtros %}
-{% load seo %}
 
 <!DOCTYPE html>
 <html lang="pt-BR">
   	<head>
-        {% get_metadata %}
 
 	    <!-- Required meta tags -->
 	    <meta charset="UTF-8">
@@ -34,7 +32,18 @@
         <link rel="icon" type="image/png" sizes="32x32" href='{% sass_src "logo.png" %}'>
 
 
-        <title> Feriapp </title>
+        <meta name="keywords" content="feriapp, vacation, day-off, scheduler, report, reportlab, Django, Prefeitura Municipal de Ilha Solteira, Ilha Solteira, Gustavo Ennes, full-stack web developer, full-stack, web developer, software engineer, férias, ferias, agendamento, relatorios, prefeitura, abonadas, abonos">
+
+        <meta name="author" content="Gustavo Ennes">
+
+        <meta property="og:url" content="https://project.feriapp.ennes.dev" />
+        <meta property="og:title" content="Feriapp - App to schedule vacations, day-offs, calculate hours of work and print reports" />
+
+
+        <title> 
+            Feriapp - App to schedule vacations, day-offs, calculate hours of work and 
+            print reports
+        </title>
         {% block head %} {% endblock %}
     </head>
     <body>
