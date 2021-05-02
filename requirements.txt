@@ -12,6 +12,7 @@ django-crispy-forms==1.11.2
 django-sass-processor==1.0.1
 django-storages==1.11.1
 django-user-agents==0.4.0
+DjangoSEO==1.0
 google-api-core==1.26.3
 google-auth==1.30.0
 google-cloud-core==1.6.0

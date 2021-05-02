@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup as bs
 import random
 from urllib import request
 import requests
+from rollyourown import seo
 
 
 # Create your models here.
@@ -744,3 +745,6 @@ class WorkerFactory:
 
         return str(ano) + '-' + (str(mes) if mes > 9 else '0' + str(mes)) + '-' + (
             str(dia) if dia > 9 else '0' + str(dia)) + " " + hora + minuto
+
+
+class Metadata(seo.Metadata)

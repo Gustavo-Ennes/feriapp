@@ -2,11 +2,12 @@
 {# {% load staticfiles %} #}
 {% load sass_tags %}
 {% load filtros %}
+{% load seo %}
 
 <!DOCTYPE html>
 <html lang="pt-BR">
   	<head>
-
+        {% get_metadata %}
 
 	    <!-- Required meta tags -->
 	    <meta charset="UTF-8">

@@ -15,6 +15,11 @@ from .tasks import *
 from bs4 import BeautifulSoup as bs
 import requests
 
+from ..temp.cloud_functions import download_from_cloud, upload_to_cloud
+
+
+
+
 lembretes_exibidos = False
 
 
@@ -909,7 +914,11 @@ def pdf(request, tipo, obj_id):
     temp_pdf = None
     obj = None
     try:
+
+        # download_from_cloud()
+
         temp_pdf = os.path.join(PROJECT_ROOT, 'temp/pdf.pdf')
+        
     except Exception as e:
         print('-' * 40, "Warning: Pdf indisponível (%s)" % e, '-' * 40)
         messages.error(request, "Pdf indisponível")
@@ -1317,6 +1326,7 @@ def pdf(request, tipo, obj_id):
             PDFFactory.get_cancelamento_licenca_pdf(obj)
 
         pdf = open(temp_pdf, 'rb')
+        # upload_cloud_pdf()
         return FileResponse(pdf, filename=temp_pdf, as_attachment=request.user_agent.is_mobile)
 
 

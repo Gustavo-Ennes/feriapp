@@ -96,6 +96,7 @@ INSTALLED_APPS = (
     'app',
     'compressor',
     'django_user_agents',
+    'rollyourown.seo'
 )
 
 MIDDLEWARE = [
