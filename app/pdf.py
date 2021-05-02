@@ -141,7 +141,7 @@ class RandomStuff:
 
 class PDF:
     MAX_TABLE_LINES_RELATORIO = 34
-    PDF_PATH = os.path.join(PROJECT_ROOT, 'temp/pdf.pdf')
+    PDF_PATH = os.path.join(PROJECT_ROOT, 'temp/pdf.pdf') if not os.getenv('GAE_APPLICATION', None) else '/tmp/pdf.pdf'
 
     @staticmethod
     # std ==  SimpleDocTemplate
@@ -633,7 +633,7 @@ class PDF:
 
         columns_data = []
         table_data = []
-        columns_data.append("get_diretor()ia: %s" % trabalhador.setor.nome)
+        columns_data.append("Secretaria: %s" % trabalhador.setor.nome)
         columns_data.append("")
         columns_data.append("Setor: Transporte")
         table_data.append(columns_data)
@@ -684,7 +684,7 @@ class PDF:
     @staticmethod
     def create_justificativa_pdf(trabalhador: Trabalhador, ano):
 
-        c = canvas.Canvas(os.path.join(PROJECT_ROOT, 'temp/pdf.pdf'), pagesize=A4)
+        c = canvas.Canvas(PDF.PDF_PATH, pagesize=A4)
         start_y = 272 * mm
 
         PDF.draw_header(c)

@@ -917,7 +917,7 @@ def pdf(request, tipo, obj_id):
 
         # download_from_cloud()
 
-        temp_pdf = os.path.join(PROJECT_ROOT, 'temp/pdf.pdf')
+        temp_pdf = os.path.join(PROJECT_ROOT, 'temp/pdf.pdf') if not os.getenv('GAE_APPLICATION', None) else '/tmp/pdf.pdf'
         
     except Exception as e:
         print('-' * 40, "Warning: Pdf indisponível (%s)" % e, '-' * 40)
