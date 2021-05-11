@@ -1,4 +1,5 @@
 from django.db import models
+from djongo import models as djongoModels
 from datetime import datetime, timedelta
 from django.contrib import messages
 from django.db.models import Q
@@ -9,6 +10,7 @@ from django.urls import reverse
 from bs4 import BeautifulSoup as bs
 import random
 from urllib import request
+import djongo
 import requests
 
 
@@ -31,7 +33,7 @@ class Setor(models.Model):
     class Meta:
         verbose_name_plural = 'Setores'
         ordering = ['nome']
-
+        
 
 
 class Trabalhador(models.Model):
@@ -76,7 +78,7 @@ class Trabalhador(models.Model):
     class Meta:
         verbose_name_plural = 'Trabalhadores'
         ordering = ['nome']
-
+        
 
 
 
@@ -139,6 +141,8 @@ class Ferias(models.Model):
         verbose_name_plural = "Férias"
         verbose_name = "Férias"
         ordering = ['data_inicio']
+        
+
 
 
 class LicencaPremio(Ferias):
@@ -193,6 +197,8 @@ class LicencaPremio(Ferias):
         verbose_name_plural = "Licença Prêmio"
         verbose_name = "Licenças Prêmio"
         ordering = ['data_inicio']
+        
+
 
 
 class Abono(models.Model):
@@ -246,7 +252,118 @@ class Abono(models.Model):
 
     class Meta:
         ordering = ['data']
+        
 
+
+
+class Conf(models.Model):
+    ADC_CONST = 1.143
+    objects = models.Manager()
+
+    proximas_folgas = models.BooleanField(
+        default=True,
+        help_text='Mostra uma tabela na página principal, representando os trabalhadores que tem as folgas próximas'
+    )
+    em_andamento = models.BooleanField(
+        default=True,
+        help_text='Mostra uma tabela na página principal, representando os trabalhadores que estão de folga no momento'
+    )
+    proximos_retornos = models.BooleanField(
+        default=True,
+        help_text='Mostra uma tabela na página principal, representando os trabalhadores que estão no final de sua '
+                  'folga '
+    )
+    calculo_de_adicional = models.BooleanField(
+        default=False,
+        verbose_name="Cálculo de Adicional Noturno",
+        help_text='Multiplica o total de horas por 1,143, caso marcado'
+    )
+        
+
+
+class Diretor(models.Model):
+    objects = models.Manager()
+    nome = models.CharField(max_length=200)
+    legenda = models.CharField(max_length=100)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    modificado = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Diretores"
+        ordering = ['nome']
+        
+
+
+
+
+class ChefeDeSetor(models.Model):
+    objects = models.Manager()
+    nome = models.CharField(max_length=200)
+    legenda = models.CharField(max_length=100)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    modificado = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Chefes de Setor"
+        ordering = ['nome']
+
+class Lembrete(models.Model):
+    options = [
+        ('d', 'Diário'),
+        ('s', 'Semanal'),
+        ('m', 'Mensal'),
+    ]
+
+    objects = models.Manager()
+    titulo = models.CharField(max_length=200)
+    mensagem = models.TextField()
+    url_name = models.CharField(max_length=100)
+    periodicidade = models.CharField(max_length=2, choices=options)
+    dia = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(31)],
+        help_text="Semanal: indique o dia da semana(0=domingo, 1=segunda,...). Mensal: caso não haja tal dia em algum mês(30, 31), o lembrete será exibido no último dia do mês"
+    )
+    mostrado_esse_mes = models.BooleanField(default=False)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    modificado_em = models.DateTimeField(auto_now=True)
+
+    @property
+    def is_valid(self):
+        is_valid = False
+        hoje = timezone.now()
+        weekday = hoje.weekday()
+        if not self.mostrado_esse_mes:
+            # aqui a lógica muda dependendo da periodicidade
+            if self.periodicidade == 'm':
+                if weekday >= self.dia:
+                    is_valid = True
+            elif self.periodicidade == 's':
+                if self.dia <= weekday < 6:
+                    is_valid = True
+            elif self.periodicidade == 'd':
+                if hoje.hour == self.day:
+                    is_valid = True
+        return is_valid
+
+    class Meta:
+        ordering = ['dia']
+        
+
+
+
+class Banner(models.Model):
+
+    objects = models.Manager()
+    titulo = models.CharField(max_length=200, blank=True)
+    descricao = models.TextField(blank=True)
+    link_img = models.URLField(unique=True)
+    link = models.URLField()
+    criado_em = models.DateTimeField(auto_now_add=True)
+    modificado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-criado_em']
+        
 
 class LinhaRelatorio(models.Model):
     objects = models.Manager()
@@ -351,89 +468,7 @@ class Relatorio(models.Model):
         verbose_name = "Relatório"
         verbose_name_plural = "Relatórios"
         ordering = ['-criado_em', 'setor__nome']
-
-
-class Lembrete(models.Model):
-    options = [
-        ('d', 'Diário'),
-        ('s', 'Semanal'),
-        ('m', 'Mensal'),
-    ]
-
-    objects = models.Manager()
-    titulo = models.CharField(max_length=200)
-    mensagem = models.TextField()
-    url_name = models.CharField(max_length=100)
-    periodicidade = models.CharField(max_length=2, choices=options)
-    dia = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(31)],
-        help_text="Semanal: indique o dia da semana(0=domingo, 1=segunda,...). Mensal: caso não haja tal dia em algum mês(30, 31), o lembrete será exibido no último dia do mês"
-    )
-    mostrado_esse_mes = models.BooleanField(default=False)
-    criado_em = models.DateTimeField(auto_now_add=True)
-    modificado_em = models.DateTimeField(auto_now=True)
-
-    @property
-    def is_valid(self):
-        is_valid = False
-        hoje = timezone.now()
-        weekday = hoje.weekday()
-        if not self.mostrado_esse_mes:
-            # aqui a lógica muda dependendo da periodicidade
-            if self.periodicidade == 'm':
-                if weekday >= self.dia:
-                    is_valid = True
-            elif self.periodicidade == 's':
-                if self.dia <= weekday < 6:
-                    is_valid = True
-            elif self.periodicidade == 'd':
-                if hoje.hour == self.day:
-                    is_valid = True
-        return is_valid
-
-    class Meta:
-        ordering = ['dia']
-
-
-
-class Conf(models.Model):
-    ADC_CONST = 1.143
-    objects = models.Manager()
-
-    proximas_folgas = models.BooleanField(
-        default=True,
-        help_text='Mostra uma tabela na página principal, representando os trabalhadores que tem as folgas próximas'
-    )
-    em_andamento = models.BooleanField(
-        default=True,
-        help_text='Mostra uma tabela na página principal, representando os trabalhadores que estão de folga no momento'
-    )
-    proximos_retornos = models.BooleanField(
-        default=True,
-        help_text='Mostra uma tabela na página principal, representando os trabalhadores que estão no final de sua '
-                  'folga '
-    )
-    calculo_de_adicional = models.BooleanField(
-        default=False,
-        verbose_name="Cálculo de Adicional Noturno",
-        help_text='Multiplica o total de horas por 1,143, caso marcado'
-    )
-
-
-
-class Banner(models.Model):
-
-    objects = models.Manager()
-    titulo = models.CharField(max_length=200, blank=True)
-    descricao = models.TextField(blank=True)
-    link_img = models.URLField(unique=True)
-    link = models.URLField()
-    criado_em = models.DateTimeField(auto_now_add=True)
-    modificado_em = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['-criado_em']
-
+        
 
 
 class RelacaoAbono(models.Model):
@@ -447,6 +482,7 @@ class RelacaoAbono(models.Model):
         verbose_name = 'Relação de abonos'
         verbose_name_plural = "Relações de abonos"
         ordering = ['-data_inicio']
+        
 
     @staticmethod
     def factory(data_inicio, data_termino):
@@ -466,106 +502,23 @@ class RelacaoAbono(models.Model):
         return relacao
 
 
-class Diretor(models.Model):
-    objects = models.Manager()
-    nome = models.CharField(max_length=200)
-    legenda = models.CharField(max_length=100)
-    criado_em = models.DateTimeField(auto_now_add=True)
-    modificado = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name_plural = "Diretores"
-        ordering = ['nome']
 
 
 
-class ChefeDeSetor(models.Model):
-    objects = models.Manager()
-    nome = models.CharField(max_length=200)
-    legenda = models.CharField(max_length=100)
-    criado_em = models.DateTimeField(auto_now_add=True)
-    modificado = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name_plural = "Chefes de Setor"
-        ordering = ['nome']
-
-
-
-
-# class BannerManager():
-#     def __init__(self):
-#         self.site_name = "https://www.ilhasolteira.sp.gov.br"
-#         self.slide_tag = 'sp-pc-post'
-#         self.slide_container_type = 'div'
-#         self.tags = {
-#             'titulo': 'sp-pc-post-title',
-#             'descricao':'sp-pc-content',
-#             'img_link': 'sp-pc-post-img',
-#             'link': 'sp-pc-post-image',
-#         }
-
-#     def is_site_up(self):
-#         return request.urlopen(self.site_name).getcode() == 200
-
-#     def get_slides(self):
-#         soup = bs(requests.get(self.site_name).content, 'html.parser')
-#         return soup.find_all(self.slide_container_type, {'class': self.slide_tag})
-
-
-#     def are_there_slides(self):  
-#         slides = self.get_slides()      
-#         return bool(len(slides))
-
-#     def need_replacement(self):
-#         banners = Banner.objects.all()
-#         slides = self.get_slides()
-#         pass_test = False
-
-#         if slides and not banners:
-#             pass_test = True
-#         elif slides and banners:
-#             # slides[len(slides) - 1] comparado com Banners[0]
-#             last_getted_slide = slides[len(slides) - 1]
-#             first_slide_in_query = banners[0]
-#             if last_getted_slide.find('img', self.tags['img_link']).get('src') != first_slide_in_query.link_img:
-#                 pass_test = True
-
-#         return pass_test
-
-#     def do_replacement(self):
-#         slides = self.get_slides()
-#         Banner.objects.all().delete()
-
-#         for slide in slides:
-#             b = Banner(
-#                 link_img= slide.find('img', self.tags['img_link']).get('src'),
-#                 link= slide.find('div', self.tags['link']).find('a').get("href")
-#             )
-
-#             titulo = slide.find("h2", self.tags['titulo']).find('a')
-#             descricao = slide.find('p', self.tags['descricao'])
-#             if titulo:
-#                 b.titulo = titulo.text.strip()
-#             if descricao:
-#                 b.descricao = descricao.text.strip()
-
-#             b.save()
-
-#     def banner_routine(self):
-#         if self.is_site_up():
-#             if self.are_there_slides():
-#                 if self.need_replacement():
-#                     self.do_replacement()
-#                 else:
-#                     print("Banners verificados. Troca desnecessária.")
-
-#             else:
-#                 raise Exception("O site não possui slides hoje")
-#         else:
-#             raise Exception("O site parece estar offline")
-
-
+# class Entry(djongoModels.Model):
+#     setores = djongoModels.ArrayField(model_container=Setor)    
+#     trabalhadores = djongoModels.ArrayField(model_container=Trabalhador)
+#     ferias = djongoModels.ArrayField(model_container=Ferias)
+#     licencas_premio = djongoModels.ArrayField(model_container=LicencaPremio)
+#     abonos = djongoModels.ArrayField(model_container=Abono)
+#     conf = djongoModels.EmbeddedField(model_container=Conf)
+#     diretores = djongoModels.ArrayField(model_container=Diretor)
+#     chefes_de_setor = djongoModels.ArrayField(model_container=ChefeDeSetor)
+#     lembretes = djongoModels.ArrayField(model_container=Lembrete)
+#     banners = djongoModels.ArrayField(model_container=Banner)
+#     linhas_relatorio = djongoModels.ArrayField(model_container=LinhaRelatorio)
+#     relatorios = djongoModels.ArrayField(model_container=Relatorio)
+#     headline = djongoModels.CharField(max_length=255)    
 
 
 
