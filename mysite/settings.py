@@ -43,7 +43,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 env_file = os.path.join(BASE_DIR, ".env")
 
@@ -138,7 +138,8 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
 # [START db_setup]
-if os.getenv('GAE_APPLICATION', None) or not DEBUG:
+if not DEBUG:
+# if os.getenv('GAE_APPLICATION', None):
     DATABASES = {
         'default': {
             'ENGINE': 'djongo',
@@ -154,7 +155,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'djongo',
-            'NAME': 'feriapp',
+            'NAME': 'feriapp_test',
             'CLIENT': {
                 'host': os.getenv('DB_TEST_STRING')
             },   
