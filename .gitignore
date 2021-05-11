@@ -5,6 +5,5 @@ staticfiles
 *.sqlite3
 test
 .idea
-*.yaml
 .remember
 static/

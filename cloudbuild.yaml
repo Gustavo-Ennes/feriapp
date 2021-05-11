@@ -1,0 +1,16 @@
+steps:
+
+- name: python39
+  entrypoint: python
+  args: ["manage.py", "migrate"]
+
+- name: node:14
+  entrypoint: npm
+  args: ["run", "create-env"]
+  env:
+    - 'DB_STRING=${_DB_STRING}'
+    - 'SECRET_KEY=${_SECRET_KEY}'
+    - 'GS_BUCKET_NAME=${_GS_BUCKET_NAME}'
+- name: "gcr.io/cloud-builders/gcloud"
+  args: ["app", "deploy"]
+timeout: "1700s"
