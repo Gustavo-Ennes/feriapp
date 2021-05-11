@@ -1,6 +1,10 @@
 steps:
 
 - name: python:3.9
+  entrypoint: pip3
+  args: ["install", "-r", "requirements.txt"]
+
+- name: python:3.9
   entrypoint: python
   args: ["manage.py", "migrate"]
 
