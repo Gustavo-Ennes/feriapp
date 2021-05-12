@@ -1,7 +1,7 @@
 steps:
 - name: python:3.9
-  entrypoint: python
-  args: ["pip", "install", "-r", "requirements.txt", "--user"]
+  entrypoint: pip3
+  args: ["install", "-r", "requirements.txt", "--user"]
 
 - name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "deploy"]
