@@ -47,7 +47,6 @@ DEBUG = False
 
 env_file = os.path.join(BASE_DIR, ".env")
 
-
 env = environ.Env()
 # If no .env has been provided, pull it from Secret Manager
 if os.path.isfile(env_file):
