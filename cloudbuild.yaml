@@ -2,4 +2,8 @@ steps:
 
 - name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "deploy"]
+  env:
+    - 'DB_STRING=${_DB_STRING}'
+    - 'SECRET_KEY=${_SECRET_KEY}'
+    - 'GS_BUCKET_NAME=${_GS_BUCKET_NAME}'
 timeout: "1700s"
