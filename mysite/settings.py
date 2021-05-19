@@ -58,6 +58,10 @@ else:
         env.read_env(io.StringIO(placeholder))
     else:
         # [START cloudrun_django_secretconfig]
+
+
+        # just testing
+        from google.cloud import bigquery
         import google.auth
         from google.cloud import secretmanager
 
