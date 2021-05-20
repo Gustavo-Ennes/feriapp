@@ -1,5 +1,4 @@
-from django.db import models
-from djongo import models as djongoModels
+from djongo import models
 from datetime import datetime, timedelta
 from django.contrib import messages
 from django.db.models import Q
@@ -9,10 +8,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
 from bs4 import BeautifulSoup as bs
 import random
-from urllib import request
-import djongo
-import requests
-
 
 # Create your models here.
 
@@ -236,12 +231,18 @@ class Abono(models.Model):
     fruido = models.BooleanField(editable=False, default=False)
     criado_por = models.ForeignKey(User, on_delete=models.SET_NULL, editable=False, null=True, blank=True)
 
+    def is_this_month(self):
+        data = timezone.now().date()
+        if self.data:
+            return ((data.month == self.data.month) and (data.year == self.data.year))
+        return False
+
     def save(self, validacao=True, *args, **kwargs):
 
         if not validacao:
             self.deferido = False
         else:
-            self.deferido = valida_abono(self)
+            self.deferido = True
         super(Abono, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -584,8 +585,7 @@ def valida_abono(abono):
 
     a = a.exclude(id=abono.id)
 
-    if l or f or a or data < hoje or contagem_abonos(trabalhador) > 6 or abonou_esse_mes(trabalhador, data,
-                                                                                         abono) or data.weekday() in [5,
+    if l or f or a or data < hoje or contagem_abonos(trabalhador) > 6 or abonou_esse_mes(trabalhador, abono) or data.weekday() in [5,
                                                                                                                       6]:
         if len(f):
             abono.observacoes = "férias, de %s à %s, convergem com a data marcada" % (
@@ -600,7 +600,7 @@ def valida_abono(abono):
             return True
         elif contagem_abonos(trabalhador) > 6:
             abono.observacoes = "limite de seis abonos por ano já atingido"
-        elif abonou_esse_mes(trabalhador, data, abono):
+        elif abonou_esse_mes(trabalhador, abono):
             abono.observacoes = "trabalhador já abonou esse mês"
         elif data.weekday() in [5, 6]:
             abono.observacoes = "agendamento em fim de semana"
@@ -614,7 +614,7 @@ def contagem_abonos(trabalhador):
     abonos = Abono.objects.filter(
         Q(trabalhador=trabalhador) & 
         Q(deferido=True) & 
-        Q(data__year=timezone.now().date().year)
+        Q(data__year=timezone.now().year)
     )
     counter = 0.0
     for i in abonos.all():
@@ -626,19 +626,22 @@ def contagem_abonos(trabalhador):
     return counter
 
 
-def abonou_esse_mes(trabalhador, data, abono):
+def abonou_esse_mes(trabalhador, abono):
+    SOMA_DO_MES  = 1
+    soma = 0
     abonos = Abono.objects.filter(
-        Q(trabalhador=trabalhador) & Q(deferido=True) & Q(data__month=data.month) & Q(data__year=data.year)).exclude(
-        id=abono.id)
+        Q(trabalhador=trabalhador) &
+        Q(deferido=True)
+    )
+    for a in abonos:
+        if a.is_this_month() and a.id != abono.id:
+            if a.expediente == 'integral':
+                soma += 1
+            else:
+                soma += .5
+    return soma <= SOMA_DO_MES
 
-    # se o trabalhador utilizou só meio abono, e o abono requerido agora é meia abonada,
-    #  afunção retorna que ele não abonou esse mês, o permitindo abonar
-    if abonos:
-        if len(abonos) == 1:
-            if abonos[0].expediente != 'integral':
-                if abono.expediente != 'integral':
-                    return False
-    return bool(abonos)
+
 
 
 class WorkerFactory:
