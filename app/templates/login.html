@@ -2,43 +2,50 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block conteudo %}
+{% block login %}
+		<div class='loginabsolute'>
+			<section class="row justify-content-center align-items-center">
 
-	<section class="row justify-content-center align-items-center">
-
-		<div class="col-12">
-			<img class="rounded mx-auto d-block my-4" src="{% static 'logo.png' %}" alt="Prefeitura Municipal de Ilha Solteira">
-		</div>
-
-		<section class="col-12 text-center">
-			<h1 class="text-success">Entrar</h1>
-		</section>
-		<div class="col-12 text-center">
-			<small class="mb-5 mt-0 logo-font"><small>F E R I A P P</small></small>
-		</div>
-		<section class='col-12 col-md-8 col-lg-6 col-xl-4 mt-2'>
-
-			<form method="POST" action="{% url 'entrar' %}" enctype="multipart/form-data" class="text-center">
-
-				{% csrf_token %}
-
-				{{ LoginForm|crispy }}
-				<input type='hidden' name='next' value='{{ request.GET.next }}' />
-
-				<div class="form-check my-4">
-				  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name='remember_me'>
-				  <label class="form-check-label text-success" for="defaultCheck1">
-				    Lembrar de mim
-				  </label>
+				
+				<div class="col-12">
+					<img width='200' height='200' class="rounded mx-auto d-block my-4" src="{% static 'logo.png' %}" alt="Prefeitura Municipal de Ilha Solteira">
 				</div>
 
-				<button class="btn btn-success">Entrar</button>
-			</form>
+				<div class="col-12 text-center">
+					<small class="logo-font pb-5"><small>E N T R A R</small></small>
+				</div>
+				<section class='col-12 col-md-8 col-lg-6 col-xl-4 mt-2'>
+
+					<form method="POST" action="{% url 'entrar' %}" enctype="multipart/form-data" class="text-center">
+
+						{% csrf_token %}
+
+						{{ LoginForm|crispy }}
+						<input type='hidden' name='next' value='{{ request.GET.next }}' />
+
+						<div class="form-check my-4">
+							<input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name='remember_me'>
+							<label class="form-check-label text-success" for="defaultCheck1">
+								Lembrar de mim
+							</label>
+						</div>
+
+						<button class="btn btn-success">Entrar</button>
+					</form>
 
 
-		</section>
+				</section>
 
 
-	</section>
-
+			</section>
+		</div>
 {% endblock %}
+
+{% block js %}
+	<script type='module'>
+		import {init} from '../static/index.js'
+		const el = document.querySelector('.three')
+
+		init(el)
+	</script>
+{% endblock%}

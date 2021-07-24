@@ -654,6 +654,7 @@ def entrar(request):
             
         context = {
             'LoginForm': LoginForm(),
+            'isLoginPage': True
         }
         return render(request, 'login.html', context)
 
@@ -662,7 +663,7 @@ def entrar(request):
         username = request.POST['usuario']
         password = request.POST['senha']
         remember_me = True if 'remember_me' in request.POST else False
-
+        print(username + " ~ " + password)
         user = authenticate(request, username=username, password=password)
         if user is not None:
             if user.is_active:
@@ -674,8 +675,9 @@ def entrar(request):
 
                 if not remember_me:
                     request.session.set_expiry(0)
+
                 name = user.username if user.groups.count() > 0 else Trabalhador.objects.get(
-                    Q(matricula=user.username)).nome
+                    Q(nome=user.username)).nome
                 messages.success(request, 'Bem-vindo(a), %s' % name)
 
                 if 'next' in request.POST:

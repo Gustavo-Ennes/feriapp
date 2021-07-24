@@ -73,13 +73,7 @@ body {
 }
 
 .modal{
-
   background-color: rgba(0,0,0, 0.5 );
-
-  .modal-content{
-
-  }
-
   .modal-title{
     font-family: $title_font;
   }
@@ -122,7 +116,7 @@ body {
 }
 
 .dropdown-menu{
-    border: 1px solid #main_darker !important;
+    border: 1px solid $main_darker !important;
     background-color: $main !important;
 
     .dropdown-item{
@@ -183,10 +177,7 @@ form{
     color: $secondary !important;
     text-shadow: 1px 1px 1px $secondary_darker !important;
     font-family: 'Codystar', cursive;
-    &:hover{
-        color: $secondary_darker !important;
-        text-shadow: 1px 1px 1px $shadow !important;
-    }
+    margin-top: 25px !important;
 }
 
 nav{
@@ -222,11 +213,11 @@ nav{
 
     .nav-item{
       background-color: $main;
-      box-shadow: 1px 1px 2px 1px #main_darker;
+      box-shadow: 1px 1px 2px 1px $main_darker;
       }
     .nav-item.active{
       background-color: $main_darker;
-      box-shadow: 1px 1px 2px 1px #main;
+      box-shadow: 1px 1px 2px 1px $main;
       color: $secondary;
 
 
@@ -241,7 +232,7 @@ nav{
 }
 
 .badge{
-  background-color: #main !important;
+  background-color: $main !important;
   color: $secondary !important;
 }
 
@@ -332,7 +323,7 @@ nav{
   box-shadow: 1px 1px 2px 1px $terceary_darker !important;
   color: $background !important;
   font-family: $title_font !important;
-  text-shadow: 0px 1px 0px #shadow !important;
+  text-shadow: 0px 1px 0px $shadow !important;
 
   &:hover{
     border-bottom:1px solid $secondary !important;
@@ -348,8 +339,7 @@ nav{
   color: $warning !important;
   font-family: $title_font !important;
   border: 1px solid $secondary_darker;
-  text-shadow: 0px 1px 0px #secondary_darker;
-
+  text-shadow: 0px 1px 0px $secondary_darker;
 }
 
 .swiper-container {
@@ -363,7 +353,7 @@ small, .nav-link,h4,h5{
   font-family: $text_font !important;
 }
 h1,h2,h3{
-  font-family: $title_font !important !important;
+  font-family: $title_font !important;
 }
 
 .wrapper-label{
@@ -385,15 +375,13 @@ h1,h2,h3{
   border-radius: 10px;
   margin-right:10px;
   margin-left: 10px;
-  padding:15px;
-  
+  padding:15px;  
 }
 
 .divider{
   height:2px;
-  border-bottom: 1px solid #main_darker;
+  border-bottom: 1px solid $main_darker;
   width: 70%;
-
 }
 
 .collapse .card.card-body,
@@ -413,4 +401,17 @@ h1,h2,h3{
   color:#EEE;
   border-radius:15px;
   box-shadow:inset 1px 1px 2px 1px $main_darker;
+}
+
+
+.three{
+  position: relative !important;
+  z-index:1 !important;
+}
+
+.loginabsolute{
+  position: absolute !important;
+  height: 100% !important;
+  width: 100% !important;
+  z-index: 2 !important;
 }

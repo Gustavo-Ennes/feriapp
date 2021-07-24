@@ -45,6 +45,7 @@
             print reports
         </title>
         {% block head %} {% endblock %}
+        {% block style %} {% endblock%}
     </head>
     <body>
 
@@ -62,7 +63,7 @@
   		        {% for message in messages %}
 
         				<div class="col-12 alert alert-{{ message.tags }}{% if message.tags == 'error' %} alert-danger text-right {% endif %}" role="alert">
-        					<small class="{% if message.tags == 'error' %} mr-2 {% endif %}">{{ message }}</small>
+        					<small class="{% if message.tags == 'error' %} p-0 m-0 mr-2 {% endif %}">{{ message }}</small>
         				</div>
 
 
@@ -102,6 +103,12 @@
 
             {% block header %}{% endblock %}
         </div>
+
+        {% if isLoginPage %}
+            <div class='three'>
+                {% block login %}{% endblock %}
+            </div>
+        {% endif %}
 
         <div class='container-fluid'>
 
@@ -263,6 +270,8 @@
         });
 
     </script>
+
+    <script src='{% static "tween.umd.js" %}'></script>
 
     {% block js %} {% endblock %}
 

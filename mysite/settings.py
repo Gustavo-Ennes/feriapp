@@ -43,7 +43,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 env_file = os.path.join(BASE_DIR, ".env")
 
@@ -198,6 +198,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(PROJECT_ROOT, 'static'),
     os.path.join(BASE_DIR, 'scss'),
+    os.path.join(BASE_DIR, 'threejs')
 ]
 
 STATICFILES_FINDERS = [
@@ -280,3 +281,4 @@ DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 GS_DEFAULT_ACL = "publicRead"
 # [END cloudrun_django_staticconfig]
+

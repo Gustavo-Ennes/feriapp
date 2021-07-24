@@ -40,7 +40,7 @@ body { background-color: #EDF6FF; }
 
 .table td, .table td strong { color: #21548A !important; }
 
-.dropdown-menu { border: 1px solid #main_darker !important; background-color: #488DD6 !important; }
+.dropdown-menu { border: 1px solid #21548A !important; background-color: #488DD6 !important; }
 
 .dropdown-menu .dropdown-item { color: rgba(255, 255, 255, 0.6); }
 
@@ -62,7 +62,7 @@ form .requiredField { font-family: "Noto Serif", serif !important; color: #488DD
 
 .form-control { border: 1px solid main !important; color: #21548A !important; }
 
-.logo-font { color: #C2D633 !important; text-shadow: 1px 1px 1px #7D8A28 !important; font-family: 'Codystar', cursive; }
+.logo-font { color: #C2D633 !important; text-shadow: 1px 1px 1px #7D8A28 !important; font-family: 'Codystar', cursive; margin-top: 55px !important; }
 
 .logo-font:hover { color: #7D8A28 !important; text-shadow: 1px 1px 1px #DAE2EA !important; }
 
@@ -78,13 +78,13 @@ nav .nav-link:hover { color: #C2D633 !important; text-shadow: 1px 1px 1px #7D8A2
 
 nav .nav-tabs { padding: 5px; border-bottom: 2px solid #7D8A28; }
 
-nav .nav-tabs .nav-item { background-color: #488DD6; box-shadow: 1px 1px 2px 1px #main_darker; }
+nav .nav-tabs .nav-item { background-color: #488DD6; box-shadow: 1px 1px 2px 1px #21548A; }
 
-nav .nav-tabs .nav-item.active { background-color: #21548A; box-shadow: 1px 1px 2px 1px #main; color: #C2D633; }
+nav .nav-tabs .nav-item.active { background-color: #21548A; box-shadow: 1px 1px 2px 1px #488DD6; color: #C2D633; }
 
 .header-gradient { margin-top: 10px; padding-left: 10px; padding-right: 10px; }
 
-.badge { background-color: #main !important; color: #C2D633 !important; }
+.badge { background-color: #488DD6 !important; color: #C2D633 !important; }
 
 .text-success { color: #C2D633 !important; text-shadow: 1px 1px 1px #21548A !important; }
 
@@ -114,26 +114,34 @@ nav .nav-tabs .nav-item.active { background-color: #21548A; box-shadow: 1px 1px 
 
 .btn-primary:hover { border: 2px solid #C2D633 !important; box-shadow: 2px 2px 3px 1px #7D8A28 !important; }
 
-.btn-danger { background-color: #D6675E !important; box-shadow: 1px 1px 2px 1px #964942 !important; color: #EDF6FF !important; font-family: "Noto Serif", serif !important; text-shadow: 0px 1px 0px #shadow !important; }
+.btn-danger { background-color: #D6675E !important; box-shadow: 1px 1px 2px 1px #964942 !important; color: #EDF6FF !important; font-family: "Noto Serif", serif !important; text-shadow: 0px 1px 0px #DAE2EA !important; }
 
 .btn-danger:hover { border-bottom: 1px solid #C2D633 !important; box-shadow: 2px 2px 3px 1px #964942 !important; }
 
-.btn-warning { background-color: #C2D633 !important; box-shadow: 1px 1px 2px 1px #7D8A28 !important; color: #E3C22D !important; font-family: "Noto Serif", serif !important; border: 1px solid #7D8A28; text-shadow: 0px 1px 0px #secondary_darker; }
+.btn-warning { background-color: #C2D633 !important; box-shadow: 1px 1px 2px 1px #7D8A28 !important; color: #E3C22D !important; font-family: "Noto Serif", serif !important; border: 1px solid #7D8A28; text-shadow: 0px 1px 0px #7D8A28; }
 
+&:hover{
+  color: $secondary_darker !important;
+  text-shadow: 1px 1px 1px $shadow !important;
+}
 .swiper-container { width: 600px; height: 300px; }
 
 small, .nav-link, h4, h5 { font-family: "Roboto Slab", serif !important; }
 
-h1, h2, h3 { font-family: "Noto Serif", serif !important !important; }
+h1, h2, h3 { font-family: "Noto Serif", serif !important; }
 
 .wrapper-label { font-family: "Noto Serif", serif !important; color: #C2D633 !important; text-align: left !important; text-shadow: 1px 1px 1px #21548A !important; margin-top: 30px !important; margin-bottom: 0 !important; }
 
 .requisicao-wrapper, .novo-wrapper, .outros-wrapper, .relatorio-wrapper { background-color: rgba(0, 0, 255, 0.05); border-radius: 10px; margin-right: 10px; margin-left: 10px; padding: 15px; }
 
-.divider { height: 2px; border-bottom: 1px solid #main_darker; width: 70%; }
+.divider { height: 2px; border-bottom: 1px solid #21548A; width: 70%; }
 
 .collapse .card.card-body, .collapsing .card.card-body, .collapsed .card.card-body { border-radius: 20px; }
 
 .collapse-label { font-size: 1.3rem; color: #C2D633; text-shadow: 1px 1px 1px #7D8A28; }
 
 .btn-relatorio { background-color: #488DD6; color: #EEE; border-radius: 15px; box-shadow: inset 1px 1px 2px 1px #21548A; }
+
+.three { position: relative !important; z-index: 1 !important; }
+
+.loginabsolute { position: absolute !important; height: 100% !important; width: 100% !important; z-index: 2 !important; }
