@@ -109,7 +109,7 @@ export const init = (el) => {
 
 const addPlane = () => {
   let g, m, mesh
-  g = new THREE.PlaneGeometry(250, 250)
+  g = new THREE.PlaneGeometry(1000, 250)
   m = new THREE.MeshPhongMaterial({color: new THREE.Color(0xcdd8ff)})
   mesh = new THREE.Mesh(g, m)
   mesh.position.set(0, 0, -10)
