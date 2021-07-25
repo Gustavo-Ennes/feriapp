@@ -60,6 +60,7 @@ else:
         # [START cloudrun_django_secretconfig]
 
         import google.auth
+        from google.cloud import bigquery
         from google.cloud import secretmanager
 
         _, project = google.auth.default()
