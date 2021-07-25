@@ -3,6 +3,7 @@ from app.models import *
 from app.forms import *
 from datetime import datetime, timedelta
 from django.db.models import Q
+import sys
 
 register = template.Library()
 
@@ -112,12 +113,15 @@ def horas_justificadas(trabalhador):
     linha = None
     try:
         relatorio = Relatorio.objects.get(
-            Q(setor=trabalhador.setor) & Q(criado_em__month=data.month) & Q(criado_em__year=data.year) & Q(
-                estado='justificativas'))
+            Q(setor=trabalhador.setor) & 
+            Q(criado_em__month=data.month) & 
+            Q(criado_em__year=data.year) & 
+            Q(estado='justificativas'))
         linha = relatorio.linhas.get(Q(trabalhador=trabalhador))
         print(relatorio, linha)
     except:
         print('Query de busca de relatório incorreta')
+        print("Unexpected error:", sys.exc_info()[0])
         return
     return str(linha.horas_extras).replace(',', '.') if linha else 0.0
 

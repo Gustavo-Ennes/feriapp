@@ -886,19 +886,25 @@ def relatorios(request):
 @login_required(login_url='/entrar/')
 @permission_required('app.add_relatorio')
 def finalizar_relatorios(request):
+    obj = ''
     if request.method == 'POST':
-        relatorios = Relatorio.vigentes.em_aberto()
-        lembrete = Lembrete.objects.get(id=1)
+        try:
+            obj = "relatórios"
+            relatorios = Relatorio.vigentes.em_aberto()
+            for r in relatorios:
+                r.data_fechamento = datetime.now().date()
+                r.estado = 'oficial'
+                r.save()
+            obj = "lembretes"
+            lembrete = Lembrete.objects.get(id=1)
+            if lembrete:
+                lembrete.mostrado_esse_mes = True
+                lembrete.save()
 
-        for r in relatorios:
-            r.data_fechamento = datetime.now().date()
-            r.estado = 'oficial'
-            r.save()
-
-        lembrete.mostrado_esse_mes = True
-        lembrete.save()
-
-        messages.success(request, "%d relatórios foram finalizados e é impossível editá-los" % relatorios.count())
+            messages.success(request, "%d relatórios foram finalizados e é impossível editá-los" % relatorios.count())
+        except Exception as e:
+            print(e)
+            print("Não há %s" % obj)
         return redirect('relatorios')
 
 

@@ -19,7 +19,7 @@
               <small>
                 <label for='{{ trabalhador.id }}horas'>Horas Extras</label>
               </small>
-              <input id='{{ trabalhador.id }}horas' value="{{ trabalhador|horas_justificadas }}" step='0.1' min='0' class='form-control mb-2' name="{{ trabalhador.id }}horas" type="number" placeholder="Horas justificadas por {{ trabalhador.nome }}">
+              <input id='{{ trabalhador.id }}horas' value="{{ trabalhador|horas_justificadas }}" step='0.1' min='0' class='form-control mb-2' name="{{ trabalhador.id }}horas" type="number" placeholder="Horas justificadas por {{ trabalhador.nome }}" required>
               
 
             </div>
