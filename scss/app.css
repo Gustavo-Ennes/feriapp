@@ -62,9 +62,7 @@ form .requiredField { font-family: "Noto Serif", serif !important; color: #488DD
 
 .form-control { border: 1px solid main !important; color: #21548A !important; }
 
-.logo-font { color: #C2D633 !important; text-shadow: 1px 1px 1px #7D8A28 !important; font-family: 'Codystar', cursive; margin-top: 55px !important; }
-
-.logo-font:hover { color: #7D8A28 !important; text-shadow: 1px 1px 1px #DAE2EA !important; }
+.logo-font { color: #C2D633 !important; text-shadow: 1px 1px 1px #7D8A28 !important; font-family: 'Codystar', cursive; margin-top: 25px !important; }
 
 nav.navbar { background-color: #488DD6 !important; box-shadow: 1px 0px 1px 1px #21548A !important; }
 
@@ -120,10 +118,6 @@ nav .nav-tabs .nav-item.active { background-color: #21548A; box-shadow: 1px 1px 
 
 .btn-warning { background-color: #C2D633 !important; box-shadow: 1px 1px 2px 1px #7D8A28 !important; color: #E3C22D !important; font-family: "Noto Serif", serif !important; border: 1px solid #7D8A28; text-shadow: 0px 1px 0px #7D8A28; }
 
-&:hover{
-  color: $secondary_darker !important;
-  text-shadow: 1px 1px 1px $shadow !important;
-}
 .swiper-container { width: 600px; height: 300px; }
 
 small, .nav-link, h4, h5 { font-family: "Roboto Slab", serif !important; }
