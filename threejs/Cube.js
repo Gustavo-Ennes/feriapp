@@ -10,10 +10,8 @@ export default class Cube{
 
     this.isTweening = false
     this.tween = false
-
-
     loader = new THREE.FontLoader()
-    loader.load( '../static/fonts/Origicide_Regular.json', function ( font ) {
+    loader.load('https://storage.googleapis.com/feriapp/fonts/Origicide_Regular.json', function ( font ) {
 
       g = new THREE.TextGeometry( letter, {
         font: font,
@@ -50,7 +48,7 @@ export default class Cube{
         TWEEN.remove(this.tween)
       }
       this.tween = new TWEEN.Tween(this.mesh.rotation)
-      .to({y: "+6.2"}, Cube.randomTime())
+      .to({y: ["+0.062", "-0.062"]}, Cube.randomTime())
       .easing(TWEEN.Easing.Quintic.InOut)
       .onStart(onStart)
       .onComplete(onComplete)

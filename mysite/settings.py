@@ -45,39 +45,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-env_file = os.path.join(BASE_DIR, ".env")
-
-env = environ.Env()
-# If no .env has been provided, pull it from Secret Manager
-if os.path.isfile(env_file):
-    env.read_env(env_file)
-else:
-    # Create local settings if running with CI, for unit testing
-    if os.getenv("TRAMPOLINE_CI", None):
-        placeholder = f"SECRET_KEY=a\nGS_BUCKET_NAME=none\nDATABASE_URL=sqlite://{os.path.join(BASE_DIR, 'db.sqlite3')}"
-        env.read_env(io.StringIO(placeholder))
-    else:
-        # [START cloudrun_django_secretconfig]
-
-        import google.auth
-        from google.cloud import bigquery
-        from google.cloud import secretmanager
-
-        _, project = google.auth.default()
-
-        if project:
-            client = secretmanager.SecretManagerServiceClient()
-
-            SETTINGS_NAME = os.environ.get("SETTINGS_NAME", "django_settings")
-            name = f"projects/{project}/secrets/{SETTINGS_NAME}/versions/latest"
-            payload = client.access_secret_version(name=name).payload.data.decode(
-                "UTF-8"
-            )
-        env.read_env(io.StringIO(payload))
-        # [END cloudrun_django_secretconfig]
-
-
-
 # SECURITY WARNING: App Engine's security features ensure that it is safe to
 # have ALLOWED_HOSTS = ['*'] when the app is deployed. If you deploy a Django
 # app not on App Engine, make sure to set an appropriate host here.
