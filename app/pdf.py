@@ -22,8 +22,10 @@ def get_diretor():
         return Diretor.objects.all().order_by('id')[0]
 
 def get_chefe_de_setor():
-    if ChefeDeSetor.objects.count() > 0:
-        return ChefeDeSetor.objects.all().order_by('id')[0]
+    try:
+        return ChefeDeSetor.objects.get(id=1)
+    except Exception as e:
+        print(e)
         
 
 diretor = get_diretor()

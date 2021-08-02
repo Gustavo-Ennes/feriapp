@@ -1,0 +1,15 @@
+app_abono
+app_banner
+app_chefedesetor
+app_conf
+app_diretor
+app_ferias
+app_lembrete
+app_licencapremio
+app_linharelatorio
+app_relacaoabono
+app_relacaoabono_abonos
+app_relatorio
+app_relatorio_linhas
+app_setor
+app_trabalhador

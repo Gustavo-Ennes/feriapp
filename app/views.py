@@ -12,6 +12,7 @@ from app.forms import *
 from mysite.settings import PROJECT_ROOT
 from .pdf import PDFFactory
 from .tasks import *
+from .models import *
 from bs4 import BeautifulSoup as bs
 import requests
 
@@ -62,8 +63,9 @@ def index(request):
             'data': datetime.now().date(),
             'conf': Conf.objects.get(id=1),
             'banners': Banner.objects.all(),
-
         }
+
+        print(context['banners'])
 
         # só quero lembretes válidos
         context['lembretes'] = [ l for l in context['lembretes'] if l.is_valid ]
@@ -298,9 +300,7 @@ def marcar_ferias(request):
             if obj and obj.deferida and obj.data_inicio >= hoje:
                 messages.success(request, 'Você marcou férias para o servidor %s de %s à %s.' % (
                     obj.trabalhador.nome, obj.data_inicio.strftime("%d/%m/%Y"), obj.data_termino.strftime("%d/%d/%Y")))
-                PDFFactory.get_ferias_pdf(obj)
-                pdf = open(temp_pdf, 'rb')
-                return FileResponse(pdf, filename=temp_pdf, as_attachment=request.user_agent.is_mobile)
+                return redirect('pdf', tipo='ferias', obj_id=obj.id) if obj.deferida else redirect("ferias")
             else:
                 messages.error(request, "O trabalhador não pode tirar férias nessa data por %s." % obj.observacoes)
 
@@ -393,7 +393,7 @@ def novo_trabalhador(request):
             elif 'nome' in form.errors:
                 string = 'Servidor não cadastrado: já existe servidor com esse nome'
             else:
-                string = "Erro: " + form.errors
+                string = form.errors
 
             messages.error(request, string)
 
@@ -663,8 +663,8 @@ def entrar(request):
         username = request.POST['usuario']
         password = request.POST['senha']
         remember_me = True if 'remember_me' in request.POST else False
-        print(username + " ~ " + password)
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
             if user.is_active:
                 login(request, user)

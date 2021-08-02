@@ -41,6 +41,9 @@ class DiretorAdmin(admin.ModelAdmin):
 class ChefeDeSetorAdmin(admin.ModelAdmin):
     pass
 
+class BannerAdmin(admin.ModelAdmin):
+    pass
+
 
 
 
@@ -54,4 +57,5 @@ admin.site.register(LinhaRelatorio, LinhaRelatorioAdmin)
 admin.site.register(Lembrete, LembreteAdmin)
 admin.site.register(Diretor, DiretorAdmin)
 admin.site.register(ChefeDeSetor, ChefeDeSetorAdmin)
+# admin.site.register(Banner, BannerAdmin)
 # admin.site.register(Entry)

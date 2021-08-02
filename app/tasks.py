@@ -28,6 +28,7 @@ def atualiza_situacoes_trabalhadores():
 
         for f in ferias:
             if not f.fruida:
+                print(type(f.data_inicio))
                 if f.data_inicio <= hoje and hoje < f.data_termino and f.deferida:
                     trabalhador.situacao = 'ferias'
                     break

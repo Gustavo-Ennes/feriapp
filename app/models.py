@@ -1,4 +1,4 @@
-from djongo import models
+from django.db import models
 from datetime import datetime, timedelta
 from django.contrib import messages
 from django.db.models import Q
@@ -301,6 +301,7 @@ class ChefeDeSetor(models.Model):
     objects = models.Manager()
     nome = models.CharField(max_length=200)
     legenda = models.CharField(max_length=100)
+    rg = models.CharField(max_length=20)
     criado_em = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
 
@@ -364,6 +365,9 @@ class Banner(models.Model):
 
     class Meta:
         ordering = ['-criado_em']
+
+    def get_absolute_url(self):
+        return reverse('banner')
         
 
 class LinhaRelatorio(models.Model):

@@ -43,8 +43,14 @@ body {
 
 
   .card-header, .card-footer{
-    background-color: $main !important;
+    // background-color: $main !important;
+    background: hsla(242, 100%, 50%, 1);
 
+    background: linear-gradient(90deg, hsla(242, 100%, 50%, 1) 0%, hsla(201, 84%, 80%, 1) 100%);
+
+    background: -moz-linear-gradient(90deg, hsla(242, 100%, 50%, 1) 0%, hsla(201, 84%, 80%, 1) 100%);
+
+    background: -webkit-linear-gradient(90deg, hsla(242, 100%, 50%, 1) 0%, hsla(201, 84%, 80%, 1) 100%);
   }
 
   .card-body{

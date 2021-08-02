@@ -48,7 +48,7 @@ export default class Cube{
         TWEEN.remove(this.tween)
       }
       this.tween = new TWEEN.Tween(this.mesh.rotation)
-      .to({y: ["+0.062", "-0.062"]}, Cube.randomTime())
+      .to({y: "+6.2"}, Cube.randomTime())
       .easing(TWEEN.Easing.Quintic.InOut)
       .onStart(onStart)
       .onComplete(onComplete)
