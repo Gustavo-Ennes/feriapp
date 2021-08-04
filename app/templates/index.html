@@ -27,9 +27,6 @@
             {% include 'modals/marcar_abono.html' %}
           </div>
 
-          <div class="col-10 col-offset-1 divider">
-          </div>
-
           <div class="col-10 col-offset-1 col-md-6 col-lg-4 align-items-center">
             <form method='GET' action='{% url "sexta_parte" %}'>
               <button type='submit' class='btn btn-primary btn-block btn-big my-1'>Sexta-Parte</button>
@@ -176,7 +173,7 @@
     $(document).ready(function(){
 
       function seta_lembretes(){
-        {% if lembretes  %}
+        {% if lembretes %}
           let string;
           string = '#modal_lembrete-'.concat('{{ lembretes.0.id }}');
           $(string).modal({
