@@ -8,6 +8,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
 from bs4 import BeautifulSoup as bs
 import random
+import traceback
 
 # Create your models here.
 
@@ -237,12 +238,11 @@ class Abono(models.Model):
             return ((data.month == self.data.month) and (data.year == self.data.year))
         return False
 
+    # form=false representa que eu não quero salvar a instaância quando salvo o form porque adiciono um campo
     def save(self, validacao=True, *args, **kwargs):
 
-        if not validacao:
-            self.deferido = False
-        else:
-            self.deferido = True
+        if validacao:
+            self.deferido = valida_abono2(self)
         super(Abono, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -348,8 +348,7 @@ class Lembrete(models.Model):
         return is_valid
 
     class Meta:
-        ordering = ['dia']
-        
+        ordering = ['dia']       
 
 
 
@@ -398,7 +397,7 @@ class LinhaRelatorio(models.Model):
                     relatorio_fonte.save()
                     relatorio_alvo.save()
                 except Exception as e:
-                    print("Erro: %s", e)
+                    print("Erro: %s" % e)
 
 
 
@@ -508,45 +507,17 @@ class RelacaoAbono(models.Model):
 
 
 
-
-
-# class Entry(djongoModels.Model):
-#     setores = djongoModels.ArrayField(model_container=Setor)    
-#     trabalhadores = djongoModels.ArrayField(model_container=Trabalhador)
-#     ferias = djongoModels.ArrayField(model_container=Ferias)
-#     licencas_premio = djongoModels.ArrayField(model_container=LicencaPremio)
-#     abonos = djongoModels.ArrayField(model_container=Abono)
-#     conf = djongoModels.EmbeddedField(model_container=Conf)
-#     diretores = djongoModels.ArrayField(model_container=Diretor)
-#     chefes_de_setor = djongoModels.ArrayField(model_container=ChefeDeSetor)
-#     lembretes = djongoModels.ArrayField(model_container=Lembrete)
-#     banners = djongoModels.ArrayField(model_container=Banner)
-#     linhas_relatorio = djongoModels.ArrayField(model_container=LinhaRelatorio)
-#     relatorios = djongoModels.ArrayField(model_container=Relatorio)
-#     headline = djongoModels.CharField(max_length=255)    
-
-
-
-###################################################################################################################
-
-
-
-
-
 def valida_ferias(ferias):
     hoje = timezone.now().date()
     trabalhador = ferias.trabalhador
     inicio = ferias.data_inicio
 
     f = Ferias.objects.filter(Q(trabalhador=trabalhador) & (
-            Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | Q(
-        data_termino__range=(ferias.data_inicio, ferias.data_termino))) & Q(data_termino__gt=hoje) & Q(
-        deferida=True) & Q(tipo='f'))
-    l = LicencaPremio.objects.filter(Q(trabalhador=trabalhador) & (
-            Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | Q(
-        data_termino__range=(ferias.data_inicio, ferias.data_termino))) & Q(deferida=True))
-    a = Abono.objects.filter(
-        Q(trabalhador=trabalhador) & Q(data__range=(ferias.data_inicio, ferias.data_termino)) & Q(deferido=True))
+            Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | 
+            Q(data_termino__range=(ferias.data_inicio, ferias.data_termino))) & 
+            Q(data_termino__gt=hoje) & Q(deferida=True) & Q(tipo='f'))
+    l = LicencaPremio.objects.filter(Q(trabalhador=trabalhador) & (Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | Q(data_termino__range=(ferias.data_inicio, ferias.data_termino))) & Q(deferida=True))
+    a = Abono.objects.filter(Q(trabalhador=trabalhador) & Q(data__range=(ferias.data_inicio, ferias.data_termino)) & Q(deferido=True))
 
     if ferias.tipo == 'f':
         f = f.exclude(id=ferias.id)
@@ -555,11 +526,9 @@ def valida_ferias(ferias):
 
     if l or f or a or inicio < hoje or inicio.weekday() in [5, 6]:
         if len(f):
-            ferias.observacoes = "férias, de %s à %s, convergem com a data marcada" % (
-                f[0].data_inicio.strftime("%d/%m/%Y"), f[0].data_termino.strftime("%d/%m/%Y"))
+            ferias.observacoes = "férias, de %s à %s, convergem com a data marcada" % (f[0].data_inicio.strftime("%d/%m/%Y"), f[0].data_termino.strftime("%d/%m/%Y"))
         elif len(l):
-            ferias.observacoes = "licença-prêmio de %s à %s, convergem com a data marcada" % (
-                l[0].data_inicio.strftime("%d/%m/%Y"), l[0].data_termino.strftime("%d/%m/%Y"))
+            ferias.observacoes = "licença-prêmio de %s à %s, convergem com a data marcada" % (l[0].data_inicio.strftime("%d/%m/%Y"), l[0].data_termino.strftime("%d/%m/%Y"))
         elif len(a):
             ferias.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
         elif inicio < hoje:
@@ -573,78 +542,79 @@ def valida_ferias(ferias):
     return True
 
 
-def valida_abono(abono):
-    hoje = timezone.now().date()
-    trabalhador = abono.trabalhador
-    data = abono.data
+def valida_abono2(abono):
+    try:
+        valido = False
+        data = timezone.now().date()
+        pontuacao_abono = 1 if abono.expediente == 'integral' else 0.5
+        f = Ferias.objects.filter(
+            Q(tipo='f')&
+            Q(deferida=True)&
+            Q(trabalhador=abono.trabalhador)&
+            Q(data_inicio__lte=abono.data)&
+            Q(data_termino__gte=abono.data)
+        )
+        l = LicencaPremio.objects.filter(
+            Q(deferida=True)&
+            Q(trabalhador=abono.trabalhador)&
+            Q(data_inicio__lte=abono.data)&
+            Q(data_termino__gte=abono.data)
+        )
+        a = Abono.objects.filter(
+            Q(trabalhador=abono.trabalhador)&
+            Q(data=abono.data)&
+            Q(deferido=True)
+        )
 
-    f = Ferias.objects.filter(
-        Q(trabalhador=trabalhador) & Q(data_inicio__lte=data) & Q(data_termino__gt=data) & Q(deferida=True) & Q(
-            tipo='f'))
-    l = LicencaPremio.objects.filter(
-        Q(trabalhador=trabalhador) & Q(data_inicio__lte=data) & Q(data_termino__gt=data) & Q(deferida=True))
-    a = Abono.objects.filter(
-        Q(trabalhador=trabalhador) & Q(data__year=abono.data.year) & Q(data__month=abono.data.month) & Q(
-            data__day=abono.data.day) & Q(deferido=True))
-
-    a = a.exclude(id=abono.id)
-
-    if l or f or a or data < hoje or contagem_abonos(trabalhador) > 6 or abonou_esse_mes(trabalhador, abono) or data.weekday() in [5,
-                                                                                                                      6]:
-        if len(f):
-            abono.observacoes = "férias, de %s à %s, convergem com a data marcada" % (
-                f[0].data_inicio.strftime("%d/%m/%Y"), f[0].data_termino.strftime("%d/%m/%Y"))
+        if len(a):
+            abono.observacoes = "converger com outro abono em %s" % a[0].data.strftime("%d/%m/%Y")
+        elif len(f):
+            abono.observacoes = "estar de férias no dia %d" % abono.data.day
         elif len(l):
-            abono.observacoes = "licença-prêmio de %s à %s, convergem com a data marcada" % (
-                l[0].data_inicio.strftime("%d/%m/%Y"), l[0].data_termino.strftime("%d/%m/%Y"))
-        elif len(a):
-            abono.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
-        elif data < hoje:
-            abono.observacoes = "data de agendamento Anterior a data do pedido"
-            return True
-        elif contagem_abonos(trabalhador) > 6:
-            abono.observacoes = "limite de seis abonos por ano já atingido"
-        elif abonou_esse_mes(trabalhador, abono):
-            abono.observacoes = "trabalhador já abonou esse mês"
-        elif data.weekday() in [5, 6]:
-            abono.observacoes = "agendamento em fim de semana"
-
-        return False
-
-    return True
-
-
-def contagem_abonos(trabalhador):
-    abonos = Abono.objects.filter(
-        Q(trabalhador=trabalhador) & 
-        Q(deferido=True) & 
-        Q(data__year=timezone.now().year)
-    )
-    counter = 0.0
-    for i in abonos.all():
-        if i.expediente == 'integral':
-            counter += 1.0
+            abono.observacoes = "estar de licença no dia %d" % abono.data.day
+        elif contagem_abonos('ano', abono) >= 6:
+            abono.observacoes = "não ter mais abonos restantes"
+        elif contagem_abonos('mes', abono) + pontuacao_abono > 1:
+            abono.observacoes = "já ter abonado ou ter marcado abono pra esse mês"
+        elif data.day in [5, 6]:
+            abono.observacoes = "ser final de semana"
         else:
-            counter += .5
-    print('contagem: %.1f' % counter)
-    return counter
+            valido = True
 
+        return valido
 
-def abonou_esse_mes(trabalhador, abono):
-    SOMA_DO_MES  = 1
-    soma = 0
-    abonos = Abono.objects.filter(
-        Q(trabalhador=trabalhador) &
-        Q(deferido=True)
-    )
+    except Exception:
+        traceback.print_exc()
+
+   
+
+def contagem_abonos(tempo, abono):
+    counter = 0.0
+    if tempo == 'mes':
+        abonos = Abono.objects.filter(
+            Q(trabalhador=abono.trabalhador) & 
+            Q(deferido=True) & 
+            Q(data__year=timezone.now().year)
+        )
+    elif tempo == 'ano':
+        abonos = Abono.objects.filter(
+            Q(trabalhador=abono.trabalhador) & 
+            Q(deferido=True) & 
+            Q(data__year=timezone.now().year)
+        )
+
+    abonos = abonos.exclude(id=abono.id)
+
+    print("abonos: %s" % abonos)
     for a in abonos:
-        if a.is_this_month() and a.id != abono.id:
+        if (tempo == 'mes' and a.data.month == abono.data.month) or tempo == 'ano':
             if a.expediente == 'integral':
-                soma += 1
+                counter += 1.0
             else:
-                soma += .5
-    return soma <= SOMA_DO_MES
+                counter += .5
+    print('contagem %s: %.1f' % (tempo, counter))
 
+    return counter
 
 
 

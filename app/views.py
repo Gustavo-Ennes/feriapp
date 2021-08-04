@@ -2,24 +2,18 @@ import os
 from itertools import chain
 import traceback
 import sys
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import FileResponse
 from django.shortcuts import render, redirect
-
-from app.forms import *
+from .forms import *
 from mysite.settings import PROJECT_ROOT
 from .pdf import PDFFactory
 from .tasks import *
 from .models import *
 from bs4 import BeautifulSoup as bs
 import requests
-
 from utils.cloud_functions import download_from_cloud, upload_to_cloud
-
-
-
 
 lembretes_exibidos = False
 
@@ -345,11 +339,11 @@ def marcar_abono(request):
             hoje = timezone.now().date()
             obj = form.save()
             obj.criado_por = request.user
-            obj.save()
+            # só quero validar neste último save()
+            obj.save(validacao=False)
             if obj and obj.deferido:
                 if obj.data >= hoje:
-                    messages.success(request, 'Você marcou um abono para o servidor %s em %s.' % (
-                        obj.trabalhador.nome, obj.data.strftime("%d/%m/%Y")))
+                    messages.success(request, 'Você marcou um abono para o servidor %s em %s.' % (obj.trabalhador.nome, obj.data.strftime("%d/%m/%Y")))
                 else:
                     messages.warning(request, "Atenção: abono com %s" % obj.observacoes)
             else:
