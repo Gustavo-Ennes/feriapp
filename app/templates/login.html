@@ -43,9 +43,19 @@
 
 {% block js %}
 	<script type='module'>
+		
 		import {init} from '{% static "index.js" %}';
-		const el = document.querySelector('.three');
-
-		init(el);
+		const animate = new Promise((resolve, reject)=> {
+			try{
+				const el = document.querySelector('.three');
+				init(el);
+				resolve()
+			}catch(err){
+				console.log(`\nthree.js error: ${err}\n`)
+				reject(err)
+			}
+		})
+		animate
+		
 	</script>
 {% endblock%}
