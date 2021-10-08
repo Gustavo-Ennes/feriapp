@@ -138,4 +138,4 @@ h1, h2, h3 { font-family: "Noto Serif", serif !important; }
 
 .three { position: relative !important; z-index: 1 !important; }
 
-.loginabsolute { position: absolute !important; height: 100% !important; width: 100% !important; z-index: 2 !important; padding: 15px; }
+.loginabsolute { position: absolute !important; height: 100% !important; width: 100% !important; z-index: 3 !important; padding: 15px !important; }
