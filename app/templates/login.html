@@ -45,17 +45,15 @@
 	<script type='module'>
 		
 		import {init} from '{% static "index.js" %}';
-		const animate = new Promise((resolve, reject)=> {
+		new Promise((resolve, reject)=> {
 			try{
-				const el = document.querySelector('.three');
-				init(el);
-				resolve()
+				const el = document.querySelector('.three');				
+				resolve(init(el))
 			}catch(err){
 				console.log(`\nthree.js error: ${err}\n`)
 				reject(err)
 			}
 		})
-		animate
 		
 	</script>
 {% endblock%}

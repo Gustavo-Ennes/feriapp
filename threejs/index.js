@@ -132,9 +132,9 @@ const createCubes = () => {
 
 
 const _animate = () => {
-	requestAnimationFrame( _animate );
+  requestAnimationFrame( _animate );
 
   TWEEN.update()
   Cube.update()
-	renderer.render( scene, camera );
+  renderer.render( scene, camera );
 }
