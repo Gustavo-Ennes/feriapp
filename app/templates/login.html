@@ -14,7 +14,7 @@
 				<div class="col-12 text-center">
 					<small class="logo-font pb-5"><small>E N T R A R</small></small>
 				</div>
-				<section class='col-12 col-md-8 col-lg-6 col-xl-4 mt-2'>
+				<section class='col-12 col-md-8 col-lg-6 col-xl-4'>
 
 					<form method="POST" action="{% url 'entrar' %}" enctype="multipart/form-data" class="text-center">
 
@@ -43,9 +43,9 @@
 
 {% block js %}
 	<script type='module'>
-		import {init} from '{% static "index.js" %}'
-		const el = document.querySelector('.three')
+		import {init} from '{% static "index.js" %}';
+		const el = document.querySelector('.three');
 
-		init(el)
+		init(el);
 	</script>
 {% endblock%}
