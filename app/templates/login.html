@@ -45,15 +45,19 @@
 	<script type='module'>
 		
 		import {init} from '{% static "index.js" %}';
-		new Promise((resolve, reject)=> {
-			try{
-				const el = document.querySelector('.three');				
-				resolve(init(el))
-			}catch(err){
-				console.log(`\nthree.js error: ${err}\n`)
-				reject(err)
-			}
-		})
+		// I'll show the animation only if the screen size tells me that the device isn't a phone or tablet
+		if(window.innerWidth > 1023){
+		
+			new Promise((resolve, reject)=> {
+				try{
+					const el = document.querySelector('.three');				
+					resolve(init(el))
+				}catch(err){
+					console.log(`\nthree.js error: ${err}\n`)
+					reject(err)
+				}
+			})
+		}
 		
 	</script>
 {% endblock%}

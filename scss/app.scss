@@ -406,14 +406,14 @@ h1,h2,h3{
 
 
 .three{
-  position: relative !important;
-  z-index:1 !important;
+  height: 100% ;
+  width: 100% ;
 }
 
 .loginabsolute{
-  position: absolute !important;
-  height: 100% !important;
-  width: 100% !important;
-  z-index: 3 !important;
-  padding: 15px !important;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 3 ;
+  padding: 15px;
 }
