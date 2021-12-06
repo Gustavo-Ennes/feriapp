@@ -43,7 +43,7 @@ class Trabalhador(models.Model):
     )
 
     nome = models.CharField(max_length=100, unique=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='usuario',
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='usuario',
                              editable=False)
     matricula = models.CharField(unique=True, max_length=15)
     registro = models.CharField(unique=True, max_length=15)
@@ -65,7 +65,8 @@ class Trabalhador(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.user:
-            self.user = User.objects.create_user(self.matricula, password=self.matricula)
+            self.user = User.objects.create_user(username=self.nome.replace(" ",""), password=self.registro)
+
         super(Trabalhador, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -246,7 +247,7 @@ class Abono(models.Model):
         super(Abono, self).save(*args, **kwargs)
 
     def __str__(self):
-        return '%s - %s' % (self.trabalhador.nome, self.data.strftime("%d/%m/%Y"))
+        return '%s: %s - %s' % (self.id, self.trabalhador.nome, self.data.strftime("%d/%m/%Y"))
 
     def get_absolute_url(self):
         return reverse('abono')
@@ -380,8 +381,10 @@ class LinhaRelatorio(models.Model):
     modificado_em = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "%s(%.1f, %.1f, %d)" % (self.trabalhador.nome, self.horas_extras, self.adicional_noturno, self.faltas)
-
+        try:
+            return "%s(%.1f, %.1f, %d)" % (self.trabalhador.nome, self.horas_extras, self.adicional_noturno, self.faltas)
+        except:
+            return "Trabalhador excluído(%.1f, %.1f, %d)" % (self.horas_extras, self.adicional_noturno, self.faltas)
     class Meta:
         ordering = ['trabalhador__nome']
         verbose_name = "Linha de Relatório"
@@ -466,7 +469,10 @@ class Relatorio(models.Model):
     
 
     def __str__(self):
-        return "%s - %d/%d" % (self.setor.nome, self.mes, self.ano)
+        try:
+            return "%s - %d/%d" % (self.setor.nome, self.mes, self.ano)
+        except:
+            return "Setor excluído  ->  %d/%d" % (self.mes, self.ano)
 
     class Meta:
         verbose_name = "Relatório"
@@ -494,13 +500,19 @@ class RelacaoAbono(models.Model):
             Q(deferido=True)
             & Q(criado_em__gte=data_inicio)
             & Q(criado_em__lte=data_termino)
-        )      
+        )    
         relacao = RelacaoAbono.objects.create(
             data_inicio=data_inicio,
             data_termino=data_termino
         )
-        for abono in abonos:
-            relacao.abonos.add(abono)
+        print("\nRelação.abonos: %s\n" % relacao.abonos.all())
+        print("\nAbonos: %s" % abonos)
+        for abono in abonos.all():
+            print("Abono: %s" % abono.__str__())
+            try:
+                relacao.abonos.add(abono)
+            except Exception as bwe:
+                print(bwe.details)
 
         relacao.save()
         return relacao

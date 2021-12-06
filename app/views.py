@@ -855,24 +855,27 @@ def soma_horas(request):
 def relatorios(request):
     data = timezone.now()
     data = data.replace(day=1)
-    context = {
-        'relatorios_em_aberto': Relatorio.vigentes.em_aberto(),
-        'relatorios_finalizados': Relatorio.vigentes.finalizados(),
-        'relatorios_finalizados_antigos': Relatorio.objects.filter(Q(estado='oficial') & Q(criado_em__lt=data)),
-        'referencias': get_referencias_relatorios(),
-        'qtd_trabalhadores': Trabalhador.objects.count(),
-    }
-    print(
-        'Em Aberto:\n ',
-        context['relatorios_em_aberto'],
-        'Finalizados:\n',
-        context['relatorios_finalizados'],
-        "Finalizados antigos:\n",
-        context['relatorios_finalizados_antigos'],
-    )
+    try:
+        context = {
+            'relatorios_em_aberto': Relatorio.vigentes.em_aberto(),
+            'relatorios_finalizados': Relatorio.vigentes.finalizados(),
+            'relatorios_finalizados_antigos': Relatorio.objects.filter(Q(estado='oficial') & Q(criado_em__lt=data)),
+            'referencias': get_referencias_relatorios(),
+            'qtd_trabalhadores': Trabalhador.objects.count(),
+        }
+        print(
+            'Em Aberto:\n ',
+            context['relatorios_em_aberto'],
+            'Finalizados:\n',
+            context['relatorios_finalizados'],
+            "Finalizados antigos:\n",
+            context['relatorios_finalizados_antigos'],
+        )
 
-    # debug
-    print(get_referencias_relatorios())
+        # debug
+        print(get_referencias_relatorios())
+    except Exception as e:
+        print(e)
 
     return render(request, 'relatorios.html', context)
 
