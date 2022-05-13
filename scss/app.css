@@ -4,8 +4,6 @@ html .page-header, body .page-header, .page-header .page-header { font-family: "
 
 .carousel-caption { background-color: rgba(0, 0, 0, 0.6) !important; border-radius: 15px; }
 
-body { background: rgba(0, 0, 255, 0.1) url("https://ce.uwex.edu/wp-content/uploads/2016/06/textured-overlay-2.png") no-repeat fixed center; }
-
 .card { box-shadow: 2px 2px 10px 2px #DAE2EA; background-color: rgba(255, 255, 255, 0.2); }
 
 .card .card-header, .card .card-footer { background-color: #21548A !important; }

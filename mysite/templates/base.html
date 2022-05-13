@@ -1,5 +1,5 @@
 {% load static %}
-{# {% load staticfiles %} #}
+{#{% load staticfiles %}#}
 {% load sass_tags %}
 {% load filtros %}
 
@@ -23,12 +23,13 @@
 
       <!-- fonts 
       <link href="https://fonts.googleapis.com/css?family=Abel|Bebas+Neue|Dosis&display=swap" rel="stylesheet">-->
-        <link href="https://fonts.googleapis.com/css2?family=Abel&family=Noto+Serif&family=Roboto+Slab:wght@200&family=Codystar&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Abel&family=Noto+Serif&family=Roboto+Slab:wght@200&family=Codystar&display=swap" rel="stylesheet" data-noprefix>
 
 	    <!-- scss -->
-	    <!--<link href="{% static 'app.css' %}" rel="stylesheet" type="text/css">-->
+	    <!-- <link href="{% static 'app.css' %}" rel="stylesheet"> -->
         <link href="{% sass_src 'app.scss' %}" rel="stylesheet" type="text/css" />
 
+	    <link type="image/png"  href="{% static 'logo.png' %}" rel="stylesheet">
         <link rel="icon" type="image/png" sizes="32x32" href='{% sass_src "logo.png" %}'>
 
 

@@ -88,7 +88,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'mysite/templates/'),],
+        'DIRS': [os.path.join(BASE_DIR, 'mysite/templates/'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -107,14 +107,14 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # [START db_setup]
 if not DEBUG:
-# if os.getenv('GAE_APPLICATION', None):
+    # if os.getenv('GAE_APPLICATION', None):
     DATABASES = {
         'default': {
             'ENGINE': 'djongo',
             'NAME': 'feriapp',
             'CLIENT': {
                 'host': os.getenv('DB_STRING')
-            },   
+            },
             'ENFORCE_SCHEMA': False
 
         }
@@ -125,8 +125,8 @@ else:
             'ENGINE': 'djongo',
             'NAME': 'feriapp_test',
             'CLIENT': {
-                'host': os.getenv('DB_TEST_STRING')
-            },   
+                'host': os.getenv('DB_STRING_TEST')
+            },
             'ENFORCE_SCHEMA': False
 
         }
@@ -142,9 +142,6 @@ if os.getenv('TRAMPOLINE_CI', None):
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
         }
     }
-
-
-
 
 LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'America/Sao_Paulo'
@@ -232,7 +229,7 @@ LOGGING = {
     }
 }
 
-#sessão durará 10 horas
+# sessão durará 10 horas
 SESSION_COOKIE_AGE = 60 * 60 * 10
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
@@ -249,4 +246,3 @@ DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 GS_DEFAULT_ACL = "publicRead"
 # [END cloudrun_django_staticconfig]
-

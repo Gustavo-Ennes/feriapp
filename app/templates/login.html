@@ -11,27 +11,31 @@
 					<img width='200' height='200' class="rounded mx-auto d-block my-4" src="{% static 'logo.png' %}" alt="Prefeitura Municipal de Ilha Solteira">
 				</div>
 
-				<div class="col-12 text-center">
-					<small class="logo-font pb-5"><small>E N T R A R</small></small>
+				<div class="col-12 text-center" style="padding-top: 150px">
+					<small class="logo-font pb-5 entrar"><small>E N T R A R</small></small>
 				</div>
 				<section class='col-12 col-md-8 col-lg-6 col-xl-4'>
 
-					<form method="POST" action="{% url 'entrar' %}" enctype="multipart/form-data" class="text-center">
+					<div class="login">
 
-						{% csrf_token %}
+						<form method="POST" action="{% url 'entrar' %}" enctype="multipart/form-data" class="text-center" class="login">
 
-						{{ LoginForm|crispy }}
-						<input type='hidden' name='next' value='{{ request.GET.next }}' />
+							{% csrf_token %}
 
-						<div class="form-check my-4">
-							<input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name='remember_me'>
-							<label class="form-check-label text-success" for="defaultCheck1">
-								Lembrar de mim
-							</label>
-						</div>
+							{{ LoginForm|crispy }}
+							<input type='hidden' name='next' value='{{ request.GET.next }}' />
 
-						<button class="btn btn-success">Entrar</button>
-					</form>
+							<div class="form-check my-4">
+								<input class="form-check-input" type="checkbox" value="" id="defaultCheck1" name='remember_me'>
+								<label class="form-check-label text-success" for="defaultCheck1">
+									Lembrar de mim
+								</label>
+							</div>
+
+							<button class="btn btn-success">Entrar</button>
+						</form>
+
+					</div>
 
 
 				</section>
