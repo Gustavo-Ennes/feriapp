@@ -674,12 +674,19 @@ class PDF:
         PDF.draw_table(c, 8 * mm, start_y, table_data, 1, tipo='justificativa')
         start_y -= spacement * 1.3
 
-        PDF.draw_line(c, 12 * mm, start_y, "%s" % ('_' * 40), font_size=10, align=TA_CENTER)
+        PDF.draw_line(c, -35 * mm, start_y, "%s" % ('_' * 40), font_size=10, align=TA_CENTER)
         start_y -= spacement
-        PDF.draw_line(c, 12 * mm, start_y, get_chefe_de_setor().nome, font_size=10, align=TA_CENTER)
+        PDF.draw_line(c, -35 * mm, start_y, get_chefe_de_setor().nome, font_size=10, align=TA_CENTER)
         start_y -= spacement / 2
-        PDF.draw_line(c, 12 * mm, start_y, chefe_de_setor.legenda, font_size=8, align=TA_CENTER)
-        start_y -= spacement * 1.3
+        PDF.draw_line(c, -35 * mm, start_y, chefe_de_setor.legenda, font_size=8, align=TA_CENTER)
+
+        start_y += 1.5 * spacement
+        PDF.draw_line(c, 60 * mm, start_y, "%s" % ('_' * 40), font_size=10, align=TA_CENTER)
+        start_y -= spacement
+        PDF.draw_line(c, 60 * mm, start_y, trabalhador.nome, font_size=10, align=TA_CENTER)
+        start_y -= spacement / 2
+        PDF.draw_line(c, 60 * mm, start_y, trabalhador.funcao, font_size=8, align=TA_CENTER)
+        start_y -= spacement *1.3
 
         return start_y
 

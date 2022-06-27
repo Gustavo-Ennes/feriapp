@@ -18,7 +18,8 @@ class Setor(models.Model):
     nome = models.CharField(max_length=100, unique=True)
     criado_em = models.DateTimeField(auto_now_add=True)
     modificado_em = models.DateTimeField(auto_now=True)
-    criado_por = models.ForeignKey(User, on_delete=models.SET_NULL, editable=False, null=True, blank=True)
+    criado_por = models.ForeignKey(
+        User, on_delete=models.SET_NULL, editable=False, null=True, blank=True)
 
     def __str__(self):
         return '%s - desde %s' % (self.nome, self.criado_em.strftime("%d/%m/%Y"))
@@ -29,7 +30,6 @@ class Setor(models.Model):
     class Meta:
         verbose_name_plural = 'Setores'
         ordering = ['nome']
-        
 
 
 class Trabalhador(models.Model):
@@ -57,7 +57,8 @@ class Trabalhador(models.Model):
     ctps = models.CharField(max_length=20, blank=True, null=True)
     cpf = models.CharField(max_length=20, blank=True, null=True)
     ctps_serie = models.CharField(max_length=20, blank=True, null=True)
-    criado_por = models.ForeignKey(User, on_delete=models.SET_NULL, editable=False, null=True, blank=True)
+    criado_por = models.ForeignKey(
+        User, on_delete=models.SET_NULL, editable=False, null=True, blank=True)
 
     def __str__(self):
         return '%s : %s - %s - desde %s' % (
@@ -65,7 +66,8 @@ class Trabalhador(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.user:
-            self.user = User.objects.create_user(username=self.nome.replace(" ",""), password=self.registro)
+            self.user = User.objects.create_user(
+                username=self.nome.replace(" ", ""), password=self.registro)
 
         super(Trabalhador, self).save(*args, **kwargs)
 
@@ -75,8 +77,6 @@ class Trabalhador(models.Model):
     class Meta:
         verbose_name_plural = 'Trabalhadores'
         ordering = ['nome']
-        
-
 
 
 class Ferias(models.Model):
@@ -115,11 +115,13 @@ class Ferias(models.Model):
     observacoes = models.TextField(blank=True, editable=False)
     tipo = models.CharField(max_length=2, default='f', editable=False)
     fruida = models.BooleanField(editable=False, default=False)
-    criado_por = models.ForeignKey(User, on_delete=models.SET_NULL, editable=False, null=True, blank=True)
+    criado_por = models.ForeignKey(
+        User, on_delete=models.SET_NULL, editable=False, null=True, blank=True)
 
     def save(self, validacao=True, *args, **kwargs):
 
-        self.data_termino = self.data_inicio + timedelta(days=self.qtd_dias - 1)
+        self.data_termino = self.data_inicio + \
+            timedelta(days=self.qtd_dias - 1)
 
         if not validacao:
             self.deferida = False
@@ -138,8 +140,6 @@ class Ferias(models.Model):
         verbose_name_plural = "Férias"
         verbose_name = "Férias"
         ordering = ['data_inicio']
-        
-
 
 
 class LicencaPremio(Ferias):
@@ -176,7 +176,8 @@ class LicencaPremio(Ferias):
 
     def save(self, validacao=True, *args, **kwargs):
 
-        self.data_termino = self.data_inicio + timedelta(days=self.qtd_dias - 1)
+        self.data_termino = self.data_inicio + \
+            timedelta(days=self.qtd_dias - 1)
         self.tipo = 'l'
 
         if not validacao:
@@ -186,7 +187,6 @@ class LicencaPremio(Ferias):
 
         super(LicencaPremio, self).save(validacao, *args, **kwargs)
 
-
     def get_absolute_url(self):
         return reverse('licenca_premio')
 
@@ -194,8 +194,6 @@ class LicencaPremio(Ferias):
         verbose_name_plural = "Licença Prêmio"
         verbose_name = "Licenças Prêmio"
         ordering = ['data_inicio']
-        
-
 
 
 class Abono(models.Model):
@@ -231,7 +229,8 @@ class Abono(models.Model):
     deferido = models.BooleanField(editable=False, default=False)
     observacoes = models.TextField(blank=True, editable=False)
     fruido = models.BooleanField(editable=False, default=False)
-    criado_por = models.ForeignKey(User, on_delete=models.SET_NULL, editable=False, null=True, blank=True)
+    criado_por = models.ForeignKey(
+        User, on_delete=models.SET_NULL, editable=False, null=True, blank=True)
 
     def is_this_month(self):
         data = timezone.now().date()
@@ -254,8 +253,6 @@ class Abono(models.Model):
 
     class Meta:
         ordering = ['data']
-        
-
 
 
 class Conf(models.Model):
@@ -280,7 +277,6 @@ class Conf(models.Model):
         verbose_name="Cálculo de Adicional Noturno",
         help_text='Multiplica o total de horas por 1,143, caso marcado'
     )
-        
 
 
 class Diretor(models.Model):
@@ -293,9 +289,6 @@ class Diretor(models.Model):
     class Meta:
         verbose_name_plural = "Diretores"
         ordering = ['nome']
-        
-
-
 
 
 class ChefeDeSetor(models.Model):
@@ -309,6 +302,7 @@ class ChefeDeSetor(models.Model):
     class Meta:
         verbose_name_plural = "Chefes de Setor"
         ordering = ['nome']
+
 
 class Lembrete(models.Model):
     options = [
@@ -349,8 +343,7 @@ class Lembrete(models.Model):
         return is_valid
 
     class Meta:
-        ordering = ['dia']       
-
+        ordering = ['dia']
 
 
 class Banner(models.Model):
@@ -368,13 +361,16 @@ class Banner(models.Model):
 
     def get_absolute_url(self):
         return reverse('banner')
-        
+
 
 class LinhaRelatorio(models.Model):
     objects = models.Manager()
-    trabalhador = models.ForeignKey(Trabalhador, on_delete=models.SET_NULL, null=True)
-    horas_extras = models.FloatField(default=0, validators=[MinValueValidator(0)])
-    adicional_noturno = models.FloatField(default=0, validators=[MinValueValidator(0)])
+    trabalhador = models.ForeignKey(
+        Trabalhador, on_delete=models.SET_NULL, null=True)
+    horas_extras = models.FloatField(
+        default=0, validators=[MinValueValidator(0)])
+    adicional_noturno = models.FloatField(
+        default=0, validators=[MinValueValidator(0)])
     faltas = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     dias_faltas = []
     criado_em = models.DateTimeField(auto_now_add=True)
@@ -385,6 +381,7 @@ class LinhaRelatorio(models.Model):
             return "%s(%.1f, %.1f, %d)" % (self.trabalhador.nome, self.horas_extras, self.adicional_noturno, self.faltas)
         except:
             return "Trabalhador excluído(%.1f, %.1f, %d)" % (self.horas_extras, self.adicional_noturno, self.faltas)
+
     class Meta:
         ordering = ['trabalhador__nome']
         verbose_name = "Linha de Relatório"
@@ -401,7 +398,6 @@ class LinhaRelatorio(models.Model):
                     relatorio_alvo.save()
                 except Exception as e:
                     print("Erro: %s" % e)
-
 
 
 def mes_anterior():
@@ -453,7 +449,8 @@ class Relatorio(models.Model):
             MaxValueValidator(12),
         ]
     )
-    ano = models.IntegerField(default=ano_padrao(), validators=[MaxValueValidator(datetime.now().year)])
+    ano = models.IntegerField(default=ano_padrao(), validators=[
+                              MaxValueValidator(datetime.now().year)])
     data_fechamento = models.DateField(blank=True, null=True)
     criado_em = models.DateTimeField(auto_now_add=True)
     modificado_em = models.DateTimeField(auto_now=True)
@@ -466,7 +463,6 @@ class Relatorio(models.Model):
     @property
     def referencia(self):
         return str(self.mes) + "-" + str(self.ano)
-    
 
     def __str__(self):
         try:
@@ -478,7 +474,6 @@ class Relatorio(models.Model):
         verbose_name = "Relatório"
         verbose_name_plural = "Relatórios"
         ordering = ['-criado_em', 'setor__nome']
-        
 
 
 class RelacaoAbono(models.Model):
@@ -492,7 +487,6 @@ class RelacaoAbono(models.Model):
         verbose_name = 'Relação de abonos'
         verbose_name_plural = "Relações de abonos"
         ordering = ['-data_inicio']
-        
 
     @staticmethod
     def factory(data_inicio, data_termino):
@@ -500,7 +494,7 @@ class RelacaoAbono(models.Model):
             Q(deferido=True)
             & Q(criado_em__gte=data_inicio)
             & Q(criado_em__lte=data_termino)
-        )    
+        )
         relacao = RelacaoAbono.objects.create(
             data_inicio=data_inicio,
             data_termino=data_termino
@@ -518,18 +512,19 @@ class RelacaoAbono(models.Model):
         return relacao
 
 
-
 def valida_ferias(ferias):
     hoje = timezone.now().date()
     trabalhador = ferias.trabalhador
     inicio = ferias.data_inicio
 
     f = Ferias.objects.filter(Q(trabalhador=trabalhador) & (
-            Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | 
-            Q(data_termino__range=(ferias.data_inicio, ferias.data_termino))) & 
-            Q(data_termino__gt=hoje) & Q(deferida=True) & Q(tipo='f'))
-    l = LicencaPremio.objects.filter(Q(trabalhador=trabalhador) & (Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | Q(data_termino__range=(ferias.data_inicio, ferias.data_termino))) & Q(deferida=True))
-    a = Abono.objects.filter(Q(trabalhador=trabalhador) & Q(data__range=(ferias.data_inicio, ferias.data_termino)) & Q(deferido=True))
+        Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) |
+        Q(data_termino__range=(ferias.data_inicio, ferias.data_termino))) &
+        Q(data_termino__gt=hoje) & Q(deferida=True) & Q(tipo='f'))
+    l = LicencaPremio.objects.filter(Q(trabalhador=trabalhador) & (Q(data_inicio__range=(ferias.data_inicio, ferias.data_termino)) | Q(
+        data_termino__range=(ferias.data_inicio, ferias.data_termino))) & Q(deferida=True))
+    a = Abono.objects.filter(Q(trabalhador=trabalhador) & Q(
+        data__range=(ferias.data_inicio, ferias.data_termino)) & Q(deferido=True))
 
     if ferias.tipo == 'f':
         f = f.exclude(id=ferias.id)
@@ -538,11 +533,14 @@ def valida_ferias(ferias):
 
     if l or f or a or inicio < hoje or inicio.weekday() in [5, 6]:
         if len(f):
-            ferias.observacoes = "férias, de %s à %s, convergem com a data marcada" % (f[0].data_inicio.strftime("%d/%m/%Y"), f[0].data_termino.strftime("%d/%m/%Y"))
+            ferias.observacoes = "férias, de %s à %s, convergem com a data marcada" % (
+                f[0].data_inicio.strftime("%d/%m/%Y"), f[0].data_termino.strftime("%d/%m/%Y"))
         elif len(l):
-            ferias.observacoes = "licença-prêmio de %s à %s, convergem com a data marcada" % (l[0].data_inicio.strftime("%d/%m/%Y"), l[0].data_termino.strftime("%d/%m/%Y"))
+            ferias.observacoes = "licença-prêmio de %s à %s, convergem com a data marcada" % (
+                l[0].data_inicio.strftime("%d/%m/%Y"), l[0].data_termino.strftime("%d/%m/%Y"))
         elif len(a):
-            ferias.observacoes = "abono em %s, converge com a data marcada" % (a[0].data.strftime("%d/%m/%Y"))
+            ferias.observacoes = "abono em %s, converge com a data marcada" % (
+                a[0].data.strftime("%d/%m/%Y"))
         elif inicio < hoje:
             ferias.observacoes = "data de agendamento Anterior a data do pedido"
             return True
@@ -560,26 +558,27 @@ def valida_abono2(abono):
         data = timezone.now().date()
         pontuacao_abono = 1 if abono.expediente == 'integral' else 0.5
         f = Ferias.objects.filter(
-            Q(tipo='f')&
-            Q(deferida=True)&
-            Q(trabalhador=abono.trabalhador)&
-            Q(data_inicio__lte=abono.data)&
+            Q(tipo='f') &
+            Q(deferida=True) &
+            Q(trabalhador=abono.trabalhador) &
+            Q(data_inicio__lte=abono.data) &
             Q(data_termino__gte=abono.data)
         )
         l = LicencaPremio.objects.filter(
-            Q(deferida=True)&
-            Q(trabalhador=abono.trabalhador)&
-            Q(data_inicio__lte=abono.data)&
+            Q(deferida=True) &
+            Q(trabalhador=abono.trabalhador) &
+            Q(data_inicio__lte=abono.data) &
             Q(data_termino__gte=abono.data)
         )
         a = Abono.objects.filter(
-            Q(trabalhador=abono.trabalhador)&
-            Q(data=abono.data)&
+            Q(trabalhador=abono.trabalhador) &
+            Q(data=abono.data) &
             Q(deferido=True)
         )
 
         if len(a):
-            abono.observacoes = "converger com outro abono em %s" % a[0].data.strftime("%d/%m/%Y")
+            abono.observacoes = "converger com outro abono em %s" % a[0].data.strftime(
+                "%d/%m/%Y")
         elif len(f):
             abono.observacoes = "estar de férias no dia %d" % abono.data.day
         elif len(l):
@@ -598,20 +597,19 @@ def valida_abono2(abono):
     except Exception:
         traceback.print_exc()
 
-   
 
 def contagem_abonos(tempo, abono):
     counter = 0.0
     if tempo == 'mes':
         abonos = Abono.objects.filter(
-            Q(trabalhador=abono.trabalhador) & 
-            Q(deferido=True) & 
+            Q(trabalhador=abono.trabalhador) &
+            Q(deferido=True) &
             Q(data__year=timezone.now().year)
         )
     elif tempo == 'ano':
         abonos = Abono.objects.filter(
-            Q(trabalhador=abono.trabalhador) & 
-            Q(deferido=True) & 
+            Q(trabalhador=abono.trabalhador) &
+            Q(deferido=True) &
             Q(data__year=timezone.now().year)
         )
 
@@ -629,12 +627,12 @@ def contagem_abonos(tempo, abono):
     return counter
 
 
-
 class WorkerFactory:
 
     @staticmethod
     def create_random_workers(how_many):
-        workers_data = WorkerFactory.random_worker_list(how_many, name_lenght=random.randint(2, 4))
+        workers_data = WorkerFactory.random_worker_list(
+            how_many, name_lenght=random.randint(2, 4))
         trabalhadores = []
         for data in workers_data:
             trabalhadores.append(
@@ -664,7 +662,8 @@ class WorkerFactory:
             random_role = random.randint(0, len(roles) - 1)
             random_matricula = str(random.randint(8000, 19999))
             random_date = WorkerFactory.get_random_date()
-            worker = [name, random_matricula, roles[random_role], random_date, 'ativo']
+            worker = [name, random_matricula,
+                      roles[random_role], random_date, 'ativo']
             workers_list.append(worker)
 
         return workers_list
@@ -678,7 +677,8 @@ class WorkerFactory:
                 for each in range(how_many):
                     string = ''
                     for _ in range(name_length):
-                        string += WorkerFactory.string_treatment(lines[random.randint(0, len(lines))]) + ' '
+                        string += WorkerFactory.string_treatment(
+                            lines[random.randint(0, len(lines))]) + ' '
                     string.strip()
 
                     names.append(string)
@@ -703,5 +703,3 @@ class WorkerFactory:
 
         return str(ano) + '-' + (str(mes) if mes > 9 else '0' + str(mes)) + '-' + (
             str(dia) if dia > 9 else '0' + str(dia)) + " " + hora + minuto
-
-
